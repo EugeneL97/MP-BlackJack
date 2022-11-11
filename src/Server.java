@@ -82,7 +82,27 @@ public class Server {
 		}
 		
 		public void run() {
-			
+			try {
+				InputStream inputStream = clientSocket.getInputStream();
+				ObjectInputStream input = new ObjectInputStream(inputStream);
+				
+				while(true) {
+					try {
+						List<Message> messageQueue = (List<Message>) input.readObject();
+						
+						for (int x = 0; x < messageQueue.size(); x++) {
+							System.out.println("Message = " + messageQueue.get(x).toString());
+						}
+					}
+					catch (ClassNotFoundException c) {
+						c.printStackTrace();
+					}
+					
+				}
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		public void SendMessage(Message message) {
