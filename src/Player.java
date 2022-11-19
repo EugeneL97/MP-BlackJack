@@ -1,47 +1,61 @@
 import java.util.*;
 
 public class Player {
-	private String firstName;
-	private String lastName;
 	private String username;
+	private int playerState;
 	private int roomNumber;
-	private PlayerState playerState;
-	private ArrayList<Card> currentHand;
-	private boolean isPlayer;
-	private boolean isSitting;
 	private int accountBalance;
-	private int currentAction[];
-	private final int CURRENT_ACTION_SIZE = 6;
+	private int currentAction;
+	private int isPlayer;
+	private int isSitting;
+	private ArrayList<ArrayList<Card>> currentHand;
 	
-	public Player(String firstName, String lastName, String username, int roomNumber, PlayerState playerState,
-			ArrayList<Card> currentHand, boolean isPlayer, boolean isSitting, int accountBalance, int[] currentAction) {
+	public Player(Player player) {
+		this(player.getUsername(), player.getPlayerState(), player.getRoomNumber(), player.getAccountBalance(),
+				player.getCurrentAction(), player.isPlayer(), player.isSitting(), player.getCurrentHand());
+	}
+	
+	public Player(String username, int accountBalance) {
+		this(username, 0, -1, accountBalance, -1, 1, 0, null);
+	}
+	
+	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int isPlayer, int isSitting, ArrayList<ArrayList<Card>> currentHand) {
 		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
+		
 		this.username = username;
 		this.roomNumber = roomNumber;
 		this.playerState = playerState;
-		this.currentHand = currentHand;
 		this.isPlayer = isPlayer;
 		this.isSitting = isSitting;
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
+		this.currentHand = new ArrayList<ArrayList<Card>>();
+		
+		if (currentHand != null) {
+			for (int x = 0; x < currentHand.size(); ++x) {
+				this.currentHand.add(new ArrayList<Card> ());
+			}
+			
+			for (int x = 0; x < currentHand.size(); ++x) {
+				for (int y = 0; y < currentHand.get(x).size(); ++y) {
+					this.currentHand.get(x).add(currentHand.get(x).get(y));
+				}
+			}
+		}
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public String toString() {
+		String output = null;
+		output = username + "#" + Integer.toString(playerState) + "#" + Integer.toString(roomNumber) + "#" + Integer.toString(accountBalance) + "#"
+				+ Integer.toString(currentAction) + "#" + Integer.toString(isPlayer) + "#" + Integer.toString(isSitting) + "#" + Integer.toString(currentHand.size()) + "#";
+		
+		for (int x = 0; x < currentHand.size(); ++x) {
+			for (int y = 0; y <currentHand.get(x).size(); ++y) {
+				output = output + Integer.toString(x) + "#" + currentHand.get(x).get(y).toString();
+			}
+		}
+		
+		return output;
 	}
 
 	public String getUsername() {
@@ -60,35 +74,35 @@ public class Player {
 		this.roomNumber = roomNumber;
 	}
 
-	public PlayerState getPlayerState() {
+	public int getPlayerState() {
 		return playerState;
 	}
 
-	public void setPlayerState(PlayerState playerState) {
+	public void setPlayerState(int playerState) {
 		this.playerState = playerState;
 	}
 
-	public ArrayList<Card> getCurrentHand() {
+	public ArrayList<ArrayList<Card>> getCurrentHand() {
 		return currentHand;
 	}
 
-	public void setCurrentHand(ArrayList<Card> currentHand) {
+	public void setCurrentHand(ArrayList<ArrayList<Card>> currentHand) {
 		this.currentHand = currentHand;
 	}
 
-	public boolean isPlayer() {
+	public int isPlayer() {
 		return isPlayer;
 	}
 
-	public void setPlayer(boolean isPlayer) {
+	public void setPlayer(int isPlayer) {
 		this.isPlayer = isPlayer;
 	}
 
-	public boolean isSitting() {
+	public int isSitting() {
 		return isSitting;
 	}
 
-	public void setSitting(boolean isSitting) {
+	public void setSitting(int isSitting) {
 		this.isSitting = isSitting;
 	}
 
@@ -100,17 +114,11 @@ public class Player {
 		this.accountBalance = accountBalance;
 	}
 
-	public int[] getCurrentAction() {
+	public int getCurrentAction() {
 		return currentAction;
 	}
 
-	public void setCurrentAction(int[] currentAction) {
+	public void setCurrentAction(int currentAction) {
 		this.currentAction = currentAction;
 	}
-
-	public int getCURRENT_ACTION_SIZE() {
-		return CURRENT_ACTION_SIZE;
-	}
-	
-	
 }
