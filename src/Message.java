@@ -12,6 +12,12 @@ public class Message implements Serializable {
 		this.text = "undefined";
 	}
 	
+	public Message(Message message) {
+		this.type = message.getType();
+		this.status = message.getStatus();
+		this.text = message.getText();
+	}
+	
 	public Message(String type, String status, String text) {
 		this.type = type;
 		this.status = status;
