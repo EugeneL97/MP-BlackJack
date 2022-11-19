@@ -3,7 +3,7 @@ import java.util.*;
 public class Driver {
 	public static void main(String[] args) {
 		Parser parser = new Parser();
-		/*
+		
 		// Test parsing Player
 		Player player = new Player("jackson", 214554);
 		Shoe shoe = new Shoe();
@@ -70,11 +70,12 @@ public class Driver {
 		message = new Message("room", "", room.toString());
 		newRoom = parser.parseRoom(message.getText());
 		System.out.println(newRoom.toString());
-		*/
 		
+		
+		/*
 		// Test parsing LobbyRoom
 		LobbyRoom clientLobbyRoom = null;
-		
+		*/
 		
 	}
 }
