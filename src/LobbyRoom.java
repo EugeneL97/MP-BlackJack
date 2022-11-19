@@ -32,7 +32,7 @@ public class LobbyRoom {
 		this.clientLobbyRoom = clientLobbyRoom;
 	}
 	
-	public void addRoom(String room) {
+	public void addRoom() {
 		if (numberOfRooms > 0) {
 			clientLobbyRoom.add(numberOfRooms, new ArrayList<String>());
 		}
@@ -88,5 +88,9 @@ public class LobbyRoom {
 		}
 		
 		return output;
+	}
+	
+	public int getNumberOfRooms() {
+		return numberOfRooms;
 	}
 }
