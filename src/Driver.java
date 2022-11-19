@@ -74,7 +74,7 @@ public class Driver {
 		
 		
 		// Test parsing LobbyRoom
-		LobbyRoom clientLobbyRoom = null;
+		LobbyRoom clientLobbyRoom = new LobbyRoom();
 		clientLobbyRoom.addRoom();
 		ArrayList<String> username = new ArrayList<String>();
 		username.add("harvey");
@@ -87,6 +87,6 @@ public class Driver {
 			clientLobbyRoom.addPlayer(0, username.get(x));
 		}
 		
-		//test
+		System.out.println(clientLobbyRoom.toString());
 	}
 }

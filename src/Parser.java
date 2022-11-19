@@ -5,6 +5,15 @@ public class Parser {
 		
 	}
 	
+	public LobbyRoom parseLobbyRoom(String message) {
+		LobbyRoom tmp = null;
+		
+		return tmp;
+	}
+	
+	
+	// Parses the toString() output of the Room class and converts it into an object of Room class
+	// with the same state as the one that was sent
 	public Room parseRoom(String message) {
 		Room tmp = null;
 		int roomNumber;
@@ -29,7 +38,6 @@ public class Parser {
 
 		}
 		
-		
 		numberOfPlayersInRoom = Integer.parseInt(room[3 + numberOfCurrentPlayers]);
 		numberOfPlayersInRoomIndex = 3 + numberOfCurrentPlayers;
 		
@@ -41,10 +49,11 @@ public class Parser {
 		
 		tmp = new Room(roomNumber, readyToStart, currentPlayers, playersInRoom, shoe);
 		
-		
 		return tmp;
 	}
 	
+	// Parses the toString() output of the Player class and converts it into an object of Player class
+	// with the same state as the one that was sent
 	public Player parsePlayer(String message) {
 		Player player;
 		String [] playerInfo;
@@ -82,6 +91,7 @@ public class Parser {
 		return player;
 	}
 	
+	// Helper function for parseRoom function
 	public Shoe parseShoe(String message) {
 		Shoe tmp = null;
 		
@@ -92,6 +102,7 @@ public class Parser {
 		return tmp;
 	}
 	
+	// Helper function for the parseRoom function
 	public ArrayList<Card> parseDeck(String message) {
 		ArrayList<Card> deck = new ArrayList<Card>();
 		String [] cards;
