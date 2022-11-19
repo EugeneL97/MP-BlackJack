@@ -1,16 +1,38 @@
 import java.util.*;
 
 public class Shoe {
-	private ArrayList<Card> deck;
 	private final int numOfDecks = 6;
 	private final int cutPoint = 70;
 	private final int SHOE_SIZE = 312;
-	private  int cardValue[];
-	private String suits[];
+	private final int cardValue[];
+	private final String suits[];
+	private ArrayList<Card> deck;
 	
 	public Shoe() {
 		cardValue = new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 		suits = new String[] {"Spade", "Heart", "Club", "Diamond"};
+		this.deck = new ArrayList<Card>();
+	}
+	
+	public Shoe(ArrayList<Card> deck) {
+		this();
+		for (int x = 0; x < deck.size(); ++x) {
+			this.deck.add(deck.get(x));
+		}
+	}
+	
+	public String toString() {
+		String output = "";
+		
+		for (int x = 0; x < deck.size(); ++x) {
+			output += deck.get(x).toString();
+		}
+		
+		return output;
+	}
+	
+	public ArrayList<Card> getDeck() {
+		return deck;
 	}
 	
 	public void generateCards() {
@@ -26,7 +48,7 @@ public class Shoe {
 		
 		// shuffling
 		for (int x = 0; x < SHOE_SIZE; x++) {
-			int index = random.nextInt(0, SHOE_SIZE);
+			int index = random.nextInt(SHOE_SIZE);
 			
 			Card tmp = new Card(deck.get(x).getValue(), deck.get(x).getSuit());
 			
@@ -44,6 +66,11 @@ public class Shoe {
 		Card tmp = null;
 		
 		if (deck.size() > 0) {
+			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
+			deck.remove(0);
+		}
+		else {
+			generateCards();
 			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
 			deck.remove(0);
 		}
