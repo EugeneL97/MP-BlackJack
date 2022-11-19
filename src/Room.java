@@ -2,25 +2,63 @@ import java.util.*;
 
 public class Room {
 	private int roomNumber;
+	private int readyToStart;
 	private ArrayList<Player> currentPlayers;
-	private Player dealer;
 	private ArrayList<Player> playersInRoom;
-	private int minWagerAmount;
-	private boolean readyToStart;
 	private Shoe shoe;
 	
-	public Room(int roomNumber, ArrayList<Player> currentPlayers, Player dealer, ArrayList<Player> playersInRoom,
-			int minWagerAmount, boolean readyToStart, Shoe shoe) {
+	public Room(Room room) {
+		this(room.getRoomNumber(), room.isReadyToStart(), room.getCurrentPlayers(), room.getPlayersInRoom(), room.getShoe());
+	}
+	
+	public Room(int roomNumber, int readyToStart,
+			ArrayList<Player> currentPlayers, ArrayList<Player> playersInRoom, Shoe shoe) {
+		
 		super();
 		this.roomNumber = roomNumber;
-		this.currentPlayers = currentPlayers;
-		this.dealer = dealer;
-		this.playersInRoom = playersInRoom;
-		this.minWagerAmount = minWagerAmount;
 		this.readyToStart = readyToStart;
+		this.currentPlayers = new ArrayList<Player>();
+		this.currentPlayers = currentPlayers;
+		/*
+		for (int x = 0; x < currentPlayers.size(); ++x) {
+			this.currentPlayers.add(currentPlayers.get(x));
+		}*/
+		
+		this.playersInRoom = new ArrayList<Player>();
+		
+		/*
+		for (int x = 0; x < playersInRoom.size(); ++x) {
+			this.playersInRoom.add(playersInRoom.get(x));
+		}*/
+		this.playersInRoom = playersInRoom;
+		
 		this.shoe = shoe;
 	}
 
+	public String toString() {
+		String output = "";
+		
+		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(currentPlayers.size()) + "%";
+		
+		
+		for (int x = 0; x < currentPlayers.size(); ++x) {
+			output += currentPlayers.get(x).toString();
+			output += "%";
+		}
+		
+		output += Integer.toString(playersInRoom.size()) + "%";
+		
+		for (int x = 0; x < playersInRoom.size(); ++x) {
+			output += playersInRoom.get(x).toString();
+			output += "%";
+		}
+		
+		
+		output += shoe.toString();
+		
+		return output;
+	}
+	
 	public int getRoomNumber() {
 		return roomNumber;
 	}
@@ -37,14 +75,6 @@ public class Room {
 		this.currentPlayers = currentPlayers;
 	}
 
-	public Player getDealer() {
-		return dealer;
-	}
-
-	public void setDealer(Player dealer) {
-		this.dealer = dealer;
-	}
-
 	public ArrayList<Player> getPlayersInRoom() {
 		return playersInRoom;
 	}
@@ -53,19 +83,11 @@ public class Room {
 		this.playersInRoom = playersInRoom;
 	}
 
-	public int getMinWagerAmount() {
-		return minWagerAmount;
-	}
-
-	public void setMinWagerAmount(int minWagerAmount) {
-		this.minWagerAmount = minWagerAmount;
-	}
-
-	public boolean isReadyToStart() {
+	public int isReadyToStart() {
 		return readyToStart;
 	}
 
-	public void setReadyToStart(boolean readyToStart) {
+	public void setReadyToStart(int readyToStart) {
 		this.readyToStart = readyToStart;
 	}
 
@@ -76,6 +98,4 @@ public class Room {
 	public void setShoe(Shoe shoe) {
 		this.shoe = shoe;
 	}
-	
-	
 }
