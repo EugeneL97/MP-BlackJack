@@ -20,6 +20,6 @@ public class Card {
 	}
 	
 	public String toString() {
-		return Integer.toString(value) + " of " + suit;
+		return Integer.toString(value) + "#" + suit + "#";
 	}
 }
