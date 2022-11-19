@@ -1,15 +1,6 @@
-/Card.class
-/Client.class
-/Driver.class
-/LobbyRoom.class
+/Client$MessageHandler.class
+/Parser.class
 /Login.class
-/Message.class
-/MessageType.class
-/Player.class
 /PlayerState.class
 /Register.class
-/Room.class
-/Server$ClientHandler.class
-/Server.class
-/Shoe.class
 /TestClass.class

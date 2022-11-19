@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Server {
 	private ArrayList<Room> rooms;
+	private LobbyRoom lobbyRooms;
 	
 	public Server() {
 		this.rooms = new ArrayList<Room>();
