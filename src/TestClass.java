@@ -18,6 +18,7 @@ public class TestClass {
 	public void print() {
 		for (int x = 0; x < test.size(); ++x) {
 			System.out.println(test.get(x));
+			//System.out.println("Eugene was here.");
 		}
 	}
 }
