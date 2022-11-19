@@ -59,7 +59,8 @@ public class Client {
 			return;
 		}
 		
-		while(!logout) {
+		int counter = 0;
+		while(counter < 2) {
 			Parser parser = new Parser();
 			
 			Player player = new Player("jackson", 214554);
@@ -112,7 +113,7 @@ public class Client {
 			
 			message = new Message("room", "", room.toString());
 			client.sendMessage(message);
-			
+			++counter;
 		}
 		
 		
