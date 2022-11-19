@@ -4,6 +4,19 @@ public class LobbyRoom {
 	private int numberOfRooms;
 	private ArrayList<ArrayList<String>> clientLobbyRoom;
 	
+	LobbyRoom(LobbyRoom clientLobbyRoom) {
+		this.numberOfRooms = clientLobbyRoom.getNumberOfRooms();
+		this.clientLobbyRoom = new ArrayList<ArrayList<String>>();
+		
+		for (int x = 0; x < clientLobbyRoom.getNumberOfRooms(); ++x) {
+			this.clientLobbyRoom.add(new ArrayList<String>());
+			
+			for (int y = 0; y < clientLobbyRoom.getClientLobbyRoom().get(x).size(); ++y) {
+				this.clientLobbyRoom.get(x).add(clientLobbyRoom.getClientLobbyRoom().get(x).get(y));
+			}
+		}
+	}
+	
 	LobbyRoom() {
 		this.clientLobbyRoom = new ArrayList<ArrayList<String>>();
 		numberOfRooms = 0;
@@ -32,7 +45,7 @@ public class LobbyRoom {
 		this.clientLobbyRoom = clientLobbyRoom;
 	}
 	
-	public void addRoom(String room) {
+	public void addRoom() {
 		if (numberOfRooms > 0) {
 			clientLobbyRoom.add(numberOfRooms, new ArrayList<String>());
 		}
@@ -88,5 +101,9 @@ public class LobbyRoom {
 		}
 		
 		return output;
+	}
+	
+	public int getNumberOfRooms() {
+		return numberOfRooms;
 	}
 }
