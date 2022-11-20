@@ -5,21 +5,32 @@ public class Parser {
 		
 	}
 	
+	// Parses the toString() output of the LobbyRoom class and converts it into an object of
+	// LobbyRoom class with the same state as the one that was sent
 	public LobbyRoom parseLobbyRoom(String message) {
-		LobbyRoom tmp = null;
+		LobbyRoom tmp = new LobbyRoom();
 		String [] lobbyRoom;
-		int numberOfRooms;
-		int numberOfPlayers;
+
 		ArrayList<ArrayList<String>> clientLobbyRoom = new ArrayList<ArrayList<String>>();
 		
-		lobbyRoom = message.split("#");
-		
-		numberOfRooms = Integer.parseInt(lobbyRoom[0]);
+		lobbyRoom = message.split("%");
 	
-		for (int x = 0; x < numberOfRooms; ++x) {
-			//for (int y = 0; y < Integer.parseInt())
+		for (int x = 0; x < tmp.getNumberOfRooms(); ++x) {
+			clientLobbyRoom.add(new ArrayList<String>());
 		}
 		
+		
+		for (int x = 0; x < lobbyRoom.length; x += 3) {	
+			if(Integer.parseInt(lobbyRoom[x + 1]) != 0) {
+				String [] names = lobbyRoom[x + 2].split("#");
+				
+				for (int y = 0; y < names.length; ++y) {
+					clientLobbyRoom.get(Integer.parseInt(lobbyRoom[x])).add(names[y]);
+				}
+			}	
+		}
+			
+		tmp = new LobbyRoom(clientLobbyRoom);
 		
 		return tmp;
 	}
