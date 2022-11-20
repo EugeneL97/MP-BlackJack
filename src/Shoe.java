@@ -16,10 +16,6 @@ public class Shoe {
 	
 	public Shoe(ArrayList<Card> deck) {
 		this();
-		/*
-		for (int x = 0; x < deck.size(); ++x) {
-			this.deck.add(deck.get(x));
-		}*/
 		this.deck = deck;
 	}
 	
