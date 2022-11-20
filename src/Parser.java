@@ -76,7 +76,7 @@ public class Parser {
 		int accountBalance;
 		int currentAction;
 		int isPlayer;
-		int isSitting;
+		int seatIndex;
 		int size;
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
 		
@@ -88,7 +88,7 @@ public class Parser {
 		accountBalance = Integer.parseInt(playerInfo[3]);
 		currentAction = Integer.parseInt(playerInfo[4]);
 		isPlayer = Integer.parseInt(playerInfo[5]);
-		isSitting = Integer.parseInt(playerInfo[6]);
+		seatIndex = Integer.parseInt(playerInfo[6]);
 		size = Integer.parseInt(playerInfo[7]);
 		
 		for (int x = 0; x < size; ++x) {
@@ -99,7 +99,7 @@ public class Parser {
 			currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
 		}
 			
-		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, currentHand);
+		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, isPlayer, seatIndex, currentHand);
 		
 		return player;
 	}
