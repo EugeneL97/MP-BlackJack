@@ -46,6 +46,10 @@ public class Server {
 		}
 	}
 	
+	public ArrayList<Room> getRooms() {
+		return this.rooms;
+	}
+	
 	// Each thread use this class and execute the method run()
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
@@ -97,27 +101,36 @@ public class Server {
 				// Instantiate a parser object to convert client message that contains a class into an instance of the class.
 				Parser parser = new Parser();
 				
+				
+				/*
 				// Loop for when a player's in the lobby.
 				while(!logout) {
 					Message message = null;
 					message = getMessage(message);
 					
 					switch (message.getType()) {
-						case "create room":
-							
-							break;
+						
+						 // This is the case where a player is in the lobby and clicks join room. The player will send a message
+						 // of new Message("join room", "roomNumber", ""). The server will send back a room class with the player
+						 // in the ArrayList<Player> playersInRoom. Client can make a copy of their player object from the room
+						 // into their client side player object. Also, use the all the users on the playersInRoom list to populate
+						 // the GUI with cards and what not 
+						 
 						case "join room":
-							Room room = parser.parseRoom(message.getText());
-							System.out.println("Room object received = " + room.toString());
+							int roomNumber = Integer.parseInt(message.getStatus());
+							player.setRoomNumber(roomNumber);
+							server.getRooms().get(roomNumber).addPlayer(player);
+							server.lobbyRooms.addPlayer(roomNumber, player.getUsername());
+							message = new Message("join room", "success", server.getRooms().get(roomNumber).toString());
+							sendMessage(message);
 							break;
-						case "room":
-							room = parser.parseRoom(message.getText());
-							System.out.println("Room object received = " + room.toString());
-						case "lobby room":
-							LobbyRoom lobbyRoom = parser.parseLobbyRoom(message.getText());
-							System.out.println(lobbyRoom.toString());
+						case "logout":
+							message = new Message("logout", "success", "");
+							
 					}
 				}
+				*/
+				updatePlayer();
 				
 				
 				
@@ -141,6 +154,69 @@ public class Server {
 			}
 		}
 		
+		public void updatePlayer() {
+			try {
+				// Open database file
+				File file = new File(System.getProperty("user.dir") + "/database.txt");
+				
+				// Reader for database file
+				BufferedReader myReader = new BufferedReader(new FileReader(file));
+				
+				// String to store the database
+				ArrayList<String> database = new ArrayList<String>();
+
+				// read first line from database.txt	
+				String fileInput = myReader.readLine();
+				
+				// To store database changes output
+				String output = "";
+				
+				// To store tokenized strings
+				String [] tmp;
+				
+				player.setAccountBalance(-111);
+				
+				while (fileInput != null) {
+					tmp = fileInput.split("#");
+					
+					if (tmp[0].equals(player.getUsername())) {
+						tmp[2] = Integer.toString(player.getAccountBalance());
+						fileInput = tmp[0] + "#" + tmp[1] + "#" + tmp[2];
+					}
+					
+					database.add(fileInput);
+					System.out.println(fileInput);
+					fileInput = myReader.readLine();
+				}
+				
+				// If there's no match then create the new user
+				FileWriter myWriter = new FileWriter(file);
+				
+				for (int x = 0; x < database.size(); ++x) {
+					output += database.get(x);
+					
+					if (x != database.size() - 1) {
+						output += "\n";
+					}
+				}
+				
+				
+				
+				// Rewrite database
+				System.out.println("Writing to file: " + output);
+				myWriter.write(output);
+				
+				myReader.close();	
+				myWriter.close();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		public void playerGame(int roomNumber) {
+			
+		}
 		
 		// Closes connection from client
 		public void closeConnection() {
@@ -322,5 +398,7 @@ public class Server {
 			
 			return false;
 		}
+		
+		
 	}	
 }
