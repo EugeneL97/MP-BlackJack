@@ -3,22 +3,27 @@ import java.util.*;
 public class Room {
 	private int roomNumber;
 	private int readyToStart;
-	private ArrayList<Player> currentPlayers;
 	private ArrayList<Player> playersInRoom;
 	private Shoe shoe;
 	
+	public Room() {
+		this.roomNumber = -1;
+		this.readyToStart = 0;
+		this.playersInRoom = new ArrayList<Player>();
+		this.shoe = new Shoe();
+	}
+	
 	public Room(Room room) {
-		this(room.getRoomNumber(), room.isReadyToStart(), room.getCurrentPlayers(), room.getPlayersInRoom(), room.getShoe());
+		this(room.getRoomNumber(), room.isReadyToStart(), room.getPlayersInRoom(), room.getShoe());
 	}
 	
 	public Room(int roomNumber, int readyToStart,
-			ArrayList<Player> currentPlayers, ArrayList<Player> playersInRoom, Shoe shoe) {
+			ArrayList<Player> playersInRoom, Shoe shoe) {
 		
 		super();
 		this.roomNumber = roomNumber;
 		this.readyToStart = readyToStart;
-		this.currentPlayers = new ArrayList<Player>();
-		this.currentPlayers = currentPlayers;
+
 		/*
 		for (int x = 0; x < currentPlayers.size(); ++x) {
 			this.currentPlayers.add(currentPlayers.get(x));
@@ -38,15 +43,7 @@ public class Room {
 	public String toString() {
 		String output = "";
 		
-		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(currentPlayers.size()) + "%";
-		
-		
-		for (int x = 0; x < currentPlayers.size(); ++x) {
-			output += currentPlayers.get(x).toString();
-			output += "%";
-		}
-		
-		output += Integer.toString(playersInRoom.size()) + "%";
+		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(playersInRoom.size()) + "%";
 		
 		for (int x = 0; x < playersInRoom.size(); ++x) {
 			output += playersInRoom.get(x).toString();
@@ -65,14 +62,6 @@ public class Room {
 
 	public void setRoomNumber(int roomNumber) {
 		this.roomNumber = roomNumber;
-	}
-
-	public ArrayList<Player> getCurrentPlayers() {
-		return currentPlayers;
-	}
-
-	public void setCurrentPlayers(ArrayList<Player> currentPlayers) {
-		this.currentPlayers = currentPlayers;
 	}
 
 	public ArrayList<Player> getPlayersInRoom() {
