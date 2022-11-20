@@ -87,4 +87,12 @@ public class Room {
 	public void setShoe(Shoe shoe) {
 		this.shoe = shoe;
 	}
+	
+	public void addPlayer(Player player) {
+		this.playersInRoom.add(player);
+	}
+	
+	public void removePlayer(Player player) {
+		this.playersInRoom.remove(player);
+	}
 }
