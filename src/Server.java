@@ -104,16 +104,18 @@ public class Server {
 					
 					switch (message.getType()) {
 						case "create room":
+							
 							break;
 						case "join room":
 							Room room = parser.parseRoom(message.getText());
 							System.out.println("Room object received = " + room.toString());
 							break;
-						/* used for testing purposes
-						case "player":
-							Player player = parser.parsePlayer(message.getText());
-							System.out.println("Player object received = " + player.toString());
-							break;*/
+						case "room":
+							room = parser.parseRoom(message.getText());
+							System.out.println("Room object received = " + room.toString());
+						case "lobby room":
+							LobbyRoom lobbyRoom = parser.parseLobbyRoom(message.getText());
+							System.out.println(lobbyRoom.toString());
 					}
 				}
 				
@@ -191,7 +193,6 @@ public class Server {
 				System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " login successful\nSending successful login reply back to client " + clientSocket.getInetAddress().getHostAddress());
 				message = new Message("login", "success", "");
 				sendMessage(message);
-				System.out.println("Message outside getMessage = " +  message.getType() + " " + message.getStatus() + " " + message.getText());
 			}
 			else {
 				System.out.println("Client " + clientSocket.getInetAddress().getHostAddress() + " login failed\nSending failed login reply back to client " + clientSocket.getInetAddress().getHostAddress());
@@ -209,7 +210,7 @@ public class Server {
 			String [] loginInfo;
 			String username = null;
 			String password = null;
-			File file = new File(System.getProperty("user.dir") + "/database.txt");
+			File file = new File(System.getProperty("user.dir") + "/src/database.txt");
 			System.out.println("loginString = " +  loginString);
 
 			try {
