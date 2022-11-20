@@ -10,7 +10,6 @@ public class Client {
 	private Player player;
 	private LobbyRoom lobbyRoom;
 	
-	
 	public Client() throws Exception {
 		socket = null;
 		input = null;
@@ -19,6 +18,7 @@ public class Client {
 	}
 	
 	public static void main(String [] args) throws Exception {
+		// Create a new instance of client
 		Client client = new Client();
 		
 		// check to see if correct arguments were provided
@@ -42,6 +42,7 @@ public class Client {
 		boolean proceedToLobby = false;
 		boolean logout = false;
 		
+		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
 			line = userInput.nextLine();
@@ -57,88 +58,40 @@ public class Client {
 			}
 		}
 		
+		// If login attempts > 3 close the connection
 		if (loginAttempts >= 3) {
 			client.closeConnection();
 			return;
 		}
 		
-		int counter = 0;
-		while(counter < 2) {
-			Parser parser = new Parser();
-			
-			Player player = new Player("jackson", 214554);
-			Shoe shoe = new Shoe();
-			shoe.generateCards();
-			for (int x = 0; x < 3; ++x) {
-				player.getCurrentHand().add(new ArrayList<Card>());
-				for (int y = 0; y < 10; ++y) {
-					player.getCurrentHand().get(x).add(shoe.dealCard());
-				}
-			}
-		
-			player.setRoomNumber(3);
-			player.setPlayerState(1);
-			player.setPlayer(1);
-			player.setSitting(1);
-			
-			Message message = new Message("player", "", player.toString());
-			client.sendMessage(message);
-			
-			ArrayList<Player> currentPlayers = new ArrayList<Player>();
-			ArrayList<Player> playersInRoom = new ArrayList<Player>();
-			int roomNumber = 23;
-			int readyToStart = 1;
+		Parser parser = new Parser();
+		// Loop for lobby
+		while(!logout) {
+			LobbyRoom clientLobbyRoom = new LobbyRoom();
+			LobbyRoom newLobbyRoom = null;
 			ArrayList<String> username = new ArrayList<String>();
-			username.add("harvey");
 			username.add("md44l");
 			username.add("bmagic");
-
-			int playerState = 2;
-			int accountBalance = 50000;
-			int currentAction = 0;
-			int isPlayer = 1;
-			int isSitting = 1;
-			ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
-			shoe = new Shoe();
-			currentHand.add(new ArrayList<Card>());
+			username.add("ugene");
+			username.add("Alex");
 			
-			for (int x = 0; x < 3; ++x) {
-				for (int y = 0; y < 3; ++y) {
-					currentHand.get(0).add(shoe.dealCard());
-				}
-				
-				currentPlayers.add(new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, currentHand));
-				playersInRoom.add(new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, currentHand));
+			for (int x = 0; x < username.size(); ++x) {
+				clientLobbyRoom.addPlayer(0, username.get(x));
+				clientLobbyRoom.addPlayer(4, username.get(x));
+				clientLobbyRoom.addPlayer(2, username.get(x));
 			}
-		
-			Room room;
-			room = new Room(roomNumber, readyToStart, currentPlayers, playersInRoom, shoe);
 			
-			message = new Message("room", "", room.toString());
+			Message message = new Message("lobby room", "", clientLobbyRoom.toString());
 			client.sendMessage(message);
-			++counter;
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
 		
 		client.closeConnection();
 		return;
 	}
 	
+	
+	// Login function to log onto server
 	public boolean login () {
 		boolean login = false;
 		
@@ -165,6 +118,7 @@ public class Client {
 		return login;
 	}
 	
+	// Register a new user
 	public void register() {
 		System.out.printf("Enter username: ");
 		String username = userInput.nextLine();
@@ -185,6 +139,7 @@ public class Client {
 		}
 	}
 	
+	// Receives message from server
 	public Message getMessage(Message message) {
 		try {
 			while (message == null) {
@@ -200,6 +155,7 @@ public class Client {
 		return message;
 	}
 	
+	// Sends message to server
 	public void sendMessage(Message message) {
 		try {
 			output.writeObject(message);
@@ -210,6 +166,7 @@ public class Client {
 		}
 	}
 	
+	// Closes connection to server.
 	public void closeConnection() {
 		try {
 			if (userInput != null)
@@ -235,7 +192,6 @@ public class Client {
 		int roomNumber = Integer.parseInt(tmpLine[0]);
 		Message message = new Message("join room", Integer.toString(roomNumber), "");
 		sendMessage(message);
-		
 	}
 	
 	// If player is in a room and is actively playing and requests a hit, use this function to send request to server
