@@ -25,10 +25,10 @@ public class LobbyRoom {
 	public String toString() {
 		String output = "";
 		
-		output += numberOfRooms + "%";
+		output += numberOfRooms + "#";
 		
 		for (int x = 0; x < clientLobbyRoom.size(); ++x) {
-			output += x + "#" + clientLobbyRoom.get(x).size() + "#";
+			output += x + clientLobbyRoom.get(x).size() + "#";
 			for (int y = 0; y < clientLobbyRoom.get(x).size(); ++y) {
 				output += clientLobbyRoom.get(x).get(y) + "#";
 			}
