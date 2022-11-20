@@ -7,6 +7,19 @@ public class Parser {
 	
 	public LobbyRoom parseLobbyRoom(String message) {
 		LobbyRoom tmp = null;
+		String [] lobbyRoom;
+		int numberOfRooms;
+		int numberOfPlayers;
+		ArrayList<ArrayList<String>> clientLobbyRoom = new ArrayList<ArrayList<String>>();
+		
+		lobbyRoom = message.split("#");
+		
+		numberOfRooms = Integer.parseInt(lobbyRoom[0]);
+	
+		for (int x = 0; x < numberOfRooms; ++x) {
+			//for (int y = 0; y < Integer.parseInt())
+		}
+		
 		
 		return tmp;
 	}
@@ -18,10 +31,7 @@ public class Parser {
 		Room tmp = null;
 		int roomNumber;
 		int readyToStart;
-		int numberOfCurrentPlayers;
-		ArrayList<Player> currentPlayers = new ArrayList<Player>();
 		int numberOfPlayersInRoom;
-		int numberOfPlayersInRoomIndex;
 		ArrayList<Player> playersInRoom = new ArrayList<Player>();
 		Shoe shoe;
 		
@@ -31,23 +41,15 @@ public class Parser {
 		
 		roomNumber = Integer.parseInt(room[0]);
 		readyToStart = Integer.parseInt(room[1]);
-		numberOfCurrentPlayers = Integer.parseInt(room[2]);
+		numberOfPlayersInRoom= Integer.parseInt(room[2]);
 		
-		for (int x = 3; x < 3 + numberOfCurrentPlayers; ++x) {
-			currentPlayers.add(parsePlayer(room[x]));
-
-		}
-		
-		numberOfPlayersInRoom = Integer.parseInt(room[3 + numberOfCurrentPlayers]);
-		numberOfPlayersInRoomIndex = 3 + numberOfCurrentPlayers;
-		
-		for (int x = 1 + numberOfPlayersInRoomIndex; x < 1 + numberOfPlayersInRoomIndex + numberOfPlayersInRoom; ++x) {
+		for (int x = 3; x < 3 + numberOfPlayersInRoom; ++x) {
 			playersInRoom.add(parsePlayer(room[x]));
 		}
 		
 		shoe = parseShoe(room[room.length - 1]);
 		
-		tmp = new Room(roomNumber, readyToStart, currentPlayers, playersInRoom, shoe);
+		tmp = new Room(roomNumber, readyToStart, playersInRoom, shoe);
 		
 		return tmp;
 	}
