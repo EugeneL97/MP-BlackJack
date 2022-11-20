@@ -22,9 +22,7 @@ public class Player {
 	private int isPlayer;
 	
 	// seatIndex is used to easily find position of player in server's attribute ArrayList<Room> rooms and LobbyRoom lobbyRooms.
-	// This would make remove players from a room much easier than looping through the entire room.
-	// There are a total of 5 seats per room. The seatIndex is set right after a player is added into the room. We will loop through the
-	// room to see at which index the player is situated then save the index number into seatIndex
+	// This would speed up the process of making changes to the player object
 	private int seatIndex;
 	
 	// currentHand stores the player's cards in 2D array. For example, the first time a player receives cards,
