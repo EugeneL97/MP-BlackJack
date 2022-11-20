@@ -49,8 +49,14 @@ public class LobbyRoom {
 		this.clientLobbyRoom = clientLobbyRoom;
 	}
 	
-	public void addPlayer(int roomNumber, String player) {
-		clientLobbyRoom.get(roomNumber).add(player);
+	public boolean addPlayer(int roomNumber, String player) {
+		if (roomNumber >= 0 && roomNumber < numberOfRooms) {
+			clientLobbyRoom.get(roomNumber).add(player);
+			return true;
+		}
+		
+		
+		return false;
 	}
 	
 	public boolean removePlayer(int roomNumber, String player) {
