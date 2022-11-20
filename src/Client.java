@@ -9,6 +9,7 @@ public class Client {
 	private Scanner userInput;
 	private Player player;
 	private LobbyRoom lobbyRoom;
+	private Room room;
 	
 	public Client() throws Exception {
 		socket = null;
@@ -67,21 +68,22 @@ public class Client {
 		Parser parser = new Parser();
 		// Loop for lobby
 		while(!logout) {
-			LobbyRoom clientLobbyRoom = new LobbyRoom();
-			LobbyRoom newLobbyRoom = null;
-			ArrayList<String> username = new ArrayList<String>();
-			username.add("md44l");
-			username.add("bmagic");
-			username.add("ugene");
-			username.add("Alex");
-			
-			for (int x = 0; x < username.size(); ++x) {
-				clientLobbyRoom.addPlayer(0, username.get(x));
-				clientLobbyRoom.addPlayer(4, username.get(x));
-				clientLobbyRoom.addPlayer(2, username.get(x));
+			Player player = new Player("jackson", 214554);
+			Shoe shoe = new Shoe();
+
+			for (int x = 0; x < 3; ++x) {
+				player.getCurrentHand().add(new ArrayList<Card>());
+				for (int y = 0; y < 10; ++y) {
+					player.getCurrentHand().get(x).add(shoe.dealCard());
+				}
 			}
+		
+			player.setRoomNumber(3);
+			player.setPlayerState(1);
+			player.setPlayer(1);
+			player.setSitting(1);
 			
-			Message message = new Message("lobby room", "", clientLobbyRoom.toString());
+			Message message = new Message("player", "", player.toString());
 			client.sendMessage(message);
 		}
 	
