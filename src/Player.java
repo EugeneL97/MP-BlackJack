@@ -21,9 +21,9 @@ public class Player {
 	// isPlayer indicates whether this is a player or dealer. Player has a value of 1 and dealer has a value of 0
 	private int isPlayer;
 	
-	// seatIndex is used to indicate which seat the player chose to sit in.
+	// isSitting is currently useless. It could be used to indicate which seat the player chose to sit in.
 	// There are a total of 5 seats per room.
-	private int seatIndex;
+	private int isSitting;
 	
 	// currentHand stores the player's cards in 2D array. For example, the first time a player receives cards,
 	// the cards will be stored in index 0. If the player decides to split, then we take one card from index
@@ -32,21 +32,21 @@ public class Player {
 	
 	public Player(Player player) {
 		this(player.getUsername(), player.getPlayerState(), player.getRoomNumber(), player.getAccountBalance(),
-				player.getCurrentAction(), player.isPlayer(), player.getSeatIndex(), player.getCurrentHand());
+				player.getCurrentAction(), player.isPlayer(), player.isSitting(), player.getCurrentHand());
 	}
 	
 	public Player(String username, int accountBalance) {
 		this(username, 0, -1, accountBalance, -1, 1, -1, null);
 	}
 	
-	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int isPlayer, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
+	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int isPlayer, int isSitting, ArrayList<ArrayList<Card>> currentHand) {
 		super();
 		
 		this.username = username;
 		this.roomNumber = roomNumber;
 		this.playerState = playerState;
 		this.isPlayer = isPlayer;
-		this.seatIndex = seatIndex;
+		this.isSitting = isSitting;
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
 		this.currentHand = new ArrayList<ArrayList<Card>>();
@@ -67,7 +67,7 @@ public class Player {
 	public String toString() {
 		String output = null;
 		output = username + "#" + Integer.toString(playerState) + "#" + Integer.toString(roomNumber) + "#" + Integer.toString(accountBalance) + "#"
-				+ Integer.toString(currentAction) + "#" + Integer.toString(isPlayer) + "#" + Integer.toString(seatIndex) + "#" + Integer.toString(currentHand.size()) + "#";
+				+ Integer.toString(currentAction) + "#" + Integer.toString(isPlayer) + "#" + Integer.toString(isSitting) + "#" + Integer.toString(currentHand.size()) + "#";
 		
 		for (int x = 0; x < currentHand.size(); ++x) {
 			for (int y = 0; y <currentHand.get(x).size(); ++y) {
@@ -118,12 +118,12 @@ public class Player {
 		this.isPlayer = isPlayer;
 	}
 
-	public int getSeatIndex() {
-		return seatIndex;
+	public int isSitting() {
+		return isSitting;
 	}
 
-	public void setSeatIndex(int seatIndex) {
-		this.seatIndex = seatIndex;
+	public void setSitting(int isSitting) {
+		this.isSitting = isSitting;
 	}
 
 	public int getAccountBalance() {
