@@ -210,7 +210,7 @@ public class Server {
 			String [] loginInfo;
 			String username = null;
 			String password = null;
-			File file = new File(System.getProperty("user.dir") + "/src/database.txt");
+			File file = new File(System.getProperty("user.dir") + "/database.txt");
 			System.out.println("loginString = " +  loginString);
 
 			try {
