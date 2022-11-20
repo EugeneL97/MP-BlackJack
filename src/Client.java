@@ -7,7 +7,10 @@ public class Client {
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 	private Scanner userInput;
-
+	private Player player;
+	private LobbyRoom lobbyRoom;
+	
+	
 	public Client() throws Exception {
 		socket = null;
 		input = null;
@@ -224,5 +227,20 @@ public class Client {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	// If player requests join room use this function to send request to server
+	public void joinRoom(String line) {
+		String [] tmpLine = line.split(",");
+		int roomNumber = Integer.parseInt(tmpLine[0]);
+		Message message = new Message("join room", Integer.toString(roomNumber), "");
+		sendMessage(message);
+		
+	}
+	
+	// If player is in a room and is actively playing and requests a hit, use this function to send request to server
+	public void hit() {
+		Message message = new Message("hit", "", "");
+		sendMessage(message);
 	}
 }
