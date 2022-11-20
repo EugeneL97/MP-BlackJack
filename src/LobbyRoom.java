@@ -4,34 +4,38 @@ public class LobbyRoom {
 	private int numberOfRooms;
 	private ArrayList<ArrayList<String>> clientLobbyRoom;
 	
-	LobbyRoom(LobbyRoom clientLobbyRoom) {
-		this.numberOfRooms = clientLobbyRoom.getNumberOfRooms();
-		this.clientLobbyRoom = new ArrayList<ArrayList<String>>();
+	public LobbyRoom() {
+		numberOfRooms = 5;
 		
+		this.clientLobbyRoom = new ArrayList<ArrayList<String>>();
+		for (int x = 0; x < getNumberOfRooms(); ++x) {
+			this.clientLobbyRoom.add(new ArrayList<String>());
+		}
+	}
+	
+	public LobbyRoom(ArrayList<ArrayList<String>> clientLobbyRoom) {
+		this.numberOfRooms = 5;
+		this.clientLobbyRoom = clientLobbyRoom;
+		
+		/*
 		for (int x = 0; x < clientLobbyRoom.getNumberOfRooms(); ++x) {
 			this.clientLobbyRoom.add(new ArrayList<String>());
 			
 			for (int y = 0; y < clientLobbyRoom.getClientLobbyRoom().get(x).size(); ++y) {
 				this.clientLobbyRoom.get(x).add(clientLobbyRoom.getClientLobbyRoom().get(x).get(y));
 			}
-		}
+		}*/
 	}
 	
-	LobbyRoom() {
-		this.clientLobbyRoom = new ArrayList<ArrayList<String>>();
-		numberOfRooms = 0;
-	}
-
 	public String toString() {
 		String output = "";
 		
-		output += numberOfRooms + "#";
-		
 		for (int x = 0; x < clientLobbyRoom.size(); ++x) {
-			output += x + clientLobbyRoom.get(x).size() + "#";
+			output += x + "%" + clientLobbyRoom.get(x).size() + "%";
 			for (int y = 0; y < clientLobbyRoom.get(x).size(); ++y) {
 				output += clientLobbyRoom.get(x).get(y) + "#";
 			}
+			output += "%";
 		}
 		
 		return output;
@@ -43,27 +47,6 @@ public class LobbyRoom {
 
 	public void setClientLobbyRoom(ArrayList<ArrayList<String>> clientLobbyRoom) {
 		this.clientLobbyRoom = clientLobbyRoom;
-	}
-	
-	public void addRoom() {
-		if (numberOfRooms > 0) {
-			clientLobbyRoom.add(numberOfRooms, new ArrayList<String>());
-		}
-		else {
-			clientLobbyRoom.add(0, new ArrayList<String>());
-		}
-		
-		++numberOfRooms;
-	}
-	
-	public boolean removeRoom() {
-		if (numberOfRooms > 0) {
-			clientLobbyRoom.remove(numberOfRooms - 1);
-			--numberOfRooms;
-			return true;
-		}
-		
-		return false;
 	}
 	
 	public boolean addPlayer(int roomNumber, String player) {
