@@ -121,4 +121,23 @@ public class Player {
 	public void setCurrentAction(int currentAction) {
 		this.currentAction = currentAction;
 	}
+	
+	// Inserts a card at position index in the 2D array ArrayList<ArrayList<Card>> currentHand
+	public void acceptCard(int index, Card card) {
+		if (index >= 0 && index < currentHand.size()) {
+			currentHand.get(index).add(card);
+		}
+	}
+	
+	// Removes a specific card at row index, column cardIndex of the 2D array ArrayList<ArrayList<Card>> currentHand.
+	public void removeCard(int index, int cardIndex) {
+		if (index >= 0 && index < currentHand.size() && cardIndex >= 0 && cardIndex < currentHand.get(index).size()) {
+			currentHand.get(index).remove(cardIndex);
+		}
+	}
+	
+	// Removes all cards
+	public void clearHand() {
+		currentHand.clear();
+	}
 }
