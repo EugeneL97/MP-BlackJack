@@ -10,10 +10,15 @@ public class Room {
 	private ArrayList<Player> playersInRoom;
 	private Shoe shoe;
 	
-	public Room() {
-		this.roomNumber = -1;
+	public Room(int roomNumber) {
+		this.roomNumber = roomNumber;
 		this.readyToStart = 0;
 		this.playersInRoom = new ArrayList<Player>();
+		
+		// Each time a room is created, a dealer is automatically added to the room
+		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
+		this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, currentHand));
+		
 		this.shoe = new Shoe();
 	}
 	
@@ -93,7 +98,7 @@ public class Room {
 	}
 	
 	public void addPlayer(Player player) {
-		if (this.playersInRoom.size() < 5) {
+		if (this.playersInRoom.size() < 6) {
 			this.playersInRoom.add(player);
 		}
 	}
