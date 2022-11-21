@@ -100,12 +100,6 @@ public class Server {
 				output = new ObjectOutputStream(clientSocket.getOutputStream());
 				input = new ObjectInputStream(clientSocket.getInputStream());
 
-				Message message = new Message("rooms", "", server.getRooms().get(0).toString());
-				while(true) {
-					sendMessage(message);
-				}
-				
-				/*
 				boolean proceedToLobby = false; // Used in conjunction with loginCount to continue the login/register loop
 				int loginCount = 0; // Count the number of login attempts. Close connection to client if it exceeds 3 attempts 
 				boolean logout = false; // Close connection if this value is true. If player sends a logout message, set this to true
@@ -195,7 +189,7 @@ public class Server {
 				
 				
 				System.out.println("Thread closing.");
-				closeConnection();*/
+				closeConnection();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
