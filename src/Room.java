@@ -5,7 +5,8 @@ public class Room {
 	
 	// readyToStart indicates whether the current round is starting. If it is, players have 20 seconds
 	// to place wagers. The server will send a timer message to clients every 5 seconds with the time remaining
-	// until players are locked out of the current round.
+	// until players are locked out of the current round. If readyToStart = 0, then the game won't start, else if it's equal 1
+	// then start the game.
 	private int readyToStart;
 	private ArrayList<Player> playersInRoom;
 	private Shoe shoe;
@@ -23,7 +24,11 @@ public class Room {
 	}
 	
 	public Room(Room room) {
-		this(room.getRoomNumber(), room.isReadyToStart(), room.getPlayersInRoom(), room.getShoe());
+		this.roomNumber = room.getRoomNumber();
+		this.readyToStart = room.getReadyToStart();
+		this.playersInRoom = room.getPlayersInRoom();
+		this.shoe = room.getShoe();
+		
 	}
 	
 	public Room(int roomNumber, int readyToStart,
@@ -81,7 +86,7 @@ public class Room {
 		this.playersInRoom = playersInRoom;
 	}
 
-	public int isReadyToStart() {
+	public int getReadyToStart() {
 		return readyToStart;
 	}
 
