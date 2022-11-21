@@ -10,12 +10,14 @@ public class Client {
 	private Player player;
 	private LobbyRoom lobbyRoom;
 	private Room room;
+	private ArrayList<Message> messageQueue;
 	
 	public Client() throws Exception {
 		socket = null;
 		input = null;
 		output = null;
 		userInput = null;
+		messageQueue = new ArrayList<Message>();
 	}
 	
 	public static void main(String [] args) throws Exception {
@@ -37,7 +39,8 @@ public class Client {
 		client.input = new ObjectInputStream(client.socket.getInputStream());
 		client.userInput = new Scanner(System.in);
 		
-		Scanner userInput = new Scanner(System.in);
+	
+		
 		String line = null;
 		int loginAttempts = 0;
 		boolean proceedToLobby = false;
@@ -46,7 +49,7 @@ public class Client {
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
-			line = userInput.nextLine();
+			line = client.userInput.nextLine();
 			
 			switch (line) {
 				case "1":
@@ -81,15 +84,17 @@ public class Client {
 			player.setRoomNumber(3);
 			player.setPlayerState(1);
 			player.setPlayer(1);
-			player.setSitting(1);
+			player.setSeatIndex(-1);
 			
 			Message message = new Message("player", "", player.toString());
 			client.sendMessage(message);
 		}
-	
+		
 		
 		client.closeConnection();
+		
 		return;
+		
 	}
 	
 	
@@ -151,7 +156,8 @@ public class Client {
 			return message;
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			// removed e.printStackTrace(); so that it won't print annoying messages when it expects to receive a message
+			// but there isn't one in the pipe.
 		}
 		
 		return message;
