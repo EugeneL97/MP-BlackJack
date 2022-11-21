@@ -5,7 +5,8 @@ public class Player {
 	
 	// playerState indicates where in the game the player is at
 	// State = 0 means player is in the lobby. State = 1 means player is in a room.
-	// State = 2 means player has sat down in a game and is actively playing.
+	// State = 2 means player has chosen a seat and sat down but has opted not to play this round.
+	// state = 3 means player is actively playing.
 	private int playerState;
 	
 	// roomNumber indicates the player is in which room. It is also used as an index in the server
