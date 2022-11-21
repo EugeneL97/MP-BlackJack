@@ -12,9 +12,27 @@ public class Server {
 	// and which players are in which room.
 	private LobbyRoom lobbyRooms;
 	
+	// newMessage attribute lets the server know if any one of the ClientHandler threads has received a message from
+	// their respective clients after they've entered the lobby room loop and beyond. If a ClientHandler thread received a 
+	// message from their respective clients, then set this variable to true. At the end of each loop in the lobby room,
+	// game room, or playing loop, check if newMessage variable is set to true. If it is true, then each thread will send the
+	// current state of the game, which includes an instance of the server's ArrayList<Room> rooms and the LobbyRoom lobbyRooms
+	// object to the client, so that the client may update their GUI based on which window they're on. For example, if they're
+	// in the lobby GUI, they will only use the LobbyRoom lobbyRooms object to update their GUI. If they're inside the game room
+	// GUI they will use the Room room object to update their GUI.
+	private boolean newMessage;
+	
+	// Max number of rooms
+	private final int MAX_ROOMS = 5;
+	
 	public Server() {
 		this.rooms = new ArrayList<Room>();
 		this.lobbyRooms = new LobbyRoom();
+		this.newMessage = false;
+		
+		for (int x = 0; x < MAX_ROOMS; ++x) {
+			this.rooms.add(new Room());
+		}
 	}
 	
 	public static void main(String [] args) throws Exception {
@@ -48,6 +66,10 @@ public class Server {
 	
 	public ArrayList<Room> getRooms() {
 		return this.rooms;
+	}
+	
+	public LobbyRoom getLobbyRooms() {
+		return this.lobbyRooms;
 	}
 	
 	// Each thread use this class and execute the method run()
@@ -102,7 +124,6 @@ public class Server {
 				Parser parser = new Parser();
 				
 				
-				/*
 				// Loop for when a player's in the lobby.
 				while(!logout) {
 					Message message = null;
@@ -115,28 +136,46 @@ public class Server {
 						 // in the ArrayList<Player> playersInRoom. Client can make a copy of their player object from the room
 						 // into their client side player object. Also, use the all the users on the playersInRoom list to populate
 						 // the GUI with cards and what not 
-						 
 						case "join room":
 							int roomNumber = Integer.parseInt(message.getStatus());
+							// Assigning player to the room number provided
 							player.setRoomNumber(roomNumber);
+							
+							// State = 0 means player's in the lobby. State = 1 means player's in a room
+							// State = 2 means player's sitting down and playing.
+							player.setPlayerState(1);
+							
+							// Adding player to the server's attribute ArrayList<Room> rooms
 							server.getRooms().get(roomNumber).addPlayer(player);
+							
+							// Adding player's name to the server's attribute LobbyRoom lobbyRoom
 							server.lobbyRooms.addPlayer(roomNumber, player.getUsername());
+							
+							// Creating join room success reply message along with the an instance of the room
+							// the player joined
 							message = new Message("join room", "success", server.getRooms().get(roomNumber).toString());
+							
+							// Send the message to the client
 							sendMessage(message);
+							
+							// Execute inGameRoom() function
 							break;
 						case "logout":
 							message = new Message("logout", "success", "");
+							updatePlayer();
+							logout = true;
 							
 					}
 				}
-				*/
-				updatePlayer();
+
+
 				
 				
 				
 				
 				
 				System.out.println("Thread closing.");
+				closeConnection();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -154,69 +193,81 @@ public class Server {
 			}
 		}
 		
-		public void updatePlayer() {
-			try {
-				// Open database file
-				File file = new File(System.getProperty("user.dir") + "/database.txt");
+		
+		
+		public void inGameRoom() {
+			// Get the player's room number
+			int roomNumber = player.getRoomNumber();
+			
+			// Keep looping while player state = 1, meaning player is in a game room
+			while(player.getPlayerState() == 1) {
+				Message message = null;
 				
-				// Reader for database file
-				BufferedReader myReader = new BufferedReader(new FileReader(file));
+				// wait for player to send a message
+				message = getMessage(message);
 				
-				// String to store the database
-				ArrayList<String> database = new ArrayList<String>();
-
-				// read first line from database.txt	
-				String fileInput = myReader.readLine();
+				switch (message.getType()) {
+					// Player sits down to start playing game
+					case "sit":
+						// Player has sat down but not actively playing
+						player.setPlayerState(2);
+						
+						// Start playing the game
+						playGame();
 				
-				// To store database changes output
-				String output = "";
-				
-				// To store tokenized strings
-				String [] tmp;
-				
-				player.setAccountBalance(-111);
-				
-				while (fileInput != null) {
-					tmp = fileInput.split("#");
-					
-					if (tmp[0].equals(player.getUsername())) {
-						tmp[2] = Integer.toString(player.getAccountBalance());
-						fileInput = tmp[0] + "#" + tmp[1] + "#" + tmp[2];
-					}
-					
-					database.add(fileInput);
-					System.out.println(fileInput);
-					fileInput = myReader.readLine();
+						break;
+						
+					// Player chooses to leave the room
+					case "leave room":
+						player.setPlayerState(0);
+						
+						// Removing player to the server's attribute ArrayList<Room> rooms
+						server.getRooms().get(roomNumber).removePlayer(player);
+						
+						// Removing player's name to the server's attribute LobbyRoom lobbyRoom
+						server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
+						break;	
 				}
 				
-				// If there's no match then create the new user
-				FileWriter myWriter = new FileWriter(file);
-				
-				for (int x = 0; x < database.size(); ++x) {
-					output += database.get(x);
-					
-					if (x != database.size() - 1) {
-						output += "\n";
-					}
-				}
-				
-				
-				
-				// Rewrite database
-				System.out.println("Writing to file: " + output);
-				myWriter.write(output);
-				
-				myReader.close();	
-				myWriter.close();
-			}
-			catch(IOException e) {
-				e.printStackTrace();
+				message = new Message("room", "", server.rooms.toString());
 			}
 		}
 		
-		public void playerGame(int roomNumber) {
+		private void playGame() {
+			int roomNumber = player.getRoomNumber();
 			
+			// keep looping while player is sitting at the table
+			while (player.getPlayerState() >= 2) {
+				Message message = null;
+				message = getMessage(message);
+				
+				switch (message.getType()) {
+				// Player sits down to start playing game
+				case "sit out":
+					// player has decided to skip current round
+					player.setPlayerState(4);
+					
+					
+			
+					break;
+					
+				// Player chooses to leave the room
+				case "leave room":
+					player.setPlayerState(0);
+					
+					// Removing player to the server's attribute ArrayList<Room> rooms
+					server.getRooms().get(roomNumber).removePlayer(player);
+					
+					// Removing player's name to the server's attribute LobbyRoom lobbyRoom
+					server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
+					
+					// Creating a leave room success message along with sending and updated version lobbyRooms to the client 
+					message = new Message("leave room", "success", server.getLobbyRooms().toString());
+					
+			}
+			}
 		}
+		
 		
 		// Closes connection from client
 		public void closeConnection() {
@@ -397,6 +448,65 @@ public class Server {
 			}
 			
 			return false;
+		}
+		
+		// Updates player balance in database.txt before loging off
+		public void updatePlayer() {
+			try {
+				// Open database file
+				File file = new File(System.getProperty("user.dir") + "/database.txt");
+				
+				// Reader for database file
+				BufferedReader myReader = new BufferedReader(new FileReader(file));
+				
+				// String to store the database
+				ArrayList<String> database = new ArrayList<String>();
+
+				// read first line from database.txt	
+				String fileInput = myReader.readLine();
+				
+				// To store database changes output
+				String output = "";
+				
+				// To store tokenized strings
+				String [] tmp;
+				
+				player.setAccountBalance(-111);
+				
+				while (fileInput != null) {
+					tmp = fileInput.split("#");
+					
+					if (tmp[0].equals(player.getUsername())) {
+						tmp[2] = Integer.toString(player.getAccountBalance());
+						fileInput = tmp[0] + "#" + tmp[1] + "#" + tmp[2];
+					}
+					
+					database.add(fileInput);
+					System.out.println(fileInput);
+					fileInput = myReader.readLine();
+				}
+				
+				// If there's no match then create the new user
+				FileWriter myWriter = new FileWriter(file);
+				
+				for (int x = 0; x < database.size(); ++x) {
+					output += database.get(x);
+					
+					if (x != database.size() - 1) {
+						output += "\n";
+					}
+				}
+				
+				// Rewrite database
+				System.out.println("Writing to file: " + output);
+				myWriter.write(output);
+				
+				myReader.close();	
+				myWriter.close();
+			}
+			catch(IOException e) {
+				e.printStackTrace();
+			}
 		}
 		
 		
