@@ -20,6 +20,10 @@ public class Client {
 		messageQueue = new ArrayList<Message>();
 	}
 	
+	
+	
+	
+	
 	public static void main(String [] args) throws Exception {
 		// Create a new instance of client
 		Client client = new Client();
@@ -69,25 +73,26 @@ public class Client {
 		}
 		
 		Parser parser = new Parser();
+		
+		// Create a message handler for the client
+		MessageHandler messageHandler = new MessageHandler(client);
+		
+		// Spawn a new thread for the client
+		new Thread(messageHandler).start();
+		
+		
+		Message message = new Message("join room", "3", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Room number = " + client.getRoom().getRoomNumber() + "Players in room = "+ client.getRoom().getPlayersInRoom().get(0).toString());
+		//message = new Message("sit", "", "");
+		
 		// Loop for lobby
 		while(!logout) {
-			Player player = new Player("jackson", 214554);
-			Shoe shoe = new Shoe();
-
-			for (int x = 0; x < 3; ++x) {
-				player.getCurrentHand().add(new ArrayList<Card>());
-				for (int y = 0; y < 10; ++y) {
-					player.getCurrentHand().get(x).add(shoe.dealCard());
-				}
-			}
-		
-			player.setRoomNumber(3);
-			player.setPlayerState(1);
-			player.setPlayer(1);
-			player.setSeatIndex(-1);
 			
-			Message message = new Message("player", "", player.toString());
-			client.sendMessage(message);
+		
+		
+			
 		}
 		
 		
@@ -97,6 +102,50 @@ public class Client {
 		
 	}
 	
+	// MessageHandler will listen to messages and put them in a queue for processing
+		private static class MessageHandler implements Runnable {
+			private Client client;
+			
+			public MessageHandler(Client client) {
+				this.client = client;
+			}
+			
+			@Override
+			public void run() {
+				Parser parser = new Parser();
+				
+				while (true) {
+					Message message = null;
+					message = client.getMessage(message);
+					client.messageQueue.add(message);
+					
+					if (client.messageQueue.size() > 0 ) {
+						switch (client.messageQueue.get(0).getType()) {
+							case "lobby room":
+								client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
+								
+
+								client.getMessageQueue().remove(0);
+								break;
+							case "room":
+								client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
+
+								client.getMessageQueue().remove(0);
+								break;
+							default:
+								break;
+						}
+					}
+					
+					try {
+						Thread.sleep(200);
+					}
+					catch (Exception e) {
+						
+					}
+				}
+			}
+		}
 	
 	// Login function to log onto server
 	public boolean login () {
@@ -170,7 +219,7 @@ public class Client {
 			output.flush();
 		}
 		catch(Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	
@@ -195,10 +244,46 @@ public class Client {
 	}
 	
 	// If player requests join room use this function to send request to server
-	public void joinRoom(String line) {
-		String [] tmpLine = line.split(",");
-		int roomNumber = Integer.parseInt(tmpLine[0]);
+	public void joinRoom(int roomNumber) {
+		//String [] tmpLine = line.split(",");
+		//int roomNumber = Integer.parseInt(tmpLine[0]);
 		Message message = new Message("join room", Integer.toString(roomNumber), "");
+		sendMessage(message);
+	}
+	
+	// If a player requests to log out of the server use this function to send request to server
+	public void logout() {
+		Message message = new Message("logout", "", "");
+		sendMessage(message);
+	}
+	
+	// If a player wants to sit down at a seat
+	public void sit() {
+		Message message = new Message("sit", "", "");
+		sendMessage(message);
+	}
+	
+	// If a player wants to leave the room
+	public void leaveRoom() {
+		Message message = new Message("leave room", "", "");
+		sendMessage(message);
+	}
+	
+	// If a player wants to be deal the first two cards
+	public void deal() {
+		Message message = new Message("deal", "", "");
+		sendMessage(message);
+	}
+	
+	// If a player wants to sit out of the current round and wait for the next round
+	public void sitOut() {
+		Message message = new Message("sit out", "", "");
+		sendMessage(message);
+	}
+	
+	// If a player wants to doubl down on current bet
+	public void doubleDown() {
+		Message message = new Message("double down", "", "");
 		sendMessage(message);
 	}
 	
@@ -206,5 +291,37 @@ public class Client {
 	public void hit() {
 		Message message = new Message("hit", "", "");
 		sendMessage(message);
+	}
+	
+	public Player getPlayer() {
+		return this.player;
+	}
+	
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+	
+	public LobbyRoom getLobbyRoom() {
+		return this.lobbyRoom;
+	}
+	
+	public void setLobbyRoom(LobbyRoom lobbyRoom) {
+		this.lobbyRoom = lobbyRoom;
+	}
+	
+	public Room getRoom() {
+		return this.room;
+	}
+	
+	public void setRoom(Room room) {
+		this.room = room;
+	}
+	
+	public ArrayList<Message> getMessageQueue() {
+		return this.messageQueue;
+	}
+	
+	public void setMessageQueue (ArrayList<Message> messageQueue) {
+		this.messageQueue = messageQueue;
 	}
 }
