@@ -31,7 +31,7 @@ public class Server {
 		this.newMessage = false;
 		
 		for (int x = 0; x < MAX_ROOMS; ++x) {
-			this.rooms.add(new Room());
+			this.rooms.add(new Room(x));
 		}
 	}
 	
@@ -93,16 +93,6 @@ public class Server {
 			this.server = server;
 		}
 		
-		public void checkNewMessage() {
-			if (server.getNewMessage()) {
-				Message message = new Message("lobby room", "", server.getLobbyRooms().toString());
-				sendMessage(message);
-				message = new Message("room", "", server.getRooms().toString());
-				sendMessage(message);
-				
-				server.setNewMessage(false);
-			}
-		}
 		
 		@Override
 		public void run() {		
@@ -110,6 +100,12 @@ public class Server {
 				output = new ObjectOutputStream(clientSocket.getOutputStream());
 				input = new ObjectInputStream(clientSocket.getInputStream());
 
+				Message message = new Message("rooms", "", server.getRooms().get(0).toString());
+				while(true) {
+					sendMessage(message);
+				}
+				
+				/*
 				boolean proceedToLobby = false; // Used in conjunction with loginCount to continue the login/register loop
 				int loginCount = 0; // Count the number of login attempts. Close connection to client if it exceeds 3 attempts 
 				boolean logout = false; // Close connection if this value is true. If player sends a logout message, set this to true
@@ -199,7 +195,7 @@ public class Server {
 				
 				
 				System.out.println("Thread closing.");
-				closeConnection();
+				closeConnection();*/
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -266,6 +262,7 @@ public class Server {
 		
 		private void playGame() {
 			int roomNumber = player.getRoomNumber();
+			int wager = 0;
 			
 			// keep looping while player is sitting at the table
 			while (player.getPlayerState() >= 2) {
@@ -273,10 +270,29 @@ public class Server {
 				message = getMessage(message);
 				
 				switch (message.getType()) {
+				// Player chooses to participate in the room by clicking deal
+				case "deal":
+					// Set player state to actively playing
+					player.setPlayerState(3);
+				
+					// Get player's wager amount and deduct it from the player balance
+					wager = Integer.parseInt(message.getStatus());
+					
+					// Client needs to check that current player's balance equals or exceeds the wager amount.
+					player.setAccountBalance(player.getAccountBalance() - wager);
+					
+					// Deal first two cards to player
+					player.acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
+					player.acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
+					
+					// Setting new message received by client to true
+					server.setNewMessage(true);
+					
+					break;
 				// Player sits down to start playing game
 				case "sit out":
-					// player has decided to skip current round
-					player.setPlayerState(4);
+					// Set player state to skip current round
+					player.setPlayerState(2);
 					
 					// Setting new message received by client to true
 					server.setNewMessage(true);
@@ -292,6 +308,10 @@ public class Server {
 					
 					// Removing player's name to the server's attribute LobbyRoom lobbyRoom
 					server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
+					
+					
+					// update player account balance in the database
+					updatePlayer();
 					
 					// Setting new message received by client to true
 					server.setNewMessage(true);
@@ -326,7 +346,8 @@ public class Server {
 				return message;
 			}
 			catch (Exception e) {
-				e.printStackTrace();
+				// removed e.printStackTrace(); so that it won't print annoying messages when it expects to receive a message
+				// but there isn't one in the pipe.
 			}
 			
 			return message;
@@ -336,10 +357,23 @@ public class Server {
 		public void sendMessage(Message message) {
 			try {
 				output.writeObject(message);
-				output.flush();
+				//output.flush();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+			}
+		}
+		
+		// Checks if server's attribute newMessage. If it's set to true, it will send to the client an instance of
+		// the server's lobbyRoom and rooms object.
+		public void checkNewMessage() {
+			if (server.getNewMessage()) {
+				Message message = new Message("lobby room", "", server.getLobbyRooms().toString());
+				sendMessage(message);
+				message = new Message("room", "", server.getRooms().toString());
+				sendMessage(message);
+				
+				server.setNewMessage(false);
 			}
 		}
 		
