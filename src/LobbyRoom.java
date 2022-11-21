@@ -61,12 +61,7 @@ public class LobbyRoom {
 	
 	public boolean removePlayer(int roomNumber, String player) {
 		if (roomNumber >= 0 && roomNumber < numberOfRooms) {
-			for (int x = 0; x < clientLobbyRoom.get(roomNumber).size(); ++x) {
-				if (clientLobbyRoom.get(roomNumber).get(x).equals("player")) {
-					clientLobbyRoom.get(roomNumber).remove(x);
-					return true;
-				}
-			}
+			clientLobbyRoom.get(roomNumber).remove(player);
 		}
 		
 		return false;
