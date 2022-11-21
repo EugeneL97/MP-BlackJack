@@ -55,11 +55,11 @@ public class Parser {
 		numberOfPlayersInRoom= Integer.parseInt(room[2]);
 		
 		for (int x = 3; x < 3 + numberOfPlayersInRoom; ++x) {
-			playersInRoom.add(parsePlayer(room[x]));
+			Player player = parsePlayer(room[x]);
+			playersInRoom.add(player);
 		}
 		
 		shoe = parseShoe(room[room.length - 1]);
-		
 		tmp = new Room(roomNumber, readyToStart, playersInRoom, shoe);
 		
 		return tmp;
@@ -91,13 +91,17 @@ public class Parser {
 		seatIndex = Integer.parseInt(playerInfo[6]);
 		size = Integer.parseInt(playerInfo[7]);
 		
-		for (int x = 0; x < size; ++x) {
-			currentHand.add(new ArrayList<Card>());
+		
+		if (size > 0) {
+			for (int x = 0; x < size; ++x) {
+				currentHand.add(new ArrayList<Card>());
+			}
+			
+			for (int x = 8; x < playerInfo.length; x += 3) {
+				currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
+			}
 		}
 		
-		for (int x = 8; x < playerInfo.length; x += 3) {
-			currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
-		}
 			
 		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, isPlayer, seatIndex, currentHand);
 		
@@ -107,9 +111,7 @@ public class Parser {
 	// Helper function for parseRoom function
 	public Shoe parseShoe(String message) {
 		Shoe tmp = null;
-		
 		ArrayList<Card> tmpDeck = parseDeck(message);
-		
 		tmp = new Shoe(tmpDeck);
 		
 		return tmp;
@@ -124,7 +126,9 @@ public class Parser {
 		cards = message.split("#");
 		
 		for (int x = 0; x < cards.length; x += 2) {
+	
 			Card tmp = new Card(Integer.parseInt(cards[x]), cards[x + 1]);
+			
 			deck.add(tmp);
 		}
 		
