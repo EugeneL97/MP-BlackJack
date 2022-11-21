@@ -36,48 +36,79 @@ public class Server {
 	}
 	
 	public static void main(String [] args) throws Exception {
-		// create a new instance of Server class. We will pass this variable to the ClientHandler object so that each thread for the client
+		// Create a new instance of Server class. We will pass this variable to the ClientHandler object so that each thread for the client
 		// can access the server attributes ArrayList<Room< rooms and LobbyRoom lobbyRooms in order to update it with changes based on player
 		// input.
 		Server server = new Server();
 		
-		int port = 59898; // port to use
+		int port = 59898; // Port to use
 		ServerSocket serverSocket = new ServerSocket(port); // opening up port to listen for connection
 		serverSocket.setReuseAddress(true);
 		
-		// get real ip address
+		// Get real ip address
 		URL url = new URL("http://checkip.amazonaws.com/");
 		BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
 		
-		// output ip and local host address
+		// Output ip and local host address
 		System.out.println("Server is now running on - \nIP address: " + reader.readLine() + ":" + Integer.toString(port) + "\nLocal Host: " + serverSocket.getInetAddress().getLocalHost() + ":" + Integer.toString(port));
 		
-		// accept connections
+		GameHandler gameHandler = new GameHandler(server.rooms);
+		
+		// Spawn new thread to handle games
+		new Thread(gameHandler).start();
+		
+		// Accept connections
 		while (true) {
 			Socket incomingConnection = serverSocket.accept();
 			System.out.println("New client connected " + incomingConnection.getInetAddress().getHostAddress());
 			System.out.flush();
 			ClientHandler clientSocket = new ClientHandler(incomingConnection, server);
 			
-			// spawn new thread for each conneciton accepted
+			// Spawn new thread for each conneciton accepted
 			new Thread(clientSocket).start();
+			
 		}
 	}
 	
-	public ArrayList<Room> getRooms() {
-		return this.rooms;
-	}
 	
-	public LobbyRoom getLobbyRooms() {
-		return this.lobbyRooms;
-	}
-	
-	public Boolean getNewMessage() {
-		return this.newMessage;
-	}
-	
-	public void setNewMessage(Boolean newMessage) {
-		this.newMessage = newMessage;
+	// This class will handle all the games that are running in each room
+	private static class GameHandler implements Runnable {
+		ArrayList<Room> rooms;
+		public GameHandler (ArrayList<Room> rooms) {
+			this.rooms = rooms;
+		}
+		
+		@Override
+		public void run() {
+			while(true) {
+				for (int x = 0; x < rooms.size(); ++x) {
+					switch (rooms.get(x).getReadyToStart()) {
+						// if room is not ready to start, check to see if any player's state = 3.
+						// if a player's state = 3, then that means the game should start, therefore, change the
+						// the room's state = 1.
+						case 0:
+							for (int y = 0; y < rooms.get(x).getPlayersInRoom().size(); ++y) {
+								if (rooms.get(x).getPlayersInRoom().get(y).getPlayerState() == 3) {
+									rooms.get(x).setReadyToStart(1);
+								}
+							}
+							
+							break;
+						case 1:
+							for (int y = 0; y < rooms.get(x).getPlayersInRoom().size(); ++y) {
+								if (rooms.get(x).getPlayersInRoom().get(y).getPlayerState() == 3) {
+									switch (rooms.get(x).getPlayersInRoom().get(y).getCurrentAction()) {
+										// Deal Card
+										case 0:
+											break;
+											
+									}
+								}
+							}
+					}
+				}
+			}
+		}
 	}
 	
 	// Each thread use this class and execute the method run()
@@ -135,6 +166,7 @@ public class Server {
 				
 				// Loop for when a player's in the lobby.
 				while(!logout) {
+					System.out.println("Inside game lobby loop\n");
 					Message message = null;
 					message = getMessage(message);
 					
@@ -146,6 +178,7 @@ public class Server {
 						 // into their client side player object. Also, use the all the users on the playersInRoom list to populate
 						 // the GUI with cards and what not 
 						case "join room":
+							System.out.println("Received join room message\n");
 							int roomNumber = Integer.parseInt(message.getStatus());
 							// Assigning player to the room number provided
 							player.setRoomNumber(roomNumber);
@@ -163,6 +196,8 @@ public class Server {
 							// Setting new message received by client to true
 							server.setNewMessage(true);
 							
+							checkNewMessage();
+							
 							// Execute inGameRoom() function
 							inGameRoom();
 							break;
@@ -178,7 +213,6 @@ public class Server {
 						default:
 							
 					}
-					
 					checkNewMessage();
 				}
 
@@ -212,11 +246,11 @@ public class Server {
 		public void inGameRoom() {
 			// Get the player's room number
 			int roomNumber = player.getRoomNumber();
-			
+			System.out.println("Inside game room loop\n");
 			// Keep looping while player state = 1, meaning player is in a game room
 			while(player.getPlayerState() == 1) {
 				Message message = null;
-				
+				System.out.println("Inside while loop of game room\n");
 				// wait for player to send a message
 				message = getMessage(message);
 				
@@ -247,9 +281,9 @@ public class Server {
 						// Setting new message received by client to true
 						server.setNewMessage(true);
 						
-						break;	
+						break;
+					default:
 				}
-				
 				checkNewMessage();
 			}
 		}
@@ -259,16 +293,13 @@ public class Server {
 			int wager = 0;
 			
 			// keep looping while player is sitting at the table
-			while (player.getPlayerState() >= 2) {
+			while (player.getPlayerState() == 2) {
 				Message message = null;
 				message = getMessage(message);
 				
 				switch (message.getType()) {
 				// Player chooses to participate in the room by clicking deal
 				case "deal":
-					// Set player state to actively playing
-					player.setPlayerState(3);
-				
 					// Get player's wager amount and deduct it from the player balance
 					wager = Integer.parseInt(message.getStatus());
 					
@@ -276,8 +307,7 @@ public class Server {
 					player.setAccountBalance(player.getAccountBalance() - wager);
 					
 					// Deal first two cards to player
-					player.acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
-					player.acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
+					player.setCurrentAction(0);
 					
 					// Setting new message received by client to true
 					server.setNewMessage(true);
@@ -286,7 +316,7 @@ public class Server {
 				// Player sits down to start playing game
 				case "sit out":
 					// Set player state to skip current round
-					player.setPlayerState(2);
+					player.setCurrentAction(4);
 					
 					// Setting new message received by client to true
 					server.setNewMessage(true);
@@ -295,7 +325,11 @@ public class Server {
 					
 				// Player chooses to leave the room
 				case "leave room":
+					// Player wants to leave the game room
 					player.setPlayerState(0);
+					
+					// Reset player's current action to default value of 4
+					player.setCurrentAction(4);
 					
 					// Removing player to the server's attribute ArrayList<Room> rooms
 					server.getRooms().get(roomNumber).removePlayer(player);
@@ -309,6 +343,10 @@ public class Server {
 					
 					// Setting new message received by client to true
 					server.setNewMessage(true);
+					break;
+					
+				// Player wants to double the bet
+				case "double down":
 					
 				}
 				
@@ -335,6 +373,13 @@ public class Server {
 			try {
 				while (message == null) {
 					message = (Message) input.readObject();
+					
+					try {
+						Thread.sleep(100);
+					}
+					catch (Exception e) {
+						
+					}
 				}
 
 				return message;
@@ -364,9 +409,15 @@ public class Server {
 			if (server.getNewMessage()) {
 				Message message = new Message("lobby room", "", server.getLobbyRooms().toString());
 				sendMessage(message);
-				message = new Message("room", "", server.getRooms().toString());
-				sendMessage(message);
+				int playerIndex = -1;
 				
+				for (int x = 0; x < server.getRooms().get(player.getRoomNumber()).getPlayersInRoom().size(); ++x) {
+					if (server.getRooms().get(player.getRoomNumber()).getPlayersInRoom().get(x).getUsername().equals(player.getUsername())) {
+						playerIndex = x;
+					}
+				}
+				message = new Message("room", Integer.toString(playerIndex), server.getRooms().get(player.getRoomNumber()).toString());
+				sendMessage(message);
 				server.setNewMessage(false);
 			}
 		}
@@ -572,5 +623,21 @@ public class Server {
 		}
 		
 		
-	}	
+	}
+	
+	public ArrayList<Room> getRooms() {
+		return this.rooms;
+	}
+	
+	public LobbyRoom getLobbyRooms() {
+		return this.lobbyRooms;
+	}
+	
+	public Boolean getNewMessage() {
+		return this.newMessage;
+	}
+	
+	public void setNewMessage(Boolean newMessage) {
+		this.newMessage = newMessage;
+	}
 }
