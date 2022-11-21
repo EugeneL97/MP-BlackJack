@@ -72,6 +72,14 @@ public class Server {
 		return this.lobbyRooms;
 	}
 	
+	public Boolean getNewMessage() {
+		return this.newMessage;
+	}
+	
+	public void setNewMessage(Boolean newMessage) {
+		this.newMessage = newMessage;
+	}
+	
 	// Each thread use this class and execute the method run()
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
@@ -83,6 +91,17 @@ public class Server {
 		public ClientHandler(Socket socket, Server server) {
 			this.clientSocket = socket;
 			this.server = server;
+		}
+		
+		public void checkNewMessage() {
+			if (server.getNewMessage()) {
+				Message message = new Message("lobby room", "", server.getLobbyRooms().toString());
+				sendMessage(message);
+				message = new Message("room", "", server.getRooms().toString());
+				sendMessage(message);
+				
+				server.setNewMessage(false);
+			}
 		}
 		
 		@Override
@@ -151,21 +170,26 @@ public class Server {
 							// Adding player's name to the server's attribute LobbyRoom lobbyRoom
 							server.lobbyRooms.addPlayer(roomNumber, player.getUsername());
 							
-							// Creating join room success reply message along with the an instance of the room
-							// the player joined
-							message = new Message("join room", "success", server.getRooms().get(roomNumber).toString());
-							
-							// Send the message to the client
-							sendMessage(message);
+							// Setting new message received by client to true
+							server.setNewMessage(true);
 							
 							// Execute inGameRoom() function
+							inGameRoom();
 							break;
+							
 						case "logout":
 							message = new Message("logout", "success", "");
 							updatePlayer();
 							logout = true;
 							
+							// Setting new message received by client to true
+							server.setNewMessage(true);
+							
+						default:
+							
 					}
+					
+					checkNewMessage();
 				}
 
 
@@ -212,6 +236,9 @@ public class Server {
 						// Player has sat down but not actively playing
 						player.setPlayerState(2);
 						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+						
 						// Start playing the game
 						playGame();
 				
@@ -226,10 +253,14 @@ public class Server {
 						
 						// Removing player's name to the server's attribute LobbyRoom lobbyRoom
 						server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+						
 						break;	
 				}
 				
-				message = new Message("room", "", server.rooms.toString());
+				checkNewMessage();
 			}
 		}
 		
@@ -247,7 +278,8 @@ public class Server {
 					// player has decided to skip current round
 					player.setPlayerState(4);
 					
-					
+					// Setting new message received by client to true
+					server.setNewMessage(true);
 			
 					break;
 					
@@ -261,10 +293,12 @@ public class Server {
 					// Removing player's name to the server's attribute LobbyRoom lobbyRoom
 					server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
 					
-					// Creating a leave room success message along with sending and updated version lobbyRooms to the client 
-					message = new Message("leave room", "success", server.getLobbyRooms().toString());
+					// Setting new message received by client to true
+					server.setNewMessage(true);
 					
-			}
+				}
+				
+				checkNewMessage();
 			}
 		}
 		
