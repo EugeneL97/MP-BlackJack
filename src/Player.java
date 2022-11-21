@@ -4,9 +4,9 @@ public class Player {
 	private String username;
 	
 	// playerState indicates where in the game the player is at
-	// State = 0 means player is in the lobby. State = 1 means player is in a room.
-	// State = 2 means player has chosen a seat and sat down but has opted not to play this round.
-	// state = 3 means player is actively playing.
+	// State = 0 means player is in the lobby. 
+	// State = 1 means player is in a room.
+	// State = 2 means player has chosen a seat and sat down. See what player's currentAction to determine what the dealer should do
 	private int playerState;
 	
 	// roomNumber indicates the player is in which room. It is also used as an index in the server
@@ -14,9 +14,13 @@ public class Player {
 	private int roomNumber;
 	private int accountBalance;
 	
-	// currentAction signifies what the player's current action is. This attribute may be useless
-	// since we're sending the current action by sending a message to the server. We could repurpose
-	// this attribute for something else
+	// currentAction signifies what the player's current action is.
+	// currentAction = 0 means player has clicked deal and wants to receive first two cards
+	// currentAction = 1 means player wants a hit, so players receives another card
+	// currentAction = 2 means player wants to double down on the bet, so double the wager amount
+	// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards and
+	// will wait to see if the hand beats the dealer's.
+	// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
 	private int currentAction;
 	
 	// isPlayer indicates whether this is a player or dealer. Player has a value of 1 and dealer has a value of 0
@@ -37,7 +41,7 @@ public class Player {
 	}
 	
 	public Player(String username, int accountBalance) {
-		this(username, 0, -1, accountBalance, -1, 1, -1, null);
+		this(username, 0, -1, accountBalance, 4, 1, -1, new ArrayList<ArrayList<Card>> ());
 	}
 	
 	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int isPlayer, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
@@ -50,6 +54,8 @@ public class Player {
 		this.seatIndex = seatIndex;
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
+		this.currentHand = currentHand;
+		/*
 		this.currentHand = new ArrayList<ArrayList<Card>>();
 		
 		if (currentHand != null) {
@@ -62,7 +68,7 @@ public class Player {
 					this.currentHand.get(x).add(currentHand.get(x).get(y));
 				}
 			}
-		}
+		}*/
 	}
 
 	public String toString() {
