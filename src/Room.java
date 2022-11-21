@@ -2,6 +2,10 @@ import java.util.*;
 
 public class Room {
 	private int roomNumber;
+	
+	// readyToStart indicates whether the current round is starting. If it is, players have 20 seconds
+	// to place wagers. The server will send a timer message to clients every 5 seconds with the time remaining
+	// until players are locked out of the current round.
 	private int readyToStart;
 	private ArrayList<Player> playersInRoom;
 	private Shoe shoe;
@@ -89,10 +93,14 @@ public class Room {
 	}
 	
 	public void addPlayer(Player player) {
-		this.playersInRoom.add(player);
+		if (this.playersInRoom.size() < 5) {
+			this.playersInRoom.add(player);
+		}
 	}
 	
 	public void removePlayer(Player player) {
-		this.playersInRoom.remove(player);
+		if (this.playersInRoom.size() > 0) {
+			this.playersInRoom.remove(player);
+		}
 	}
 }
