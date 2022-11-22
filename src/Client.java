@@ -20,7 +20,29 @@ public class Client {
 		messageQueue = new ArrayList<Message>();
 	}
 	
-	
+	// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
+	// If a currentAction = -1 and the timer runs out, then do nothing.
+	// This timer should start when a player clicks on deal, hit, and double down. If timer runs out after a player has clicked these buttons
+	// set player's currentAction = 3 and send the server an updated player object with the room number in the status field.
+	public void countDown() {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	if (player.getPlayerState() == 3) {
+	        		switch (player.getCurrentAction()) {
+		        		case 0: case 1: case 2:
+		        			player.setCurrentAction(3);
+		        			break;
+		        		default:
+		        			break;
+	        		}
+	        	}
+	        }
+	    };
+	    Timer timer = new Timer("Timer");
+	    
+	    long delay = 10000L;
+	    timer.schedule(task, delay);
+	}
 	
 	
 	
@@ -84,7 +106,8 @@ public class Client {
 		Message message = new Message("join room", "3", "");
 		client.sendMessage(message);
 		Thread.sleep(1000);
-		System.out.println("Room number = " + client.getRoom().getRoomNumber() + "Players in room = "+ client.getRoom().getPlayersInRoom().get(0).toString());
+		System.out.println("Room number = " + client.getRoom().getRoomNumber() + "Players in room = "+ client.getRoom().getPlayersInRoom().get(0).toString()
+				+ ", " + client.getRoom().getPlayersInRoom().get(1).toString());
 		//message = new Message("sit", "", "");
 		
 		// Loop for lobby
