@@ -137,7 +137,7 @@ public class Server {
 				
 				
 				// The login/register loop. Continue to loop unless login attempt is greater than 3 or proceedToLobby is set to true
-				while(!proceedToLobby && loginCount < 3) {
+				while(!proceedToLobby) {
 					Message message = null;
 					message = getMessage(message);
 					
@@ -145,6 +145,13 @@ public class Server {
 						case "login":
 							++loginCount;
 							proceedToLobby = login(message);
+							// If there are 3 failed login attempts close the connection and end the thread.
+							if (loginCount >= 3) {
+								closeConnection();
+								System.out.println("Too many failed login attempts. Closing connection.");
+								return;
+							}
+							
 							break;
 						
 						case "register":
@@ -153,12 +160,7 @@ public class Server {
 					}
 				}
 				
-				// If there are 3 failed login attempts close the connection and end the thread.
-				if (loginCount >= 3) {
-					closeConnection();
-					System.out.println("Too many failed login attempts. Closing connection.");
-					return;
-				}
+				
 				
 				// Instantiate a parser object to convert client message that contains a class into an instance of the class.
 				Parser parser = new Parser();
@@ -167,6 +169,7 @@ public class Server {
 				// Loop for when a player's in the lobby.
 				while(!logout) {
 					System.out.println("Inside game lobby loop\n");
+					
 					Message message = null;
 					message = getMessage(message);
 					
@@ -196,10 +199,12 @@ public class Server {
 							// Setting new message received by client to true
 							server.setNewMessage(true);
 							
+							// Since newMessage was just set to true, send the class objects to the client.
 							checkNewMessage();
 							
 							// Execute inGameRoom() function
 							inGameRoom();
+							
 							break;
 							
 						case "logout":
@@ -244,13 +249,17 @@ public class Server {
 		
 		
 		public void inGameRoom() {
+			System.out.println("Inside game room loop\n");
+			
 			// Get the player's room number
 			int roomNumber = player.getRoomNumber();
-			System.out.println("Inside game room loop\n");
+			
 			// Keep looping while player state = 1, meaning player is in a game room
 			while(player.getPlayerState() == 1) {
 				Message message = null;
+				
 				System.out.println("Inside while loop of game room\n");
+				
 				// wait for player to send a message
 				message = getMessage(message);
 				
@@ -262,6 +271,9 @@ public class Server {
 						
 						// Setting new message received by client to true
 						server.setNewMessage(true);
+						
+						// Since newMessage was just set to true, send the class objects to the client.
+						checkNewMessage();
 						
 						// Start playing the game
 						playGame();
@@ -281,7 +293,9 @@ public class Server {
 						// Setting new message received by client to true
 						server.setNewMessage(true);
 						
-						break;
+						// Return to calling function, the lobby loop.
+						return;
+						
 					default:
 				}
 				checkNewMessage();
@@ -290,7 +304,6 @@ public class Server {
 		
 		private void playGame() {
 			int roomNumber = player.getRoomNumber();
-			int wager = 0;
 			
 			// keep looping while player is sitting at the table
 			while (player.getPlayerState() == 2) {
@@ -298,56 +311,66 @@ public class Server {
 				message = getMessage(message);
 				
 				switch (message.getType()) {
-				// Player chooses to participate in the room by clicking deal
-				case "deal":
-					// Get player's wager amount and deduct it from the player balance
-					wager = Integer.parseInt(message.getStatus());
-					
-					// Client needs to check that current player's balance equals or exceeds the wager amount.
-					player.setAccountBalance(player.getAccountBalance() - wager);
-					
-					// Deal first two cards to player
-					player.setCurrentAction(0);
-					
-					// Setting new message received by client to true
-					server.setNewMessage(true);
-					
-					break;
-				// Player sits down to start playing game
-				case "sit out":
-					// Set player state to skip current round
-					player.setCurrentAction(4);
-					
-					// Setting new message received by client to true
-					server.setNewMessage(true);
-			
-					break;
-					
-				// Player chooses to leave the room
-				case "leave room":
-					// Player wants to leave the game room
-					player.setPlayerState(0);
-					
-					// Reset player's current action to default value of 4
-					player.setCurrentAction(4);
-					
-					// Removing player to the server's attribute ArrayList<Room> rooms
-					server.getRooms().get(roomNumber).removePlayer(player);
-					
-					// Removing player's name to the server's attribute LobbyRoom lobbyRoom
-					server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
-					
-					
-					// update player account balance in the database
-					updatePlayer();
-					
-					// Setting new message received by client to true
-					server.setNewMessage(true);
-					break;
-					
-				// Player wants to double the bet
-				case "double down":
-					
+					// Player chooses to participate in the room by clicking deal
+					case "deal":
+						// Get player's wager amount and deduct it from the player balance
+						player.setWager(Integer.parseInt(message.getStatus()));
+						
+						// Client needs to check that current player's balance equals or exceeds the wager amount.
+						player.setAccountBalance(player.getAccountBalance() - player.getWager());
+						
+						// Deal first two cards to player
+						player.setCurrentAction(0);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+						
+						break;
+						
+					// Player sits down to start playing game
+					case "sit out":
+						// Set player state to skip current round
+						player.setCurrentAction(4);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+				
+						break;
+						
+					// Player chooses to leave the room
+					case "leave room":
+						// Player wants to leave the game room
+						player.setPlayerState(0);
+						
+						// Reset player's current action to default value of 4
+						player.setCurrentAction(4);
+						
+						// Removing player to the server's attribute ArrayList<Room> rooms
+						server.getRooms().get(roomNumber).removePlayer(player);
+						
+						// Removing player's name to the server's attribute LobbyRoom lobbyRoom
+						server.lobbyRooms.removePlayer(roomNumber, player.getUsername());
+						
+						
+						// update player account balance in the database
+						updatePlayer();
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+						
+						// Since newMessage was just set to true, send the class objects to the client.
+						checkNewMessage();
+						
+						// Return to the calling function
+						return;
+						
+					// Player wants to double the bet
+					case "double down":
+						// Doubling the player's wager
+						player.setWager(player.getWager() * 2);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
 				}
 				
 				checkNewMessage();
