@@ -52,7 +52,7 @@ public class Server {
 		// Output ip and local host address
 		System.out.println("Server is now running on - \nIP address: " + reader.readLine() + ":" + Integer.toString(port) + "\nLocal Host: " + serverSocket.getInetAddress().getLocalHost() + ":" + Integer.toString(port));
 		
-		GameHandler gameHandler = new GameHandler(server.rooms);
+		GameHandler gameHandler = new GameHandler(server);
 		
 		// Spawn new thread to handle games
 		new Thread(gameHandler).start();
@@ -73,38 +73,35 @@ public class Server {
 	
 	// This class will handle all the games that are running in each room
 	private static class GameHandler implements Runnable {
-		ArrayList<Room> rooms;
-		public GameHandler (ArrayList<Room> rooms) {
-			this.rooms = rooms;
+		Server server;
+
+		public GameHandler (Server server) {
+			this.server = server;
 		}
 		
 		@Override
 		public void run() {
 			while(true) {
-				for (int x = 0; x < rooms.size(); ++x) {
-					switch (rooms.get(x).getReadyToStart()) {
-						// if room is not ready to start, check to see if any player's state = 3.
-						// if a player's state = 3, then that means the game should start, therefore, change the
+				for (int x = 0; x < server.getRooms().size(); ++x) {
+					switch (server.getRooms().get(x).getReadyToStart()) {
+						// If room is not ready to start, check to see if any player's currentAction != -1.
+						// If a player's currentAction != -1, then that means the game should start, therefore, change the
 						// the room's state = 1.
 						case 0:
-							for (int y = 0; y < rooms.get(x).getPlayersInRoom().size(); ++y) {
-								if (rooms.get(x).getPlayersInRoom().get(y).getPlayerState() == 3) {
-									rooms.get(x).setReadyToStart(1);
+							for (int y = 0; y < server.getRooms().get(x).getPlayersInRoom().size(); ++y) {
+								if (server.getRooms().get(x).getPlayersInRoom().get(y).getCurrentAction() != -1) {
+									server.getRooms().get(x).setReadyToStart(1);
+									server.setNewMessage(true);
 								}
 							}
 							
 							break;
 						case 1:
-							for (int y = 0; y < rooms.get(x).getPlayersInRoom().size(); ++y) {
-								if (rooms.get(x).getPlayersInRoom().get(y).getPlayerState() == 3) {
-									switch (rooms.get(x).getPlayersInRoom().get(y).getCurrentAction()) {
-										// Deal Card
-										case 0:
-											break;
-											
-									}
-								}
-							}
+							// If game is in readyToStart = 1, then that means a player has chosen some action. If so, then
+							// dealer receives first two cards.
+							server.getRooms().get(x).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(x).getShoe().dealCard());
+							server.getRooms().get(x).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(x).getShoe().dealCard());
+							
 					}
 				}
 			}
@@ -309,6 +306,12 @@ public class Server {
 			while (player.getPlayerState() == 2) {
 				Message message = null;
 				message = getMessage(message);
+				int notDecided = -1;
+				int deal = 0;
+				int hit = 1;
+				int doubleDown = 2;
+				int stand = 3;
+				int sitOut = 4;
 				
 				switch (message.getType()) {
 					// Player chooses to participate in the room by clicking deal
@@ -319,17 +322,25 @@ public class Server {
 						// Client needs to check that current player's balance equals or exceeds the wager amount.
 						player.setAccountBalance(player.getAccountBalance() - player.getWager());
 						
-						// Deal first two cards to player
-						player.setCurrentAction(0);
+						// Set player action to deal which player receives first two cards
+						player.setCurrentAction(deal);
 						
 						// Setting new message received by client to true
 						server.setNewMessage(true);
 						
 						break;
 						
+					case "hit":
+						// Set player action to hit which player receives an additional card
+						player.setCurrentAction(hit);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+						
+						break;
 					// Player sits down to start playing game
 					case "sit out":
-						// Set player state to skip current round
+						// Set player action to skip current round
 						player.setCurrentAction(4);
 						
 						// Setting new message received by client to true
@@ -366,13 +377,14 @@ public class Server {
 						
 					// Player wants to double the bet
 					case "double down":
-						// Doubling the player's wager
-						player.setWager(player.getWager() * 2);
+						// Set player's currentAction = 2, meaning player wants to double down
+						player.setCurrentAction(2);
 						
 						// Setting new message received by client to true
 						server.setNewMessage(true);
 				}
 				
+				// Send player the updated objects
 				checkNewMessage();
 			}
 		}
