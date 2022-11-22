@@ -5,8 +5,10 @@ public class Room {
 	
 	// readyToStart indicates whether the current round is starting. If it is, players have 20 seconds
 	// to place wagers. The server will send a timer message to clients every 5 seconds with the time remaining
-	// until players are locked out of the current round. If readyToStart = 0, then the game won't start, else if it's equal 1
-	// then start the game.
+	// until players are locked out of the current round. 
+	// readyToStart = 0 means game is in idle state and waiting for a player to sit and choose an action to start the game
+	// readyToStart = 1 means game is in waiting for player to decide which moves to make while timer is counting down
+	// readyToStart = 2 means game is in proceed state, meaning either all players have finished deciding their move or timer has ran out
 	private int readyToStart;
 	private ArrayList<Player> playersInRoom;
 	private Shoe shoe;
@@ -54,6 +56,21 @@ public class Room {
 		this.shoe = shoe;
 	}
 
+	// Countdown timer set to a default of 10000L which is 10 seconds, at which time the readyToStart attribute of the room
+	// will be set to the parameter's value
+	public void countDown(int readyToStart) {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	setReadyToStart(readyToStart);
+	            System.out.println("Ready to start has been changed to = " + getReadyToStart());
+	        }
+	    };
+	    Timer timer = new Timer("Timer");
+	    
+	    long delay = 10000L;
+	    timer.schedule(task, delay);
+	}
+	
 	public String toString() {
 		String output = "";
 		
