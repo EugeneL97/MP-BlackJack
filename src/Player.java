@@ -15,6 +15,7 @@ public class Player {
 	private int accountBalance;
 	
 	// currentAction signifies what the player's current action is.
+	// currentAction = -1 means player has not decided on anything
 	// currentAction = 0 means player has clicked deal and wants to receive first two cards
 	// currentAction = 1 means player wants a hit, so players receives another card
 	// currentAction = 2 means player wants to double down on the bet, so double the wager amount
@@ -41,7 +42,7 @@ public class Player {
 	}
 	
 	public Player(String username, int accountBalance) {
-		this(username, 0, -1, accountBalance, 4, 1, -1, new ArrayList<ArrayList<Card>> ());
+		this(username, 0, -1, accountBalance, -1, 1, -1, new ArrayList<ArrayList<Card>> ());
 	}
 	
 	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int wager, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
@@ -55,20 +56,6 @@ public class Player {
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
 		this.currentHand = currentHand;
-		/*
-		this.currentHand = new ArrayList<ArrayList<Card>>();
-		
-		if (currentHand != null) {
-			for (int x = 0; x < currentHand.size(); ++x) {
-				this.currentHand.add(new ArrayList<Card> ());
-			}
-			
-			for (int x = 0; x < currentHand.size(); ++x) {
-				for (int y = 0; y < currentHand.get(x).size(); ++y) {
-					this.currentHand.get(x).add(currentHand.get(x).get(y));
-				}
-			}
-		}*/
 	}
 
 	public String toString() {
