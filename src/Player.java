@@ -23,8 +23,8 @@ public class Player {
 	// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
 	private int currentAction;
 	
-	// isPlayer indicates whether this is a player or dealer. Player has a value of 1 and dealer has a value of 0
-	private int isPlayer;
+	// Indicates player's current wager
+	private int wager;
 	
 	// seatIndex is used to easily find position of player in server's attribute ArrayList<Room> rooms and LobbyRoom lobbyRooms.
 	// This would speed up the process of making changes to the player object
@@ -37,20 +37,20 @@ public class Player {
 	
 	public Player(Player player) {
 		this(player.getUsername(), player.getPlayerState(), player.getRoomNumber(), player.getAccountBalance(),
-				player.getCurrentAction(), player.isPlayer(), player.getSeatIndex(), player.getCurrentHand());
+				player.getCurrentAction(), player.getWager(), player.getSeatIndex(), player.getCurrentHand());
 	}
 	
 	public Player(String username, int accountBalance) {
 		this(username, 0, -1, accountBalance, 4, 1, -1, new ArrayList<ArrayList<Card>> ());
 	}
 	
-	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int isPlayer, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
+	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int wager, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
 		super();
 		
 		this.username = username;
 		this.roomNumber = roomNumber;
 		this.playerState = playerState;
-		this.isPlayer = isPlayer;
+		this.wager = wager;
 		this.seatIndex = seatIndex;
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
@@ -74,7 +74,7 @@ public class Player {
 	public String toString() {
 		String output = null;
 		output = username + "#" + Integer.toString(playerState) + "#" + Integer.toString(roomNumber) + "#" + Integer.toString(accountBalance) + "#"
-				+ Integer.toString(currentAction) + "#" + Integer.toString(isPlayer) + "#" + Integer.toString(seatIndex) + "#" + Integer.toString(currentHand.size()) + "#";
+				+ Integer.toString(currentAction) + "#" + Integer.toString(wager) + "#" + Integer.toString(seatIndex) + "#" + Integer.toString(currentHand.size()) + "#";
 		
 		for (int x = 0; x < currentHand.size(); ++x) {
 			for (int y = 0; y <currentHand.get(x).size(); ++y) {
@@ -117,12 +117,12 @@ public class Player {
 		this.currentHand = currentHand;
 	}
 
-	public int isPlayer() {
-		return isPlayer;
+	public int getWager() {
+		return wager;
 	}
 
-	public void setPlayer(int isPlayer) {
-		this.isPlayer = isPlayer;
+	public void setWager(int wager) {
+		this.wager = wager;
 	}
 
 	public int getSeatIndex() {
