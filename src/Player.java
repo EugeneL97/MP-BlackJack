@@ -4,9 +4,13 @@ public class Player {
 	private String username;
 	
 	// playerState indicates where in the game the player is at
-	// State = 0 means player is in the lobby. 
-	// State = 1 means player is in a room.
-	// State = 2 means player has chosen a seat and sat down. See what player's currentAction to determine what the dealer should do
+	// playerState = 0 means player is in the lobby. 
+	// playerState = 1 means player is in a room.
+	// playerState = 2 means player has chosen a seat and sat down. 
+	// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
+	// by the server, set State = 2 so that server will not perform the same action again.
+	// playerState = 4 means player has decided on their action and is waiting response from the server. In the mean time
+	// the GUI should not give any buttons for the players to click until tally has been made.
 	private int playerState;
 	
 	// roomNumber indicates the player is in which room. It is also used as an index in the server
@@ -19,8 +23,8 @@ public class Player {
 	// currentAction = 0 means player has clicked deal and wants to receive first two cards
 	// currentAction = 1 means player wants a hit, so players receives another card
 	// currentAction = 2 means player wants to double down on the bet, so double the wager amount
-	// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards and
-	// will wait to see if the hand beats the dealer's.
+	// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
+	// After the tally, set currentAction = -1
 	// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
 	private int currentAction;
 	
