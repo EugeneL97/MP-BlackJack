@@ -158,6 +158,47 @@ public class Server {
 			}
 		}
 		
+		// The bust function takes the room number where the player is located, the index that indicates the player's position in the playersInRoom array and the 
+		// index of the current hand to determine if the total so far is a bust or not bust or is a blackjack.
+		public int tally(int roomNumber, int playerIndex, int handIndex) {
+			int total = 0;
+			
+			ArrayList<Integer> tmpArray1 = new ArrayList<Integer>();
+			
+			// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
+			for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
+				if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
+						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
+						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+					tmpArray1.add(10);
+				}
+				else {
+					tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+				}
+			}	
+			
+
+			// Check if there are any aces or values of 1 in tmpArray1. If an ace is found, make a duplicate of the current hand by copying it into tmpArray 2 
+			// and take note of the index value where the ace is found. Replace the value of the ace from 1 to 11 in tmpArray2, then add it to tmpArray1.
+			// by repeating this step, we can get all permutation of the values of the current hand where an ace could be either a 1 or an 11
+			
+			for (int i = 0; i < tmpArray1.size(); ++i) {
+				if (tmpArray1.get(i) == 1) {
+					if (total + 11 > 21) {
+						total += 1;
+					}
+					else {
+						total += 11;
+					}
+				}
+				else {
+					total += tmpArray1.get(i);
+				}
+			}
+			
+			return total;
+		}
+		
 		
 		// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
 		// If a currentAction = -1 and the timer runs out, then do nothing.
