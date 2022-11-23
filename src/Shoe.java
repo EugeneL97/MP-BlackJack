@@ -34,7 +34,11 @@ public class Shoe {
 		return deck;
 	}
 	
+	public void clearDeck() {
+		this.deck.clear();
+	}
 	public void generateCards() {
+		clearDeck();
 		Random random = new Random();
 		
 		for (int i = 0; i < numOfDecks; ++i) {
