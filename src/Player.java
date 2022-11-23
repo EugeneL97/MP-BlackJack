@@ -53,7 +53,7 @@ public class Player {
 	}
 	
 	public Player(String username, int accountBalance) {
-		this(username, 0, -1, accountBalance, -1, 1, -1, "not bust", new ArrayList<ArrayList<Card>> ());
+		this(username, 0, -1, accountBalance, -1, 0, -1, "not bust", new ArrayList<ArrayList<Card>> ());
 	}
 	
 	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int wager, int seatIndex, String score, ArrayList<ArrayList<Card>> currentHand) {
