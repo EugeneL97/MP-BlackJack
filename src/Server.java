@@ -114,59 +114,50 @@ public class Server {
 		public String bust(int roomNumber, int playerIndex, int handIndex) {
 			int total = 0;
 			
-			ArrayList<ArrayList<Integer>> tmpArray1 = new ArrayList<ArrayList<Integer>>();
-			tmpArray1.add(new ArrayList<Integer>());
+			ArrayList<Integer> tmpArray1 = new ArrayList<Integer>();
 			
 			// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
 			for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
 				if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
 						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
 						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
-					tmpArray1.get(0).add(10);
+					tmpArray1.add(10);
 				}
 				else {
-					tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+					tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
 				}
 			}	
 			
+
 			// Check if there are any aces or values of 1 in tmpArray1. If an ace is found, make a duplicate of the current hand by copying it into tmpArray 2 
 			// and take note of the index value where the ace is found. Replace the value of the ace from 1 to 11 in tmpArray2, then add it to tmpArray1.
 			// by repeating this step, we can get all permutation of the values of the current hand where an ace could be either a 1 or an 11
-			for (int j = 0; j < tmpArray1.size(); ++j) {
-				for (int i = 0; i < tmpArray1.get(j).size(); ++i) {
-					if (tmpArray1.get(j).get(i) == 1) {
-						int tmpIndex = i;
-						ArrayList<Integer> tmpArray2 = new ArrayList<Integer>();
-						tmpArray2 = new ArrayList<Integer> (tmpArray1.get(j));
-						
-						tmpArray2.set(tmpIndex, 11);
-						tmpArray1.add(tmpArray2);
+			
+			for (int i = 0; i < tmpArray1.size(); ++i) {
+				if (tmpArray1.get(i) == 1) {
+					if (total + 11 > 21) {
+						total += 1;
+					}
+					else {
+						total += 11;
 					}
 				}
-			}
-			
-			int busts = 0;
-			
-			for (int y = 0; y < tmpArray1.size(); ++y) {
-				for (int i = 0; i < tmpArray1.get(y).size(); ++ i) {
-					total += tmpArray1.get(y).get(i);
-				}
-				
-				if (total > 21) {
-					++busts;
-				}
-				else if (total == 21) {
-					return "blackjack";
+				else {
+					total += tmpArray1.get(i);
 				}
 			}
 			
-			if (busts == tmpArray1.size() ) {
-				return "bust";
+			if (total < 21) {
+				return "no bust";
+			}
+			else if (total == 21) {
+				return "blackjack";
 			}
 			else {
-				return "not bust";
+				return "bust";
 			}
 		}
+		
 		
 		// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
 		// If a currentAction = -1 and the timer runs out, then do nothing.
@@ -268,9 +259,7 @@ public class Server {
 						}
 						
 					// If game is in readyToStart = 2, we wait for client actions and update them accordingly.
-					case 2:
-						
-						
+					case 2:	
 						// If game is in readyToStart = 2, that means a player has chosen some action. If so, then
 						// dealer receives first two cards, then set readyToStart = 2
 						server.getRooms().get(roomNumber).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
@@ -284,6 +273,9 @@ public class Server {
 								
 								// For each player, check the playerState
 								switch (server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getPlayerState()) {
+								
+									// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+									// by the server, set State = 2 so that server will not perform the same action again.
 									case 3:
 										switch(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getCurrentAction()) {
 											// currentAction = 0 means player has clicked deal and wants to receive first two cards
@@ -311,12 +303,19 @@ public class Server {
 														// Set player's score to blackjack
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore("blackjack");
 														
+														// Set playerState = 4 until the round is over, that way no further checking of this player will occur
+														// until player gives a new command
+														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setPlayerState(4);
+														
 														// Set currentAction = -1 means player has not decided on anything
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
 													}
 													else if (score.equals("not bust")){
 														// Set player's score to not bust
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore("not bust");
+														
+														// set playerState = 4 until the round is over
+														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setPlayerState(4);
 														
 														// Set currentAction = -1 means player has not decided on anything
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
@@ -336,7 +335,7 @@ public class Server {
 												// Deal one card to player
 												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
 											
-												// Check score
+												// Check score for each hand
 												for (int i = 0; i < server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getCurrentHand().size(); ++i) {
 													// Get player's current score
 													score = bust(roomNumber, y, i);
@@ -348,34 +347,21 @@ public class Server {
 													if (score.equals("blackjack")) {
 														// Add player's current wager to accountBalance
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getWager());
-														
-														// Set player's score to blackjack
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore("blackjack");
-														
-														// Set currentAction = -1 means player has not decided on anything
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
-													}
-													else if (score.equals("not bust")){
-														// Set player's score to not bust
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore("not bust");
-														
-														// Set currentAction = -1 means player has not decided on anything
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
 													}
 													else if (score.equals("bust")){
-														// Set player's score to bust
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore("bust");
-														
 														// Subtract wager from player's accountBalance
 														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getWager());
-
-														// Set currentAction = -1 means player has not decided on anything
-														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
 													}
-													
-													
+															
 													score = "";
 												}
+												
+												// Set playerState = 4 until the round is over, that way no further checking of this player will occur
+												// until player gives a new command
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setPlayerState(4);
+												
+												// Set currentAction = -1 means player has not decided on anything
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
 												
 												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
@@ -392,19 +378,49 @@ public class Server {
 												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setWager(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getWager() * 2);
 												
 												
-												// Check if first two cards results in blackjack, bust or not bust
-												// Loop through player's currentHand, since it's a 2D array, it might have multiple hands.
+												// Check score for each hand
 												for (int i = 0; i < server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getCurrentHand().size(); ++i) {
+													// Get player's current score
 													score = bust(roomNumber, y, i);
+													
+													// Set player's current score
 													server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setScore(score);
+													
+													// If player scores blackjack on deal, add player's wager to accountBalance.
+													if (score.equals("blackjack")) {
+														// Add player's current wager to accountBalance
+														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getWager());
+													}
+													else if (score.equals("bust")){
+														// Subtract wager from player's accountBalance
+														server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getWager());
+													}
+															
 													score = "";
 												}
+												
+												// Set playerState = 4 until the round is over, that way no further checking of this player will occur
+												// until player gives a new command
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setPlayerState(4);
+												
+												// Set currentAction = -1 means player has not decided on anything
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(-1);
 												
 												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
+												
 												break;
+												
+											// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 											case 3:
+												// Set playerState = 4 until the round is over, that way no further checking of this player will occur
+												// until player gives a new command
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setPlayerState(4);
+												
+												// Set currentAction = -1 means player has not decided on anything
+												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).setCurrentAction(3);
+														
 												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
@@ -417,7 +433,28 @@ public class Server {
 								}
 							}
 							
-						}	
+						}
+						
+						// Check if Dealer has lost. If the dealer has lost, anyone who's score = not bust has won their wager
+						if (server.getRooms().get(roomNumber).getPlayersInRoom().get(0).getScore().equals("bust")) {
+							for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().size(); ++x) {
+								if (server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getScore().equals("not bust")) {
+									// Skip dealer
+									if (x != 0) {
+										// Add player's current wager to accountBalance
+										server.getRooms().get(roomNumber).getPlayersInRoom().get(x).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getWager());
+									}
+								}
+							}
+						}
+						else {
+							
+						}
+						
+						// Set newMessage = true so the server will update the client with a new instance
+						// of server attributes rooms and lobbyRooms
+						server.setNewMessage(true);
+						
 				}
 			}
 		}
@@ -947,6 +984,7 @@ public class Server {
 						server.setNewMessage(true);
 				
 						break;
+						
 					default:
 						break;
 						
