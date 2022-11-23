@@ -5,10 +5,12 @@ public class Room {
 	
 	// readyToStart indicates whether the current round is starting. 
 	// readyToStart = 0 means game is in idle state and is waiting for players to initiate some action.
-	// readyToStart = 1 means game is starting and is waiting for all players to hit deal. If there's only 1 player in the room, the game will automatically
-	// head to readyToStart = 2. If there's more than 1 player in the room, a countdown timer for 10 seconds will commence. While counting down, it will
+	// readyToStart = 1 means game is starting and is waiting for all players to hit deal. Players can only choose deal in this state.
+	// If there's only 1 player in the room, the game will automatically head to readyToStart = 2. If there's more than 1 player 
+	// in the room, a countdown timer for 10 seconds will commence. While counting down, it will
 	// check if each playerState = 3 and currentAction = 0. If that is the case, it will automatically skip to readyToStart = 2 and proceed with the game.
 	// Otherwise it will wait until the countdown is up, and it will automatically set readyToStart = 2.
+	
 	// readyToStart = 2 means dealer should receive first two cards, and game is checking for players' moves and updating the room. After performing
 	// each player's moves update their currentAction = -1 so their moves do not get repeated again.
 	// When all of the players in the room's currentAction = 3 or currentAction = -1, then tally the dealer's total against the players' total.
