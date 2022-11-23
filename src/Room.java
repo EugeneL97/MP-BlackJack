@@ -21,7 +21,7 @@ public class Room {
 		
 		// Each time a room is created, a dealer is automatically added to the room
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
-		this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, currentHand));
+		this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand));
 		
 		this.shoe = new Shoe();
 	}
