@@ -687,7 +687,11 @@ public class Server {
 						
 					// Player chooses to leave the room
 					case "leave room":
+						// Set playerState = 0 means player is in the lobby.
 						player.setPlayerState(0);
+						
+						// currentAction = -1 means player has not decided on anything
+						player.setCurrentAction(-1);
 						
 						// Removing player to the server's attribute ArrayList<Room> rooms
 						server.getRooms().get(roomNumber).removePlayer(player);
