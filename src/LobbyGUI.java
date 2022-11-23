@@ -2,9 +2,11 @@
 public class LobbyGUI extends javax.swing.JFrame {
 
     private Client client;
+
     /**
      * Creates new form LobbyGUI
-      * @param client to connect with
+     *
+     * @param client to connect with
      */
     public LobbyGUI(Client client) {
         this.client = client;
@@ -33,11 +35,15 @@ public class LobbyGUI extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-    
+
     public void setupLobbyPanel() {
+        try {
+
+        } catch (Exception ex) {
+
+        }
         setVisible(true);
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -51,18 +57,20 @@ public class LobbyGUI extends javax.swing.JFrame {
         panelLobby = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnAountInfo = new javax.swing.JButton();
-        btnCreateRoom = new javax.swing.JButton();
-        btnJoinRoom = new javax.swing.JButton();
+        btnJoinRoom1 = new javax.swing.JButton();
         btnLogOff = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        btnJoinRoom2 = new javax.swing.JButton();
+        btnJoinRoom3 = new javax.swing.JButton();
+        btnJoinRoom4 = new javax.swing.JButton();
+        btnJoinRoom5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
+
+        panelLobby.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jLabel1.setFont(new java.awt.Font("Segoe Script", 3, 36)); // NOI18N
         jLabel1.setText("Lobby");
@@ -75,19 +83,11 @@ public class LobbyGUI extends javax.swing.JFrame {
             }
         });
 
-        btnCreateRoom.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        btnCreateRoom.setText("Create Room");
-        btnCreateRoom.addActionListener(new java.awt.event.ActionListener() {
+        btnJoinRoom1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom1.setText("Join Room 1");
+        btnJoinRoom1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateRoomActionPerformed(evt);
-            }
-        });
-
-        btnJoinRoom.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        btnJoinRoom.setText("Join Room");
-        btnJoinRoom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoomActionPerformed(evt);
+                btnJoinRoom1ActionPerformed(evt);
             }
         });
 
@@ -99,13 +99,37 @@ public class LobbyGUI extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        btnJoinRoom2.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom2.setText("Join Room 2");
+        btnJoinRoom2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJoinRoom2ActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        jLabel2.setText("Name");
+        btnJoinRoom3.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom3.setText("Join Room 3");
+        btnJoinRoom3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJoinRoom3ActionPerformed(evt);
+            }
+        });
 
-        jTextField1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom4.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom4.setText("Join Room 4");
+        btnJoinRoom4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJoinRoom4ActionPerformed(evt);
+            }
+        });
+
+        btnJoinRoom5.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom5.setText("Join Room 5");
+        btnJoinRoom5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnJoinRoom5ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelLobbyLayout = new javax.swing.GroupLayout(panelLobby);
         panelLobby.setLayout(panelLobbyLayout);
@@ -114,6 +138,9 @@ public class LobbyGUI extends javax.swing.JFrame {
             .addGroup(panelLobbyLayout.createSequentialGroup()
                 .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelLobbyLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jSeparator4))
+                    .addGroup(panelLobbyLayout.createSequentialGroup()
                         .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLobbyLayout.createSequentialGroup()
                                 .addGap(186, 186, 186)
@@ -121,26 +148,25 @@ public class LobbyGUI extends javax.swing.JFrame {
                             .addGroup(panelLobbyLayout.createSequentialGroup()
                                 .addGap(116, 116, 116)
                                 .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnJoinRoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                                        .addComponent(jLabel2)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnCreateRoom))
-                                    .addComponent(btnLogOff, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jSeparator3)
-                                    .addComponent(jSeparator2)
-                                    .addComponent(jSeparator1)
-                                    .addComponent(btnAountInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(0, 100, Short.MAX_VALUE))
-                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator4)))
+                                    .addComponent(jSeparator3, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                                    .addComponent(jSeparator1)))
+                            .addGroup(panelLobbyLayout.createSequentialGroup()
+                                .addGap(144, 144, 144)
+                                .addComponent(btnAountInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelLobbyLayout.createSequentialGroup()
+                                .addGap(145, 145, 145)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnJoinRoom1, javax.swing.GroupLayout.DEFAULT_SIZE, 199, Short.MAX_VALUE)
+                                    .addComponent(btnJoinRoom2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnJoinRoom3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnJoinRoom4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnJoinRoom5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(panelLobbyLayout.createSequentialGroup()
+                .addGap(145, 145, 145)
+                .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(155, Short.MAX_VALUE))
         );
         panelLobbyLayout.setVerticalGroup(
             panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,26 +175,25 @@ public class LobbyGUI extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
+                .addGap(18, 18, 18)
                 .addComponent(btnAountInfo)
                 .addGap(18, 18, 18)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnCreateRoom)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnJoinRoom1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnJoinRoom2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnJoinRoom3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnJoinRoom4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnJoinRoom5)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnLogOff)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -184,7 +209,7 @@ public class LobbyGUI extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panelLobby, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panelLobby, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -192,53 +217,91 @@ public class LobbyGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAountInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAountInfoActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new AccountInfoGUI(client).setupAccountInfoPanel();
-            }
-        });
+        try {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    //setVisible(false);
+                    //dispose();
+                    new AccountInfoGUI(client).setupAccountInfoPanel();
+                }
+            });
+        } catch (Exception ex) {
+
+        }
     }//GEN-LAST:event_btnAountInfoActionPerformed
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new ConnectGUI(client).setupConnectPanel();
-            }
-        });
+        try {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    //setVisible(false);
+                    //dispose();
+                    new ConnectGUI(client).setupConnectPanel();
+                }
+            });
+        } catch (Exception ex) {
+
+        }
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void btnCreateRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRoomActionPerformed
+    private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnCreateRoomActionPerformed
+        try {
 
-    private void btnJoinRoomActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoomActionPerformed
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnJoinRoom1ActionPerformed
+
+    private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnJoinRoomActionPerformed
+        try {
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        Client client = new Client();
-        client.setPlayer(new Player("Samira", "Mehroz", "samira123", 1000));
-        new LobbyGUI(client).setupLobbyPanel();
-    }
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnJoinRoom2ActionPerformed
+
+    private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnJoinRoom3ActionPerformed
+
+    private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnJoinRoom4ActionPerformed
+
+    private void btnJoinRoom5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom5ActionPerformed
+        // TODO add your handling code here:
+        try {
+
+        } catch (Exception ex) {
+
+        }
+    }//GEN-LAST:event_btnJoinRoom5ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAountInfo;
-    private javax.swing.JButton btnCreateRoom;
-    private javax.swing.JButton btnJoinRoom;
+    private javax.swing.JButton btnJoinRoom1;
+    private javax.swing.JButton btnJoinRoom2;
+    private javax.swing.JButton btnJoinRoom3;
+    private javax.swing.JButton btnJoinRoom4;
+    private javax.swing.JButton btnJoinRoom5;
     private javax.swing.JButton btnLogOff;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JPanel panelLobby;
     // End of variables declaration//GEN-END:variables
 }
