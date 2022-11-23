@@ -35,6 +35,8 @@ public class Player {
 	// This would speed up the process of making changes to the player object
 	private int seatIndex;
 	
+	// This attribute should really be an ArrayList<String> to keep track of score of each
+	// hand in currentHand. But for the sake of time, we're only doing 1 hand at the moment.
 	// Score = "not bust" means cards add up to < 21
 	// Score = "bust" means cards add up to > 21
 	// Score = "blackjack" means cards add up to 21
