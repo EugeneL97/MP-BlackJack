@@ -17,7 +17,7 @@ public class Driver {
 	
 		player.setRoomNumber(3);
 		player.setPlayerState(1);
-		player.setPlayer(1);
+		player.setCurrentAction(1);
 		player.setSeatIndex(1);
 		
 		Message message = new Message("player", "", player.toString());
@@ -98,7 +98,7 @@ public class Driver {
 		
 		Driver driver = new Driver();
 		driver.countDown(room);
-		*/
+		
 		
 		// Testing bust()
 		Driver driver = new Driver();
@@ -121,7 +121,7 @@ public class Driver {
 		server.getRooms().get(0).getPlayersInRoom().get(1).acceptCard(0, card3);
 		server.getRooms().get(0).getPlayersInRoom().get(1).acceptCard(0, card4);
 		server.getRooms().get(0).getPlayersInRoom().get(1).acceptCard(0, card5);
-		//server.getRooms().get(0).getPlayersInRoom().get(1).acceptCard(0, card6);
+		server.getRooms().get(0).getPlayersInRoom().get(1).acceptCard(0, card6);
 		System.out.println(player.toString());
 		//System.out.println(server.getRooms().get(0).toString());
 		//server.getRooms().get(0).getPlayersInRoom().get(1).getCurrentHand().get(0).size()
@@ -129,6 +129,28 @@ public class Driver {
 		
 		String result = driver.bust(0, 1, 0, server);
 		System.out.println(result);
+		*/
+		
+		// Test parsing Player
+		Player player = new Player("jackson", 214554);
+		Shoe shoe = new Shoe();
+
+		for (int x = 0; x < 3; ++x) {
+			player.getCurrentHand().add(new ArrayList<Card>());
+			for (int y = 0; y < 10; ++y) {
+				player.getCurrentHand().get(x).add(shoe.dealCard());
+			}
+		}
+	
+		player.setRoomNumber(3);
+		player.setPlayerState(1);
+		player.setCurrentAction(1);
+		player.setSeatIndex(1);
+		
+		Message message = new Message("player", "", player.toString());
+		System.out.println(player.toString());
+		Player tmp = parser.parsePlayer(player.toString());
+		System.out.println(tmp.toString() + "\n");
 		
 	}
 	

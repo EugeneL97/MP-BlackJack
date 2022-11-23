@@ -13,38 +13,13 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	
 	public Client() throws Exception {
-		socket = null;
-		input = null;
-		output = null;
-		userInput = null;
-		messageQueue = new ArrayList<Message>();
+		this.socket = null;
+		this.input = null;
+		this.output = null;
+		this.userInput = null;
+		this.messageQueue = new ArrayList<Message>();
+		this.room = new Room(-1);
 	}
-	
-	// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
-	// If a currentAction = -1 and the timer runs out, then do nothing.
-	// This timer should start when a player clicks on deal, hit, and double down. If timer runs out after a player has clicked these buttons
-	// set player's currentAction = 3 and send the server an updated player object with the room number in the status field.
-	public void countDown() {
-	    TimerTask task = new TimerTask() {
-	        public void run() {
-	        	if (player.getPlayerState() == 3) {
-	        		switch (player.getCurrentAction()) {
-		        		case 0: case 1: case 2:
-		        			player.setCurrentAction(3);
-		        			break;
-		        		default:
-		        			break;
-	        		}
-	        	}
-	        }
-	    };
-	    Timer timer = new Timer("Timer");
-	    
-	    long delay = 10000L;
-	    timer.schedule(task, delay);
-	}
-	
-	
 	
 	public static void main(String [] args) throws Exception {
 		// Create a new instance of client
@@ -72,6 +47,8 @@ public class Client {
 		boolean proceedToLobby = false;
 		boolean logout = false;
 		
+		/*
+		// 
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -88,11 +65,13 @@ public class Client {
 			}
 		}
 		
+		
 		// If login attempts > 3 close the connection
 		if (loginAttempts >= 3) {
 			client.closeConnection();
 			return;
 		}
+		*/
 		
 		Parser parser = new Parser();
 		
@@ -102,13 +81,29 @@ public class Client {
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
 		
+		int roomNumber = 3;
 		
-		Message message = new Message("join room", "3", "");
+		System.out.println("Room number before sending join room 3 = " + client.getRoom().getRoomNumber());
+		Message message = new Message("join room", Integer.toString(roomNumber), "");
 		client.sendMessage(message);
 		Thread.sleep(1000);
-		System.out.println("Room number = " + client.getRoom().getRoomNumber() + "Players in room = "+ client.getRoom().getPlayersInRoom().get(0).toString()
-				+ ", " + client.getRoom().getPlayersInRoom().get(1).toString());
-		//message = new Message("sit", "", "");
+		
+		System.out.println("Room number after sending join room 3 = " + client.getRoom().getRoomNumber());
+		
+		message = new Message("sit", "", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending sit message = " + client.player.toString());
+		
+		message = new Message("deal", "100", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending deal message = " + client.player.toString());
+		
+		message = new Message("stand", "100", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending stand message = " + client.player.toString());
 		
 		// Loop for lobby
 		while(!logout) {
@@ -126,58 +121,63 @@ public class Client {
 	}
 	
 	// MessageHandler will listen to messages and put them in a queue for processing
-		private static class MessageHandler implements Runnable {
-			private Client client;
+	private static class MessageHandler implements Runnable {
+		private Client client;
+		
+		public MessageHandler(Client client) {
+			this.client = client;
+		}
+		
+		@Override
+		public void run() {
+			Parser parser = new Parser();
 			
-			public MessageHandler(Client client) {
-				this.client = client;
-			}
-			
-			@Override
-			public void run() {
-				Parser parser = new Parser();
+			while (true) {
+				Message message = null;
+				message = client.getMessage(message);
+				client.messageQueue.add(message);
 				
-				while (true) {
-					Message message = null;
-					message = client.getMessage(message);
-					client.messageQueue.add(message);
-					
-					if (client.messageQueue.size() > 0 ) {
-						switch (client.messageQueue.get(0).getType()) {
-							case "lobby room":
-								client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
-								
+				if (client.messageQueue.size() > 0 ) {
+					switch (client.messageQueue.get(0).getType()) {
+						case "lobby room":
+							client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
+							
 
-								client.getMessageQueue().remove(0);
-								break;
-							case "room":
-								client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
-
-								client.getMessageQueue().remove(0);
-								break;
-							default:
-								break;
-						}
-					}
-					
-					try {
-						Thread.sleep(200);
-					}
-					catch (Exception e) {
-						
+							client.getMessageQueue().remove(0);
+							break;
+						case "room":
+							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
+							if (client.getRoom().getPlayersInRoom().size() > 1) {
+								client.player = client.getRoom().getPlayersInRoom().get(1);
+							}
+							
+							client.getMessageQueue().remove(0);
+							break;
+						default:
+							break;
 					}
 				}
+				/*
+				try {
+					Thread.sleep(1000);
+				}
+				catch (Exception e) {
+					
+				}
+				*/
 			}
 		}
+	}
 	
 	// Login function to log onto server
-	public boolean login () {
+	public boolean login (String username, String password) {
 		boolean login = false;
-		
+		/* For testing purposes
 		System.out.printf("Enter username: ");
 		String username = userInput.nextLine();
 		System.out.printf("Enter password: ");
 		String password = userInput.nextLine();
+		*/
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -246,6 +246,30 @@ public class Client {
 		}
 	}
 	
+	// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
+	// If a currentAction = -1 and the timer runs out, then do nothing.
+	// This timer should start when a player clicks on deal, hit, and double down. If timer runs out after a player has clicked these buttons
+	// set player's currentAction = 3 and send the server an updated player object with the room number in the status field.
+	public void countDown() {
+	    TimerTask task = new TimerTask() {
+	        public void run() {
+	        	if (player.getPlayerState() == 3) {
+	        		switch (player.getCurrentAction()) {
+		        		case 0: case 1: case 2:
+		        			player.setCurrentAction(3);
+		        			break;
+		        		default:
+		        			break;
+	        		}
+	        	}
+	        }
+	    };
+	    Timer timer = new Timer("Timer");
+	    
+	    long delay = 10000L;
+	    timer.schedule(task, delay);
+	}
+	
 	// Closes connection to server.
 	public void closeConnection() {
 		try {
@@ -265,6 +289,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	// If player requests join room use this function to send request to server
 	public void joinRoom(int roomNumber) {
