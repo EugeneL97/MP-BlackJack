@@ -22,7 +22,7 @@ public class Player {
 	// currentAction = -1 means player has not decided on anything
 	// currentAction = 0 means player has clicked deal and wants to receive first two cards
 	// currentAction = 1 means player wants a hit, so players receives another card
-	// currentAction = 2 means player wants to double down on the bet, so double the wager amount
+	// currentAction = 2 means player wants to double down on the bet, so double the wager amount and receive one more card
 	// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 	// After the tally, set currentAction = -1
 	// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
