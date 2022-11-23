@@ -35,6 +35,11 @@ public class Player {
 	// This would speed up the process of making changes to the player object
 	private int seatIndex;
 	
+	// Score = "not bust" means cards add up to < 21
+	// Score = "bust" means cards add up to > 21
+	// Score = "blackjack" means cards add up to 21
+	private String score;
+	
 	// currentHand stores the player's cards in 2D array. For example, the first time a player receives cards,
 	// the cards will be stored in index 0. If the player decides to split, then we take one card from index
 	// 0 and move it to index 1. Then we receive additional cards in index 0 and 1 as cards get dealt.
@@ -42,14 +47,14 @@ public class Player {
 	
 	public Player(Player player) {
 		this(player.getUsername(), player.getPlayerState(), player.getRoomNumber(), player.getAccountBalance(),
-				player.getCurrentAction(), player.getWager(), player.getSeatIndex(), player.getCurrentHand());
+				player.getCurrentAction(), player.getWager(), player.getSeatIndex(), player.getScore(), player.getCurrentHand());
 	}
 	
 	public Player(String username, int accountBalance) {
-		this(username, 0, -1, accountBalance, -1, 1, -1, new ArrayList<ArrayList<Card>> ());
+		this(username, 0, -1, accountBalance, -1, 1, -1, "not bust", new ArrayList<ArrayList<Card>> ());
 	}
 	
-	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int wager, int seatIndex, ArrayList<ArrayList<Card>> currentHand) {
+	public Player(String username, int playerState, int roomNumber, int accountBalance, int currentAction, int wager, int seatIndex, String score, ArrayList<ArrayList<Card>> currentHand) {
 		super();
 		
 		this.username = username;
@@ -59,13 +64,14 @@ public class Player {
 		this.seatIndex = seatIndex;
 		this.accountBalance = accountBalance;
 		this.currentAction = currentAction;
+		this.score = score;
 		this.currentHand = currentHand;
 	}
 
 	public String toString() {
 		String output = null;
 		output = username + "#" + Integer.toString(playerState) + "#" + Integer.toString(roomNumber) + "#" + Integer.toString(accountBalance) + "#"
-				+ Integer.toString(currentAction) + "#" + Integer.toString(wager) + "#" + Integer.toString(seatIndex) + "#" + Integer.toString(currentHand.size()) + "#";
+				+ Integer.toString(currentAction) + "#" + Integer.toString(wager) + "#" + Integer.toString(seatIndex) + "#" + score + "#" + Integer.toString(currentHand.size()) + "#";
 		
 		for (int x = 0; x < currentHand.size(); ++x) {
 			for (int y = 0; y <currentHand.get(x).size(); ++y) {
@@ -76,6 +82,15 @@ public class Player {
 		return output;
 	}
 
+	
+	public String getScore() {
+		return score;
+	}
+
+	public void setScore(String score) {
+		this.score = score;
+	}
+	
 	public String getUsername() {
 		return username;
 	}
@@ -142,15 +157,18 @@ public class Player {
 	
 	// Inserts a card at position index in the 2D array ArrayList<ArrayList<Card>> currentHand
 	public void acceptCard(int index, Card card) {
+		if (currentHand.size() <= index) {
+			currentHand.add(new ArrayList<Card>());
+		}
 		if (index >= 0 && index < currentHand.size()) {
-			currentHand.get(index).add(card);
+			this.currentHand.get(index).add(card);
 		}
 	}
 	
 	// Removes a specific card at row index, column cardIndex of the 2D array ArrayList<ArrayList<Card>> currentHand.
 	public void removeCard(int index, int cardIndex) {
 		if (index >= 0 && index < currentHand.size() && cardIndex >= 0 && cardIndex < currentHand.get(index).size()) {
-			currentHand.get(index).remove(cardIndex);
+			this.currentHand.get(index).remove(cardIndex);
 		}
 	}
 	
