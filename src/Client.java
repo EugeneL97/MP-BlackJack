@@ -47,6 +47,8 @@ public class Client {
 		boolean proceedToLobby = false;
 		boolean logout = false;
 		
+		/*
+		// 
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -63,11 +65,13 @@ public class Client {
 			}
 		}
 		
+		
 		// If login attempts > 3 close the connection
 		if (loginAttempts >= 3) {
 			client.closeConnection();
 			return;
 		}
+		*/
 		
 		Parser parser = new Parser();
 		
@@ -166,13 +170,14 @@ public class Client {
 	}
 	
 	// Login function to log onto server
-	public boolean login () {
+	public boolean login (String username, String password) {
 		boolean login = false;
-		
+		/* For testing purposes
 		System.out.printf("Enter username: ");
 		String username = userInput.nextLine();
 		System.out.printf("Enter password: ");
 		String password = userInput.nextLine();
+		*/
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -284,6 +289,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
+	
 	
 	// If player requests join room use this function to send request to server
 	public void joinRoom(int roomNumber) {
