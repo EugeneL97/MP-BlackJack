@@ -7,7 +7,7 @@ public class Player {
 	// playerState = 0 means player is in the lobby. 
 	// playerState = 1 means player is in a room.
 	// playerState = 2 means player has chosen a seat and sat down. 
-	// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
+	// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
 	// by the server, set State = 2 so that server will not perform the same action again.
 	// playerState = 4 means player has decided on their action and is waiting response from the server. In the mean time
 	// the GUI should not give any buttons for the players to click until tally has been made.
