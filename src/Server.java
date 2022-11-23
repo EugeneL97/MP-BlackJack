@@ -583,10 +583,32 @@ public class Server {
 										server.getRooms().get(roomNumber).getPlayersInRoom().get(x).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getWager());
 									}
 								}
+								
+								// Set playerState = 4 until the round is over, that way no further checking of this player will occur
+								// until player gives a new command
+								server.getRooms().get(roomNumber).getPlayersInRoom().get(x).setPlayerState(3);
+								
+								// Set currentAction = -1 means player has not decided on anything
+								server.getRooms().get(roomNumber).getPlayersInRoom().get(x).setCurrentAction(-1);
 							}
-						}
-						else {
 							
+							// Reset game by setting readyToStart = 1
+							server.getRooms().get(roomNumber).setReadyToStart(1);
+							
+							// Reshuffle deck
+							server.getRooms().get(roomNumber).getShoe().generateCards();
+							
+						}
+						// If dealer has not lost, check if the player's tally is higher than the dealers'. If so, add their wager to accountBalance
+						else {
+							int dealerTally = tally(roomNumber, 0, 0);
+							
+							for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().size(); ++x) {
+								if (dealerTally < tally(roomNumber, x, 0)) {
+									// Add player's current wager to accountBalance
+									server.getRooms().get(roomNumber).getPlayersInRoom().get(x).setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom().get(x).getWager());
+								}
+							}
 						}
 						
 						// Set newMessage = true so the server will update the client with a new instance
@@ -887,12 +909,6 @@ public class Server {
 							// currentAction = -1 means player has not decided on anything
 							player.setCurrentAction(-1);
 							
-							// Adding player to the server's attribute ArrayList<Room> rooms
-							server.getRooms().get(roomNumber).addPlayer(player);
-							
-							// Adding player's name to the server's attribute LobbyRoom lobbyRoom
-							server.lobbyRooms.addPlayer(roomNumber, player.getUsername());
-							
 							// Setting new message received by client to true
 							server.setNewMessage(true);
 							
@@ -957,6 +973,12 @@ public class Server {
 				switch (message.getType()) {
 					// Player sits down to start playing game
 					case "sit":
+						// Adding player to the server's attribute ArrayList<Room> rooms
+						server.getRooms().get(roomNumber).addPlayer(player);
+						
+						// Adding player's name to the server's attribute LobbyRoom lobbyRoom
+						server.lobbyRooms.addPlayer(roomNumber, player.getUsername());
+						
 						// Player has sat down but not actively playing
 						player.setPlayerState(2);
 						
