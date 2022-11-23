@@ -181,19 +181,39 @@ public class Server {
 								switch (server.getRooms().get(x).getPlayersInRoom().get(y).getPlayerState()) {
 									case 3:
 										switch(server.getRooms().get(x).getPlayersInRoom().get(y).getCurrentAction()) {
+											// currentAction = 0 means player has clicked deal and wants to receive first two cards
 											case 0:
+												String score = "";
+												// Deal two cards to player
+												// Deal first card to player
+												server.getRooms().get(x).getPlayersInRoom().get(y).acceptCard(0, server.getRooms().get(x).getShoe().dealCard());
+												// Deal second card to player
+												server.getRooms().get(x).getPlayersInRoom().get(y).acceptCard(0, server.getRooms().get(x).getShoe().dealCard());
+
+												// Check if first two cards results in blackjack
+												// Loop through player's currentHand, since it's a 2D array, it might have multiple hands.
+												for (int i = 0; i < server.getRooms().get(x).getPlayersInRoom().get(y).getCurrentHand().size(); ++i) {
+													score = bust(x, y, i);
+													//Message message = new Message("score", Integer.parseInt(score))
+												}
+												
+												
+												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
 												break;
 											case 1:
+												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
 												break;
 											case 2:
+												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
 												break;
 											case 3:
+												// Set newMessage = true so the server will update the client with a new instance
 												// of server attributes rooms and lobbyRooms
 												server.setNewMessage(true);
 												break;
