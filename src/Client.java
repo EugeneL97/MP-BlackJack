@@ -13,10 +13,10 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	
 	public Client() throws Exception {
-		this.socket = null;
-		this.input = null;
-		this.output = null;
-		this.userInput = null;
+		this.socket = new Socket("127.0.1.1", 59898);
+		this.input = new ObjectInputStream(socket.getInputStream());
+		this.output = new ObjectOutputStream(socket.getOutputStream());
+		this.userInput = new Scanner(System.in);
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 	}
@@ -33,8 +33,8 @@ public class Client {
 
 		System.out.println("Attemping to connect to server IP: " + args[0] + ":" + args[1]);
 		// connect to provided ip and port
-		client.socket = new Socket(args[0], Integer.parseInt(args[1]));
-		
+		//client.socket = new Socket(args[0], Integer.parseInt(args[1]));
+		client.socket = new Socket("127.0.1.1", 59898);
 		// creating input and output stream for class object
 		client.output = new ObjectOutputStream(client.socket.getOutputStream());
 		client.input = new ObjectInputStream(client.socket.getInputStream());

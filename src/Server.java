@@ -318,8 +318,8 @@ public class Server {
 			String score = "";
 			
 			while(true) {
-				System.out.println("Room " + server.getRooms().get(roomNumber).getRoomNumber() + " is running."
-						+ " readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
+				//System.out.println("Room " + server.getRooms().get(roomNumber).getRoomNumber() + " is running."
+				//		+ " readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 				switch (server.getRooms().get(roomNumber).getReadyToStart()) {
 					case 0:
 						// If room is not ready to start, check to see if any player's currentAction != -1.
@@ -430,7 +430,9 @@ public class Server {
 												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
 												// Deal second card to player
 												server.getRooms().get(roomNumber).getPlayersInRoom().get(y).acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
-	
+												
+												System.out.println("In GameHandler. readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart() + ".\n"
+														+ "Player after being dealt 2 cards = " + server.getRooms().get(roomNumber).getPlayersInRoom().get(1).toString());
 												// Check if first two cards results in blackjack
 												// Loop through player's currentHand, since it's a 2D array, it might have multiple hands.
 												for (int i = 0; i < server.getRooms().get(roomNumber).getPlayersInRoom().get(y).getCurrentHand().size(); ++i) {
@@ -580,6 +582,9 @@ public class Server {
 							
 						}
 						
+						// Set Dealer's score
+						server.getRooms().get(roomNumber).getPlayersInRoom().get(0).setScore(bust(roomNumber, 0, 0));
+						
 						// Check if Dealer has lost. If the dealer has lost, anyone who's score = not bust has won their wager
 						if (server.getRooms().get(roomNumber).getPlayersInRoom().get(0).getScore().equals("bust")) {
 							System.out.println("Dealer has lost detected");
@@ -609,11 +614,12 @@ public class Server {
 						}
 						// If dealer has not lost, check if the player's tally is higher than the dealers'. If so, add their wager to accountBalance
 						else {
-							System.out.println("Dealer = " + server.getRooms().get(roomNumber).getPlayersInRoom().get(0).toString());
+							System.out.println("Dealer = " + server.getRooms().get(roomNumber).getPlayersInRoom().get(0).toString() + 
+									"\nDealer tally = " + tally(roomNumber, 0, 0));
 							int dealerTally = tally(roomNumber, 0, 0);
 							//System.out.printf("Dealer tally = %d\n", dealerTally);
 							for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().size(); ++x) {
-								int playerTally = tally(roomNumber, x, 0);
+								int playerTally = tally(roomNumber, 1, 0);
 								System.out.printf("Player tally = %d\n", playerTally);
 								System.out.println("Player = " + server.getRooms().get(roomNumber).getPlayersInRoom().get(1).toString());
 								if (dealerTally < playerTally) {
@@ -623,6 +629,7 @@ public class Server {
 							}
 						}
 						
+						System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 						// Set newMessage = true so the server will update the client with a new instance
 						// of server attributes rooms and lobbyRooms
 						server.setNewMessage(true);
