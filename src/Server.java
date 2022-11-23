@@ -829,7 +829,7 @@ public class Server {
 			int roomNumber = player.getRoomNumber();
 			
 			// keep looping while player is sitting at the table
-			while (player.getPlayerState() == 2) {
+			while (player.getPlayerState() >= 2) {
 				Message message = null;
 				message = getMessage(message);
 				int notDecided = -1;
@@ -842,24 +842,23 @@ public class Server {
 				switch (message.getType()) {
 					// Player chooses to participate in the room by clicking deal
 					case "deal":
-						// Player can only hit deal while room's getReadyToStart == 1
-						if (server.getRooms().get(roomNumber).getReadyToStart() == 1) {
-							// Get player's wager amount and deduct it from the player balance
-							player.setWager(Integer.parseInt(message.getStatus()));
-							
-							// Client needs to check that current player's balance equals or exceeds the wager amount.
-							player.setAccountBalance(player.getAccountBalance() - player.getWager());
-							
-							// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
-							// by the server, set State = 2 so that server will not perform the same action again.
-							player.setPlayerState(3);
-							
-							// Set player action to deal which player receives first two cards
-							player.setCurrentAction(deal);
-							
-							// Setting new message received by client to true
-							server.setNewMessage(true);
-						}
+
+						// Get player's wager amount and deduct it from the player balance
+						player.setWager(Integer.parseInt(message.getStatus()));
+						
+						// Client needs to check that current player's balance equals or exceeds the wager amount.
+						player.setAccountBalance(player.getAccountBalance() - player.getWager());
+						
+						// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
+						// by the server, set State = 2 so that server will not perform the same action again.
+						player.setPlayerState(3);
+						
+						// Set player action to deal which player receives first two cards
+						player.setCurrentAction(deal);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+
 						
 						
 						break;
@@ -879,14 +878,14 @@ public class Server {
 						
 						
 						break;
+						
 					// Player sits down to start playing game
 					case "sit out":
-						// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
-						// by the server, set State = 2 so that server will not perform the same action again.
-						player.setPlayerState(3);
+						// playerState = 2 means player has chosen a seat and sat down. 
+						player.setPlayerState(2);
 						
-						// Set currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
-						player.setCurrentAction(4);
+						// currentAction = -1 means player has not decided on anything
+						player.setCurrentAction(sitOut);
 						
 						// Setting new message received by client to true
 						server.setNewMessage(true);
@@ -899,7 +898,7 @@ public class Server {
 						player.setPlayerState(0);
 						
 						// Set currentAction = -1 means player has not decided on anything
-						player.setCurrentAction(-1);
+						player.setCurrentAction(notDecided);
 						
 						// Removing player to the server's attribute ArrayList<Room> rooms
 						server.getRooms().get(roomNumber).removePlayer(player);
@@ -928,14 +927,26 @@ public class Server {
 							player.setPlayerState(3);
 							
 							// Set currentAction = 2 means player wants to double down on the bet, so double the wager amount and receive one more card
-							player.setCurrentAction(2);
+							player.setCurrentAction(doubleDown);
 							
 							// Setting new message received by client to true
 							server.setNewMessage(true);
 						}
 						
 						break;
+					
+					// Player sits down to start playing game
+					case "stand":
+						// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+						player.setPlayerState(3);
 						
+						// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
+						player.setCurrentAction(stand);
+						
+						// Setting new message received by client to true
+						server.setNewMessage(true);
+				
+						break;
 					default:
 						break;
 						
