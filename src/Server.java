@@ -109,12 +109,14 @@ public class Server {
 			this.roomNumber = roomNumber;
 		}
 		
+	
 		// The bust function takes the room number where the player is located, the index that indicates the player's position in the playersInRoom array and the 
 		// index of the current hand to determine if the total so far is a bust or not bust or is a blackjack.
-		public String bust(int roomNumber, int playerIndex, int handIndex) {
+		public int tally(int roomNumber, int playerIndex, int handIndex) {
 			int total = 0;
 			
 			ArrayList<Integer> tmpArray1 = new ArrayList<Integer>();
+
 			
 			// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
 			for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
@@ -128,27 +130,102 @@ public class Server {
 				}
 			}	
 			
-
-			// Check if there are any aces or values of 1 in tmpArray1. If an ace is found, make a duplicate of the current hand by copying it into tmpArray 2 
-			// and take note of the index value where the ace is found. Replace the value of the ace from 1 to 11 in tmpArray2, then add it to tmpArray1.
-			// by repeating this step, we can get all permutation of the values of the current hand where an ace could be either a 1 or an 11
+			// To keep track of the unchanged ace, where the ace is still = 11
+			int unchangedAce = -1;
 			
+			// Tally up the values in the hand
 			for (int i = 0; i < tmpArray1.size(); ++i) {
 				if (tmpArray1.get(i) == 1) {
-					if (total + 11 > 21) {
+					if (total + 11 <= 21) {
+						total += 11;
+						unchangedAce = i;
+					}
+					else if (total + 1 <= 21){
 						total += 1;
 					}
-					else {
-						total += 11;
+					else if (total + 1 > 21) {
+						if (unchangedAce != -1) {
+							total += 1;
+							total -= 10;
+							unchangedAce = -1;
+						}
+						else {
+							total += 1;
+						}
 					}
 				}
 				else {
-					total += tmpArray1.get(i);
+					if (total + tmpArray1.get(i) > 21 && unchangedAce != -1) {
+						total += tmpArray1.get(i);
+						total -= 10;
+					}
+					else {
+						total += tmpArray1.get(i);
+					}
+				}
+			}
+
+			
+			return total;
+		}
+		
+		// The bust function takes the room number where the player is located, the index that indicates the player's position in the playersInRoom array and the 
+		// index of the current hand to determine if the total so far is a bust or not bust or is a blackjack.
+		public String bust(int roomNumber, int playerIndex, int handIndex) {
+			int total = 0;
+			
+			ArrayList<Integer> tmpArray1 = new ArrayList<Integer>();
+
+			
+			// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
+			for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
+				if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
+						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
+						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+					tmpArray1.add(10);
+				}
+				else {
+					tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+				}
+			}	
+			
+			// To keep track of the unchanged ace, where the ace is still = 11
+			int unchangedAce = -1;
+			
+			// Tally up the values in the hand
+			for (int i = 0; i < tmpArray1.size(); ++i) {
+				if (tmpArray1.get(i) == 1) {
+					if (total + 11 <= 21) {
+						total += 11;
+						unchangedAce = i;
+					}
+					else if (total + 1 <= 21){
+						total += 1;
+					}
+					else if (total + 1 > 21) {
+						if (unchangedAce != -1) {
+							total += 1;
+							total -= 10;
+							unchangedAce = -1;
+						}
+						else {
+							total += 1;
+						}
+					}
+				}
+				else {
+					if (total + tmpArray1.get(i) > 21 && unchangedAce != -1) {
+						total += tmpArray1.get(i);
+						total -= 10;
+					}
+					else {
+						total += tmpArray1.get(i);
+					}
 				}
 			}
 			
 			if (total < 21) {
-				return "no bust";
+				return "not bust";
 			}
 			else if (total == 21) {
 				return "blackjack";
@@ -158,47 +235,67 @@ public class Server {
 			}
 		}
 		
+		
+		/* Old implementation
 		// The bust function takes the room number where the player is located, the index that indicates the player's position in the playersInRoom array and the 
 		// index of the current hand to determine if the total so far is a bust or not bust or is a blackjack.
-		public int tally(int roomNumber, int playerIndex, int handIndex) {
+		public String bust(int roomNumber, int playerIndex, int handIndex) {
 			int total = 0;
 			
-			ArrayList<Integer> tmpArray1 = new ArrayList<Integer>();
+			ArrayList<ArrayList<Integer>> tmpArray1 = new ArrayList<ArrayList<Integer>>();
+			tmpArray1.add(new ArrayList<Integer>());
 			
 			// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
 			for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
 				if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
 						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
 						|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
-					tmpArray1.add(10);
+					tmpArray1.get(0).add(10);
 				}
 				else {
-					tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+					tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
 				}
 			}	
 			
-
 			// Check if there are any aces or values of 1 in tmpArray1. If an ace is found, make a duplicate of the current hand by copying it into tmpArray 2 
 			// and take note of the index value where the ace is found. Replace the value of the ace from 1 to 11 in tmpArray2, then add it to tmpArray1.
 			// by repeating this step, we can get all permutation of the values of the current hand where an ace could be either a 1 or an 11
-			
-			for (int i = 0; i < tmpArray1.size(); ++i) {
-				if (tmpArray1.get(i) == 1) {
-					if (total + 11 > 21) {
-						total += 1;
+			for (int j = 0; j < tmpArray1.size(); ++j) {
+				for (int i = 0; i < tmpArray1.get(j).size(); ++i) {
+					if (tmpArray1.get(j).get(i) == 1) {
+						int tmpIndex = i;
+						ArrayList<Integer> tmpArray2 = new ArrayList<Integer>();
+						tmpArray2 = new ArrayList<Integer> (tmpArray1.get(j));
+						
+						tmpArray2.set(tmpIndex, 11);
+						tmpArray1.add(tmpArray2);
 					}
-					else {
-						total += 11;
-					}
-				}
-				else {
-					total += tmpArray1.get(i);
 				}
 			}
 			
-			return total;
+			int busts = 0;
+			
+			for (int y = 0; y < tmpArray1.size(); ++y) {
+				for (int i = 0; i < tmpArray1.get(y).size(); ++ i) {
+					total += tmpArray1.get(y).get(i);
+				}
+				
+				if (total > 21) {
+					++busts;
+				}
+				else if (total == 21) {
+					return "blackjack";
+				}
+			}
+			
+			if (busts == tmpArray1.size() ) {
+				return "bust";
+			}
+			else {
+				return "not bust";
+			}
 		}
-		
+		*/
 		
 		// Countdown timer set to a default of 10000L which is 10 seconds. This is the amount of time a player has to make a decision.
 		// If a currentAction = -1 and the timer runs out, then do nothing.
