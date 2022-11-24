@@ -24,4 +24,8 @@ public class Card {
 	public String toString() {
 		return Integer.toString(value) + "#" + suit + "#";
 	}
+	
+	public String showCard() {
+		return Integer.toString(value) + " " + suit;
+	}
 }

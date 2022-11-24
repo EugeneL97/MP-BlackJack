@@ -13,15 +13,34 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	
 	public Client() throws Exception {
-		this.socket = new Socket("127.0.1.1", 59898);
+		this.socket = null;
+		this.input = null;
+		this.output = null;
+		this.userInput = null;
+		this.messageQueue = new ArrayList<Message>();
+		this.room = new Room(-1);
+	}
+	
+	public Client(String ip, int port) throws Exception {
+		this.socket = new Socket(ip, port);
 		this.input = new ObjectInputStream(socket.getInputStream());
 		this.output = new ObjectOutputStream(socket.getOutputStream());
 		this.userInput = new Scanner(System.in);
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
+		
+		// Create a message handler for the client
+		// Create a message handler for the client
+		// Create a message handler for the client
+		MessageHandler messageHandler = new MessageHandler(this);
+				
+		// Spawn a new thread for the client
+		new Thread(messageHandler).start();
 	}
 	
 	public static void main(String [] args) throws Exception {
+		//String ip = "127.0.1.1";
+		//int port = 59898;
 		// Create a new instance of client
 		Client client = new Client();
 		
@@ -48,7 +67,7 @@ public class Client {
 		boolean logout = false;
 		
 		/*
-		// 
+		// Testing, used only with console
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -71,6 +90,7 @@ public class Client {
 			client.closeConnection();
 			return;
 		}
+		
 		*/
 		
 		Parser parser = new Parser();
@@ -99,6 +119,11 @@ public class Client {
 		client.sendMessage(message);
 		Thread.sleep(1000);
 		System.out.println("Player after sending deal message = " + client.player.toString());
+		
+		message = new Message("hit", "", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending hit message = " + client.player.toString());
 		
 		message = new Message("stand", "100", "");
 		client.sendMessage(message);
@@ -147,6 +172,8 @@ public class Client {
 							break;
 						case "room":
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
+							
+							// For testing purposes only
 							if (client.getRoom().getPlayersInRoom().size() > 1) {
 								client.player = client.getRoom().getPlayersInRoom().get(1);
 							}
@@ -169,15 +196,12 @@ public class Client {
 		}
 	}
 	
+	
+	// Use this for GUI
 	// Login function to log onto server
 	public boolean login (String username, String password) {
 		boolean login = false;
-		/* For testing purposes
-		System.out.printf("Enter username: ");
-		String username = userInput.nextLine();
-		System.out.printf("Enter password: ");
-		String password = userInput.nextLine();
-		*/
+		Parser parser = new Parser();
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -187,6 +211,9 @@ public class Client {
 		
 		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
 			System.out.println("Login successful");
+			Message playerMessage = null;
+			playerMessage = getMessage(playerMessage);
+			this.setPlayer(parser.parsePlayer(playerMessage.toString()));
 			userInput.close();
 			return true;
 		}
@@ -197,6 +224,59 @@ public class Client {
 		return login;
 	}
 	
+	/*
+	// This is a duplicate function from above. It is for testing purposes.
+	// Login function to log onto server
+	public boolean login () {
+		boolean login = false;
+
+		System.out.printf("Enter username: ");
+		String username = userInput.nextLine();
+		System.out.printf("Enter password: ");
+		String password = userInput.nextLine();
+		Parser parser = new Parser();
+		
+		Message message = new Message("login", "", username + "#" + password);
+		sendMessage(message);
+		
+		Message replyMessage = null;
+		replyMessage = getMessage(replyMessage);
+		
+		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
+			System.out.println("Login successful");
+			Message playerMessage = null;
+			playerMessage = getMessage(playerMessage);
+			this.setPlayer(parser.parsePlayer(playerMessage.toString()));
+			userInput.close();
+			return true;
+		}
+		else if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("failed")) {
+			System.out.println("Login failed");
+		}
+		
+		return login;
+	}
+	*/
+
+	
+	// Use this for the GUI
+	// Register a new user
+	public Boolean register(String username, String password) {
+		Message message = new Message("register", "", username + "#" + password);
+		sendMessage(message);
+		
+		Message replyMessage = null;
+		replyMessage = getMessage(replyMessage);
+		
+		if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("success")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	/*
 	// Register a new user
 	public void register() {
 		System.out.printf("Enter username: ");
@@ -217,7 +297,7 @@ public class Client {
 			System.out.println(replyMessage.getText());
 		}
 	}
-	
+	*/
 	// Receives message from server
 	public Message getMessage(Message message) {
 		try {
@@ -318,8 +398,8 @@ public class Client {
 	}
 	
 	// If a player wants to be deal the first two cards
-	public void deal() {
-		Message message = new Message("deal", "", "");
+	public void deal(int wager) {
+		Message message = new Message("deal", Integer.toString(wager), "");
 		sendMessage(message);
 	}
 	
