@@ -307,6 +307,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
+        	client.joinRoom(0);
 
         } catch (Exception ex) {
 
@@ -316,6 +317,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
         // TODO add your handling code here:
         try {
+        	client.joinRoom(1);
 
         } catch (Exception ex) {
 
@@ -325,6 +327,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
         // TODO add your handling code here:
         try {
+        	client.joinRoom(2);
 
         } catch (Exception ex) {
 
@@ -334,6 +337,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
         // TODO add your handling code here:
         try {
+        	client.joinRoom(3);
 
         } catch (Exception ex) {
 
@@ -343,6 +347,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
         // TODO add your handling code here:
         try {
+        	client.joinRoom(4);
 
         } catch (Exception ex) {
 
