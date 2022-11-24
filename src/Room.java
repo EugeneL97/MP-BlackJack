@@ -92,6 +92,7 @@ public class Room {
 		return playersInRoom;
 	}
 
+	
 	public void setPlayersInRoom(ArrayList<Player> playersInRoom) {
 		this.playersInRoom = playersInRoom;
 	}
