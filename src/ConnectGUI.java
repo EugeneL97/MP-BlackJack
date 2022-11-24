@@ -1,3 +1,5 @@
+import java.util.concurrent.CountDownLatch;
+
 public class ConnectGUI extends javax.swing.JFrame {
 
     private Client client;
@@ -80,6 +82,12 @@ public class ConnectGUI extends javax.swing.JFrame {
                 int portNumber = Integer.valueOf(txtPortNumber.getText());
                 try {
                 	client = new Client(ip, portNumber);
+                	setVisible(false);
+                    dispose();
+                    System.out.println("Client ip = " + client.socket);
+                    LoginGUI window = new LoginGUI(client);
+             		window.getLoginFrame().setLocationRelativeTo(null); // center on screen
+             		window.getLoginFrame().setVisible(true); // make visible
                 }
                 catch(Exception e) {
                 	
@@ -155,9 +163,15 @@ public class ConnectGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
-        setVisible(false);
+        /*
+    	setVisible(false);
         dispose();
-        new LobbyGUI(client).setupLobbyPanel();      
+        System.out.println("Client ip = " + client.socket);
+        LoginGUI window = new LoginGUI(client);
+		window.getLoginFrame().setLocationRelativeTo(null); // center on screen
+		window.getLoginFrame().setVisible(true); // make visible
+		*/
+        //new LobbyGUI(client).setupLobbyPanel();      
     }//GEN-LAST:event_btnConnectActionPerformed
 
     /**
