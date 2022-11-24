@@ -157,7 +157,10 @@ public class ConnectGUI extends javax.swing.JFrame {
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         setVisible(false);
         dispose();
-        new LobbyGUI(client).setupLobbyPanel();      
+        LoginGUI window = new LoginGUI(client);
+		window.getLoginFrame().setLocationRelativeTo(null); // center on screen
+		window.getLoginFrame().setVisible(true); // make visible
+        
     }//GEN-LAST:event_btnConnectActionPerformed
 
     /**
