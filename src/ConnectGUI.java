@@ -1,11 +1,8 @@
-
 public class ConnectGUI extends javax.swing.JFrame {
 
     private Client client;
-
     /**
      * Creates new form ConnectGUI
-     *
      * @param client to connect with
      */
     public ConnectGUI(Client client) {
@@ -35,15 +32,11 @@ public class ConnectGUI extends javax.swing.JFrame {
         initComponents();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-
+    
     public void setupConnectPanel() {
-        try {
-
-        } catch (Exception ex) {
-
-        }
         setVisible(true);
     }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,9 +57,6 @@ public class ConnectGUI extends javax.swing.JFrame {
         btnConnect = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setResizable(false);
-
-        panelConnect.setPreferredSize(new java.awt.Dimension(500, 500));
 
         jLabel1.setFont(new java.awt.Font("Segoe Script", 3, 36)); // NOI18N
         jLabel1.setText("Connect");
@@ -86,6 +76,15 @@ public class ConnectGUI extends javax.swing.JFrame {
         btnConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConnectActionPerformed(evt);
+                String ip = txtIpAddress.getText();
+                int portNumber = Integer.valueOf(txtPortNumber.getText());
+                try {
+                	client = new Client(ip, portNumber);
+                }
+                catch(Exception e) {
+                	
+                }
+               
             }
         });
 
@@ -109,7 +108,7 @@ public class ConnectGUI extends javax.swing.JFrame {
                         .addGroup(panelConnectLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtIpAddress)
                             .addComponent(txtPortNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(118, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelConnectLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -132,7 +131,7 @@ public class ConnectGUI extends javax.swing.JFrame {
                     .addComponent(txtPortNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(30, 30, 30)
                 .addComponent(btnConnect)
-                .addContainerGap(254, Short.MAX_VALUE))
+                .addContainerGap(142, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -156,19 +155,21 @@ public class ConnectGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
-        try {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    //setVisible(false);
-                    //dispose();
-                    new LobbyGUI(client).setupLobbyPanel();
-                }
-            });
-        } catch (Exception ex) {
-
-        }
+        setVisible(false);
+        dispose();
+        new LobbyGUI(client).setupLobbyPanel();      
     }//GEN-LAST:event_btnConnectActionPerformed
 
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) throws Exception {
+    	//String ip = "127.0.1.1";
+    	//int port = 59898;
+        Client client = new Client();
+        client.setPlayer(new Player("Samira", 1000));
+        new ConnectGUI(client).setupConnectPanel();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConnect;
