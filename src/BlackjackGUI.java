@@ -3,12 +3,12 @@ public class BlackjackGUI extends javax.swing.JFrame {
 
     private Client client;
     private ConnectGUI connectGUI;
-    private RegisterOrLoginGUI registerOrLoginGUI;
+   // private RegisterOrLoginGUI registerOrLoginGUI;
     private LoginGUI loginGUI;
-    private RegisterGUI registerGUI;
+  //  private RegisterGUI registerGUI;
     private LobbyGUI lobbyGUI;
     private AccountInfoGUI accountInfoGUI;
-    private GameRoomGUI gameRoomGUI;
+   // private GameRoomGUI gameRoomGUI;
 
     /**
      * Creates new form BlackjackGUI
@@ -16,12 +16,12 @@ public class BlackjackGUI extends javax.swing.JFrame {
     public BlackjackGUI(Client client) {
         this.client = client;
         this.connectGUI = new ConnectGUI(client);
-        this.registerOrLoginGUI = new RegisterOrLoginGUI(client);
+      //  this.registerOrLoginGUI = new RegisterOrLoginGUI(client);
         this.loginGUI = new LoginGUI(client);
-        this.registerGUI = new RegisterGUI(client);
+        //this.registerGUI = new RegisterGUI(client);
         this.lobbyGUI = new LobbyGUI(client);
         this.accountInfoGUI = new AccountInfoGUI(client);
-        this.gameRoomGUI = new GameRoomGUI(client);
+       // this.gameRoomGUI = new GameRoomGUI(client);
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -264,7 +264,7 @@ public class BlackjackGUI extends javax.swing.JFrame {
                 public void run() {
                     //setVisible(false);
                     //dispose();
-                    registerOrLoginGUI.setupRegisterOrLoginPanel();
+                  //  registerOrLoginGUI.setupRegisterOrLoginPanel();
                 }
             });
         } catch (Exception ex) {
@@ -279,7 +279,7 @@ public class BlackjackGUI extends javax.swing.JFrame {
                 public void run() {
                     //setVisible(false);
                     //dispose();
-                    loginGUI.setupLoginPanel();
+                    loginGUI.startUp();
                 }
             });
         } catch (Exception ex) {
@@ -294,7 +294,7 @@ public class BlackjackGUI extends javax.swing.JFrame {
                 public void run() {
                     //setVisible(false);
                     //dispose();
-                    registerGUI.setupRegisterPanel();
+                   // registerGUI.setupRegisterPanel();
                 }
             });
         } catch (Exception ex) {
@@ -309,7 +309,7 @@ public class BlackjackGUI extends javax.swing.JFrame {
                 public void run() {
                     //setVisible(false);
                     //dispose();
-                    gameRoomGUI.setupGameRoomPanel();
+                    //gameRoomGUI.setupGameRoomPanel();
                 }
             });
         } catch (Exception ex) {
@@ -348,7 +348,7 @@ public class BlackjackGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 Client client = new Client();
-                client.setPlayer(new Player("Samira", "Mehroz", "samira123", 1000));
+                client.setPlayer(new Player("Samira",  1000));
                 new BlackjackGUI(client).setupBlackjackPanel();
             }
         });
