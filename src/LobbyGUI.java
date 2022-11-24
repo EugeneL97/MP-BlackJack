@@ -220,8 +220,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         try {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    //setVisible(false);
-                    //dispose();
+                    setVisible(false);
+                    dispose();
                     new AccountInfoGUI(client).setupAccountInfoPanel();
                 }
             });
@@ -234,8 +234,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         try {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
-                    //setVisible(false);
-                    //dispose();
+                    setVisible(false);
+                    dispose();
                     new ConnectGUI(client).setupConnectPanel();
                 }
             });
@@ -288,6 +288,17 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_btnJoinRoom5ActionPerformed
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) throws Exception {
+    	//String ip = "127.0.1.1";
+    	//int port = 59898;
+    	Client client = new Client();
+        client.setPlayer(new Player("Samira", 1000));
+        new LobbyGUI(client).setupLobbyPanel();
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
