@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 
 public class Client {
-	private Socket socket;
+	public Socket socket;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 	private Scanner userInput;
@@ -11,6 +11,7 @@ public class Client {
 	private LobbyRoom lobbyRoom;
 	private Room room;
 	private ArrayList<Message> messageQueue;
+	private int login;
 	
 	public Client() throws Exception {
 		this.socket = null;
@@ -19,6 +20,7 @@ public class Client {
 		this.userInput = null;
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
+		this.login = 0;
 	}
 	
 	public Client(String ip, int port) throws Exception {
@@ -28,6 +30,13 @@ public class Client {
 		this.userInput = new Scanner(System.in);
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
+		this.login = 0;
+		
+		// Create a message handler for the client
+		MessageHandler messageHandler = new MessageHandler(this);
+		
+		// Spawn a new thread for the client
+		new Thread(messageHandler).start();
 	}
 	
 	public static void main(String [] args) throws Exception {
@@ -59,7 +68,7 @@ public class Client {
 		boolean logout = false;
 		
 		
-		
+		/*
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -82,7 +91,7 @@ public class Client {
 			client.closeConnection();
 			return;
 		}
-		
+		*/
 		
 		Parser parser = new Parser();
 		
@@ -146,31 +155,63 @@ public class Client {
 		
 		@Override
 		public void run() {
+			System.out.println("MessageHandler running");
 			Parser parser = new Parser();
 			
 			while (true) {
+				System.out.println("In MessageHandling loop");
 				Message message = null;
 				message = client.getMessage(message);
+				System.out.println("Client received an object");
 				client.messageQueue.add(message);
 				
 				if (client.messageQueue.size() > 0 ) {
 					switch (client.messageQueue.get(0).getType()) {
 						case "lobby room":
+							System.out.println("Client received lobby room object");
 							client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
 							
 
 							client.getMessageQueue().remove(0);
 							break;
 						case "room":
+							System.out.println("Client received room object");
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
-							
-							// For testing purposes only
-							if (client.getRoom().getPlayersInRoom().size() > 1) {
-								client.player = client.getRoom().getPlayersInRoom().get(1);
+							if (client.messageQueue.size() > 0) {
+								for (int x = 0; x < client.getRoom().getPlayersInRoom().size(); ++x) {
+									if(client.player.getUsername().equals(client.getRoom().getPlayersInRoom().get(x).getUsername())) {
+										client.setPlayer(client.getRoom().getPlayersInRoom().get(x));
+									}
+								
+								}
 							}
 							
 							client.getMessageQueue().remove(0);
 							break;
+						case "login":
+							System.out.println("Client received login object");
+
+							if(client.messageQueue.get(0).getStatus().equals("success")) {
+								
+								client.setLogin(1);
+								System.out.println("login success");
+								client.getMessageQueue().remove(0);
+							}
+							else {
+								client.setLogin(-1);
+								client.getMessageQueue().remove(0);
+							}
+
+							break;
+							
+						case "player":
+							System.out.println("Client received player object");
+
+							client.setPlayer(parser.parsePlayer(client.messageQueue.get(0).getText()));
+							client.getMessageQueue().remove(0);
+
+							break;
+							
 						default:
 							break;
 					}
@@ -187,32 +228,18 @@ public class Client {
 		}
 	}
 	
-	/*
+
 	// Use this for GUI
 	// Login function to log onto server
-	public boolean login (String username, String password) {
-		boolean login = false;
-		
-		
+	public void login (String username, String password) {
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
 		
-		Message replyMessage = null;
-		replyMessage = getMessage(replyMessage);
-		
-		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
-			System.out.println("Login successful");
-			userInput.close();
-			return true;
-		}
-		else if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("failed")) {
-			System.out.println("Login failed");
-		}
-		
-		return login;
+		System.out.println("Sent message");
 	}
-	*/
+
 	
+	/*
 	// This is a duplicate function from above. It is for testing purposes.
 	// Login function to log onto server
 	public boolean login () {
@@ -244,8 +271,9 @@ public class Client {
 		
 		return login;
 	}
+	*/
 	
-	/*
+	
 	// Use this for the GUI
 	// Register a new user
 	public Boolean register(String username, String password) {
@@ -261,7 +289,7 @@ public class Client {
 		
 		return false;
 	}
-	*/
+	
 	
 	
 	// Register a new user
@@ -336,6 +364,8 @@ public class Client {
 	    long delay = 10000L;
 	    timer.schedule(task, delay);
 	}
+	
+	
 	
 	// Closes connection to server.
 	public void closeConnection() {
@@ -438,5 +468,13 @@ public class Client {
 	
 	public void setMessageQueue (ArrayList<Message> messageQueue) {
 		this.messageQueue = messageQueue;
+	}
+	
+	public int getLogin() {
+		return this.login;
+	}
+	
+	public void setLogin(int login) {
+		this.login = login;
 	}
 }
