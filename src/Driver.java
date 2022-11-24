@@ -65,7 +65,7 @@ public class Driver {
 				currentHand.get(0).add(shoe.dealCard());
 			}
 			
-			playersInRoom.add(new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, currentHand));
+			playersInRoom.add(new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand));
 		}
 	
 		Room room;
@@ -146,7 +146,7 @@ public class Driver {
 		}
 		
 		System.out.println("Stopped running.");
-		*/
+		
 		
 		// Testing tally()
 		Driver driver = new Driver();
@@ -194,6 +194,32 @@ public class Driver {
 		System.out.println(player.toString());
 		
 		System.out.println(driver.tally(0, 1, 0, server));
+		
+		*/
+		
+		Driver driver = new Driver();
+		driver.dealer();
+		
+		
+		
+	}
+	
+	public void dealer() {
+		Server server = new Server();
+		server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+		server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+		server.getRooms().get(0).getPlayersInRoom().get(0).setScore(bust(0, 0, 0, server));
+		
+		while (!server.getRooms().get(0).getPlayersInRoom().get(0).getScore().equals("bust")) {
+			if (tally(0, 0, 0, server) < 13) {
+				server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+				
+				bust(0, 0, 0, server);
+			}
+			
+			System.out.println("Current tally = " + tally(0, 0, 0, server));
+		}
+		
 	}
 	
 	// The bust function takes the room number where the player is located, the index that indicates the player's position in the playersInRoom array and the 
