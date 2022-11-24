@@ -49,7 +49,7 @@ public class LoginGUI {
 		this.client = client;
 	}
 	
-	private void startUp() {
+	public void startUp() {
 		loginFrame = new JFrame();
 		loginFrame.setBounds(200, 200, 500, 300);
 		loginFrame.setSize(900, 650);
