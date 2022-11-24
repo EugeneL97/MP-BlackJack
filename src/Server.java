@@ -972,6 +972,7 @@ public class Server {
 					
 					switch (message.getType()) {
 						case "login":
+							System.out.println("Received login message.");
 							++loginCount;
 							proceedToLobby = login(message);
 							// If there are 3 failed login attempts close the connection and end the thread.
@@ -1343,6 +1344,7 @@ public class Server {
 		
 		// Login function
 		public boolean login(Message message) {
+			System.out.println("login method Running");
 			boolean login = false;
 			
 			System.out.println("Received login message from client " + clientSocket.getInetAddress().getHostAddress());
@@ -1365,6 +1367,7 @@ public class Server {
 		// Helper function for the login function to see if username and password matches
 		// any line from the database.txt
 		public boolean verifyLogin(String loginString) {
+			System.out.println("verifyLogin Running");
 			String fileInput = null;
 			String [] loginInfo;
 			String username = null;
