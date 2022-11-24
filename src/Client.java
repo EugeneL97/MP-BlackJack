@@ -58,8 +58,8 @@ public class Client {
 		boolean proceedToLobby = false;
 		boolean logout = false;
 		
-		/*
-		// 
+		
+		
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -82,7 +82,7 @@ public class Client {
 			client.closeConnection();
 			return;
 		}
-		*/
+		
 		
 		Parser parser = new Parser();
 		
@@ -110,6 +110,11 @@ public class Client {
 		client.sendMessage(message);
 		Thread.sleep(1000);
 		System.out.println("Player after sending deal message = " + client.player.toString());
+		
+		message = new Message("hit", "", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending hit message = " + client.player.toString());
 		
 		message = new Message("stand", "100", "");
 		client.sendMessage(message);
@@ -158,6 +163,8 @@ public class Client {
 							break;
 						case "room":
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
+							
+							// For testing purposes only
 							if (client.getRoom().getPlayersInRoom().size() > 1) {
 								client.player = client.getRoom().getPlayersInRoom().get(1);
 							}
@@ -215,7 +222,7 @@ public class Client {
 		String username = userInput.nextLine();
 		System.out.printf("Enter password: ");
 		String password = userInput.nextLine();
-
+		Parser parser = new Parser();
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -225,6 +232,9 @@ public class Client {
 		
 		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
 			System.out.println("Login successful");
+			Message playerMessage = null;
+			playerMessage = getMessage(playerMessage);
+			this.setPlayer(parser.parsePlayer(playerMessage.toString()));
 			userInput.close();
 			return true;
 		}
@@ -235,6 +245,7 @@ public class Client {
 		return login;
 	}
 	
+	/*
 	// Use this for the GUI
 	// Register a new user
 	public Boolean register(String username, String password) {
@@ -250,9 +261,9 @@ public class Client {
 		
 		return false;
 	}
+	*/
 	
 	
-	/*
 	// Register a new user
 	public void register() {
 		System.out.printf("Enter username: ");
@@ -272,7 +283,7 @@ public class Client {
 		else if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("failed")) {
 			System.out.println(replyMessage.getText());
 		}
-	}*/
+	}
 	
 	// Receives message from server
 	public Message getMessage(Message message) {
