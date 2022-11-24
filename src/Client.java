@@ -13,7 +13,16 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	
 	public Client() throws Exception {
-		this.socket = new Socket("127.0.1.1", 59898);
+		this.socket = null;
+		this.input = null;
+		this.output = null;
+		this.userInput = null;
+		this.messageQueue = new ArrayList<Message>();
+		this.room = new Room(-1);
+	}
+	
+	public Client(String ip, int port) throws Exception {
+		this.socket = new Socket(ip, port);
 		this.input = new ObjectInputStream(socket.getInputStream());
 		this.output = new ObjectOutputStream(socket.getOutputStream());
 		this.userInput = new Scanner(System.in);
@@ -22,6 +31,8 @@ public class Client {
 	}
 	
 	public static void main(String [] args) throws Exception {
+		//String ip = "127.0.1.1";
+		//int port = 59898;
 		// Create a new instance of client
 		Client client = new Client();
 		
@@ -169,15 +180,42 @@ public class Client {
 		}
 	}
 	
+	/*
+	// Use this for GUI
 	// Login function to log onto server
 	public boolean login (String username, String password) {
 		boolean login = false;
-		/* For testing purposes
+		
+		
+		Message message = new Message("login", "", username + "#" + password);
+		sendMessage(message);
+		
+		Message replyMessage = null;
+		replyMessage = getMessage(replyMessage);
+		
+		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
+			System.out.println("Login successful");
+			userInput.close();
+			return true;
+		}
+		else if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("failed")) {
+			System.out.println("Login failed");
+		}
+		
+		return login;
+	}
+	*/
+	
+	// This is a duplicate function from above. It is for testing purposes.
+	// Login function to log onto server
+	public boolean login () {
+		boolean login = false;
+
 		System.out.printf("Enter username: ");
 		String username = userInput.nextLine();
 		System.out.printf("Enter password: ");
 		String password = userInput.nextLine();
-		*/
+
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -197,6 +235,24 @@ public class Client {
 		return login;
 	}
 	
+	// Use this for the GUI
+	// Register a new user
+	public Boolean register(String username, String password) {
+		Message message = new Message("register", "", username + "#" + password);
+		sendMessage(message);
+		
+		Message replyMessage = null;
+		replyMessage = getMessage(replyMessage);
+		
+		if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("success")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	/*
 	// Register a new user
 	public void register() {
 		System.out.printf("Enter username: ");
@@ -216,7 +272,7 @@ public class Client {
 		else if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("failed")) {
 			System.out.println(replyMessage.getText());
 		}
-	}
+	}*/
 	
 	// Receives message from server
 	public Message getMessage(Message message) {
@@ -318,8 +374,8 @@ public class Client {
 	}
 	
 	// If a player wants to be deal the first two cards
-	public void deal() {
-		Message message = new Message("deal", "", "");
+	public void deal(int wager) {
+		Message message = new Message("deal", Integer.toString(wager), "");
 		sendMessage(message);
 	}
 	
