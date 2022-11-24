@@ -76,6 +76,15 @@ public class ConnectGUI extends javax.swing.JFrame {
         btnConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConnectActionPerformed(evt);
+                String ip = txtIpAddress.getText();
+                int portNumber = Integer.valueOf(txtPortNumber.getText());
+                try {
+                	client = new Client(ip, portNumber);
+                }
+                catch(Exception e) {
+                	
+                }
+               
             }
         });
 
@@ -148,13 +157,15 @@ public class ConnectGUI extends javax.swing.JFrame {
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         setVisible(false);
         dispose();
-        new LobbyGUI(client).setupLobbyPanel();
+        new LobbyGUI(client).setupLobbyPanel();      
     }//GEN-LAST:event_btnConnectActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) throws Exception {
+    	//String ip = "127.0.1.1";
+    	//int port = 59898;
         Client client = new Client();
         client.setPlayer(new Player("Samira", 1000));
         new ConnectGUI(client).setupConnectPanel();
