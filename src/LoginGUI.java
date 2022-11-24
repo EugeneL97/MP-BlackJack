@@ -29,7 +29,9 @@ public class LoginGUI {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Client client = new Client();
+					String ip = "127.0.1.1";
+					int port = 59898;
+					Client client = new Client(ip, port);
 					LoginGUI window = new LoginGUI(client);
 					window.loginFrame.setLocationRelativeTo(null); // center on screen
 					window.loginFrame.setVisible(true); // make visible
@@ -89,7 +91,7 @@ public class LoginGUI {
 		
 		String password = txtPassword.getText();
 		String username = txtUsername.getText();
-		Boolean login = client.login(username, password);
+		//Boolean login = client.login(username, password);
 		
 			if (password.equals("pass") && username.equals("user")) {
 				txtPassword.setText(null);
