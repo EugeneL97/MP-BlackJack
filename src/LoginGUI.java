@@ -1,20 +1,14 @@
-import java.io.*;
-import javax.swing.*;
-import java.awt.LayoutManager;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JSeparator;
-import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class LoginGUI {
 	
@@ -25,6 +19,49 @@ public class LoginGUI {
 	private JFrame frameLoginSystem;
 	private Client client;
 	
+	public JFrame getLoginFrame() {
+		return loginFrame;
+	}
+	
+	private static class LoginHandler implements Runnable {
+		private Client client;
+		private JTextField txtUsername;
+		private JPasswordField txtPassword;
+		private JFrame loginFrame;
+		
+		public LoginHandler(Client client, JTextField txtUsername, JPasswordField txtPassword, JFrame loginFrame) {
+			this.client = client;
+			this.txtUsername = txtUsername;
+			this.txtPassword = txtPassword;
+			this.loginFrame = loginFrame;
+		}
+		
+		@Override
+		public void run() {
+			String password = txtPassword.getText();
+			String username = txtUsername.getText();
+			Parser parser = new Parser();
+			Message message = new Message("login", "", username + "#" + password);
+			client.sendMessage(message);
+			
+			while(client.getLogin() == 0) {
+				System.out.println("client login = " + client.getLogin());
+			}	
+			
+			if (client.getLogin() == 1) {
+				System.out.println("client login = " + client.getLogin());
+				
+				new LobbyGUI(client).setupLobbyPanel(); 
+				loginFrame.dispose();
+				
+			}
+			else if (client.getLogin() == -1){
+				JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+				txtPassword.setText(null);
+				txtUsername.setText(null);
+			}
+		}
+	}
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -51,7 +88,11 @@ public class LoginGUI {
 		this.client = client;
 	}
 	
-	private void startUp() {
+	public void giveFalse(Boolean time) {
+		time = false;
+	}
+	
+	public void startUp() {
 		loginFrame = new JFrame();
 		loginFrame.setBounds(200, 200, 500, 300);
 		loginFrame.setSize(900, 650);
@@ -91,16 +132,10 @@ public class LoginGUI {
 		
 		String password = txtPassword.getText();
 		String username = txtUsername.getText();
-		//Boolean login = client.login(username, password);
+	
+		LoginHandler loginHandler = new LoginHandler(client, txtUsername, txtPassword, loginFrame);
+		new Thread(loginHandler).start();
 		
-			if (password.equals("pass") && username.equals("user")) {
-				txtPassword.setText(null);
-				txtUsername.setText(null);
-			} else {
-				JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
-				txtPassword.setText(null);
-				txtUsername.setText(null);
-			}
 		}
 		
 		});
