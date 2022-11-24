@@ -23,53 +23,6 @@ public class LoginGUI {
 		return loginFrame;
 	}
 	
-	// Clicking on Login creates a LoginHandler which runs on another thread
-	private static class LoginHandler implements Runnable {
-		private Client client;
-		private JTextField txtUsername;
-		private JPasswordField txtPassword;
-		private JFrame loginFrame;
-		
-		// Passing attributes from LoginGUI so that the new thread can control the closing of the frame and the texts from
-		// the login and password fields
-		public LoginHandler(Client client, JTextField txtUsername, JPasswordField txtPassword, JFrame loginFrame) {
-			this.client = client;
-			this.txtUsername = txtUsername;
-			this.txtPassword = txtPassword;
-			this.loginFrame = loginFrame;
-		}
-		
-		@Override
-		public void run() {
-			// Get user input from LoginGUI
-			String password = txtPassword.getText();
-			String username = txtUsername.getText();
-			
-			// Execute login by sending a login message to the server
-			client.login(username, password);
-			
-			// Busy wait until server gets the message, responds, then server adjusts the value of client.login to either 1 or -1
-			while(client.getLogin() == 0) {
-				System.out.println("client login = " + client.getLogin());
-			}	
-			
-			// Login success, create LobbyGUI and close LoginGUI
-			if (client.getLogin() == 1) {
-				System.out.println("client login = " + client.getLogin());
-				
-				new LobbyGUI(client).setupLobbyPanel(); 
-				loginFrame.dispose();
-				
-			}
-			// Login failed. Reset client.login = 0 so the busy wait loop will work again.
-			else if (client.getLogin() == -1){
-				JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
-				txtPassword.setText(null);
-				txtUsername.setText(null);
-				client.setLogin(0);
-			}
-		}
-	}
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -140,14 +93,9 @@ public class LoginGUI {
 		
 		String password = txtPassword.getText();
 		String username = txtUsername.getText();
-	
-		// I think event handlers work on a separate thread, therefore it immediately executes instructions when
-		// event occurs. Therefore, I devised a way in which the event handler could execute immediately but the conditional
-		// response message from the server could still be checked before executing LobbyRoomGUI by spawning another thread to handle
-		// the condition checking.
-		LoginHandler loginHandler = new LoginHandler(client, txtUsername, txtPassword, loginFrame);
-		new Thread(loginHandler).start();
 		
+		
+		login();
 		}
 		
 		});
@@ -167,5 +115,35 @@ public class LoginGUI {
 		});
 		exitButton.setBounds(475, 375, 150, 45);
 		loginFrame.getContentPane().add(exitButton);
+	}
+	
+	public void login() {
+		// Get user input from LoginGUI
+		String password = txtPassword.getText();
+		String username = txtUsername.getText();
+		
+		// Execute login by sending a login message to the server
+		client.login(username, password);
+		
+		// Busy wait until server gets the message, responds, then server adjusts the value of client.login to either 1 or -1
+		while(client.getLogin() == 0) {
+			System.out.println("client login = " + client.getLogin());
+		}	
+		
+		// Login success, create LobbyGUI and close LoginGUI
+		if (client.getLogin() == 1) {
+			System.out.println("client login = " + client.getLogin());
+			
+			new LobbyGUI(client).setupLobbyPanel(); 
+			loginFrame.dispose();
+			
+		}
+		// Login failed. Reset client.login = 0 so the busy wait loop will work again.
+		else if (client.getLogin() == -1){
+			JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+			txtPassword.setText(null);
+			txtUsername.setText(null);
+			client.setLogin(0);
+		}
 	}
 }
