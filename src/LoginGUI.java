@@ -94,7 +94,6 @@ public class LoginGUI {
 		String password = txtPassword.getText();
 		String username = txtUsername.getText();
 		
-		
 		login();
 		}
 		
@@ -124,11 +123,8 @@ public class LoginGUI {
 		
 		// Execute login by sending a login message to the server
 		client.login(username, password);
-		
-		// Busy wait until server gets the message, responds, then server adjusts the value of client.login to either 1 or -1
-		while(client.getLogin() == 0) {
-			System.out.println("client login = " + client.getLogin());
-		}	
+		client.loginHandler();
+		System.out.println("After running loginHandler client.login = " + client.getLogin());
 		
 		// Login success, create LobbyGUI and close LoginGUI
 		if (client.getLogin() == 1) {
