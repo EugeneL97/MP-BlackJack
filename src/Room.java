@@ -62,7 +62,6 @@ public class Room {
 		
 		this.shoe = shoe;
 	}
-
 	
 	public String toString() {
 		String output = "";
