@@ -23,3 +23,4 @@ public class Card {
 		return Integer.toString(value) + "#" + suit + "#";
 	}
 }
+

@@ -228,6 +228,7 @@ public class Client {
 		}
 	}
 	
+	
 	// Use this for GUI
 	// Login function to log onto server
 	public void login (String username, String password) {
@@ -237,7 +238,6 @@ public class Client {
 		System.out.println("Sent message");
 	}
 
-	
 	/*
 	// This is a duplicate function from above. It is for testing purposes.
 	// Login function to log onto server

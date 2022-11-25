@@ -13,6 +13,8 @@ public class LobbyRoom {
 		}
 	}
 	
+	
+	
 	public LobbyRoom(ArrayList<ArrayList<String>> clientLobbyRoom) {
 		this.numberOfRooms = 5;
 		this.clientLobbyRoom = clientLobbyRoom;

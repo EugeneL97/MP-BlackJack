@@ -28,6 +28,7 @@ public class Player {
 	// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
 	private int currentAction;
 	
+	
 	// Indicates player's current wager
 	private int wager;
 	

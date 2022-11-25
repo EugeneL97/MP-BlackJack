@@ -18,6 +18,8 @@ public class Message implements Serializable {
 		this.text = message.getText();
 	}
 	
+	
+	
 	public Message(String type, String status, String text) {
 		this.type = type;
 		this.status = status;

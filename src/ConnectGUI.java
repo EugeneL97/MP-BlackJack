@@ -163,6 +163,7 @@ public class ConnectGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    
     private void btnConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConnectActionPerformed
         /*
     	setVisible(false);
@@ -186,6 +187,7 @@ public class ConnectGUI extends javax.swing.JFrame {
         new ConnectGUI(client).setupConnectPanel();
     }
 
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConnect;
     private javax.swing.JLabel jLabel1;

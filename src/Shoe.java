@@ -20,6 +20,8 @@ public class Shoe {
 		this.deck = deck;
 	}
 	
+	
+	
 	public String toString() {
 		String output = "";
 		

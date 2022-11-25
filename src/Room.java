@@ -32,6 +32,8 @@ public class Room {
 		this.shoe = new Shoe();
 	}
 	
+	
+	
 	public Room(Room room) {
 		this.roomNumber = room.getRoomNumber();
 		this.readyToStart = room.getReadyToStart();
