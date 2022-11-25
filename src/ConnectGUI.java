@@ -77,6 +77,7 @@ public class ConnectGUI extends javax.swing.JFrame {
         btnConnect.setText("Connect");
         btnConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
+            	
                 btnConnectActionPerformed(evt);
                 String ip = txtIpAddress.getText();
                 int portNumber = Integer.valueOf(txtPortNumber.getText());

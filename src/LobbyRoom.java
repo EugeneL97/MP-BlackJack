@@ -16,15 +16,6 @@ public class LobbyRoom {
 	public LobbyRoom(ArrayList<ArrayList<String>> clientLobbyRoom) {
 		this.numberOfRooms = 5;
 		this.clientLobbyRoom = clientLobbyRoom;
-		
-		/*
-		for (int x = 0; x < clientLobbyRoom.getNumberOfRooms(); ++x) {
-			this.clientLobbyRoom.add(new ArrayList<String>());
-			
-			for (int y = 0; y < clientLobbyRoom.getClientLobbyRoom().get(x).size(); ++y) {
-				this.clientLobbyRoom.get(x).add(clientLobbyRoom.getClientLobbyRoom().get(x).get(y));
-			}
-		}*/
 	}
 	
 	public String toString() {

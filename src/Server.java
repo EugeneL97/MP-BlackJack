@@ -938,8 +938,6 @@ public class Server {
 	}
 	 */
 	
-	
-	
 	// Each thread use this class and execute the method run()
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;
@@ -953,13 +951,15 @@ public class Server {
 			this.server = server;
 		}
 		
-		
 		@Override
 		public void run() {		
 			try {
 				output = new ObjectOutputStream(clientSocket.getOutputStream());
 				input = new ObjectInputStream(clientSocket.getInputStream());
-
+				
+				Message connectionMessage = new Message("connect", "successful", "");
+				sendMessage(connectionMessage);
+				
 				boolean proceedToLobby = false; // Used in conjunction with loginCount to continue the login/register loop
 				int loginCount = 0; // Count the number of login attempts. Close connection to client if it exceeds 3 attempts 
 				boolean logout = false; // Close connection if this value is true. If player sends a logout message, set this to true

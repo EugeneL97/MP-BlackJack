@@ -228,7 +228,6 @@ public class Client {
 		}
 	}
 	
-
 	// Use this for GUI
 	// Login function to log onto server
 	public void login (String username, String password) {

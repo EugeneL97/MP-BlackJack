@@ -117,6 +117,7 @@ public class LoginGUI {
 		loginFrame.getContentPane().add(exitButton);
 	}
 	
+
 	public void login() {
 		// Get user input from LoginGUI
 		String password = txtPassword.getText();
