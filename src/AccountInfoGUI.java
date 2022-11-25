@@ -39,13 +39,7 @@ public class AccountInfoGUI extends javax.swing.JFrame {
     public void setupAccountInfoPanel() {
         try {
             txtUserName.setText(client.getPlayer().getUsername());
-            for(int x=0; x<client.getRoom().getPlayersInRoom().size(); ++x ) {
-            	if(client.getRoom().getPlayersInRoom().get(x).equals(txtUserName)) {
-            		txtAccountBalance.setText(String.valueOf(client.getRoom().getPlayersInRoom().get(x).getAccountBalance()));		
-            	}
-            }
             txtAccountBalance.setText(String.valueOf(client.getPlayer().getAccountBalance()));
-            
         } catch (Exception ex) {
 
         }
@@ -256,8 +250,8 @@ public class AccountInfoGUI extends javax.swing.JFrame {
             java.awt.EventQueue.invokeLater(new Runnable() {
                 @Override
                 public void run() {
-                    setVisible(false);
-                    dispose();
+                    //setVisible(false);
+                    //dispose();
                     new LobbyGUI(client).setupLobbyPanel();
                 }
             });
@@ -265,18 +259,23 @@ public class AccountInfoGUI extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-    
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws Exception {
-    	//String ip = "127.0.1.1";
-    	//int port = 59898;
-        Client client = new Client();
-        client.setPlayer(new Player("Samira", 1000));
-        new AccountInfoGUI(client).setupAccountInfoPanel();
-    }
+    public static void main(String args[]){
 
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+            	try {
+                Client client = new Client();
+                client.setPlayer(new Player("Samira", 1000));
+                new AccountInfoGUI(client).setupAccountInfoPanel();
+            	} catch(Exception ex) {}
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDeposit;
