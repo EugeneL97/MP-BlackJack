@@ -960,6 +960,9 @@ public class Server {
 				output = new ObjectOutputStream(clientSocket.getOutputStream());
 				input = new ObjectInputStream(clientSocket.getInputStream());
 
+				Message connectionMessage = new Message("connect", "success", "");
+				sendMessage(connectionMessage);
+				
 				boolean proceedToLobby = false; // Used in conjunction with loginCount to continue the login/register loop
 				int loginCount = 0; // Count the number of login attempts. Close connection to client if it exceeds 3 attempts 
 				boolean logout = false; // Close connection if this value is true. If player sends a logout message, set this to true
@@ -1372,7 +1375,7 @@ public class Server {
 			String [] loginInfo;
 			String username = null;
 			String password = null;
-			File file = new File(System.getProperty("user.dir") + "/src/database.txt");
+			File file = new File(System.getProperty("user.dir") + "/database.txt");
 			System.out.println("loginString = " +  loginString);
 
 			try {
