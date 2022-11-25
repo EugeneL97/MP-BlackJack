@@ -31,12 +31,13 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
-		
+		/*
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
 		
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
+		*/
 	}
 	
 	public static void main(String [] args) throws Exception {
@@ -95,11 +96,13 @@ public class Client {
 		
 		Parser parser = new Parser();
 		
+		/*
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(client);
 		
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
+		*/
 		
 		int roomNumber = 3;
 		
@@ -145,6 +148,145 @@ public class Client {
 		
 	}
 	
+	public Boolean connectHandler() {
+		System.out.println("connectHandler running");
+		
+		while (true) {
+			System.out.println("In connectHandling loop");
+			Message message = null;
+			message = getMessage(message);
+			System.out.println("Client received an object");
+			messageQueue.add(message);
+			
+			if (messageQueue.size() > 0 ) {
+				switch (messageQueue.get(0).getType()) {
+					case "connect":
+						System.out.println("Client received connect message");
+						if (messageQueue.get(0).getStatus().equals("success")) {
+							getMessageQueue().remove(0);
+							return true;
+						}
+						else {
+							getMessageQueue().remove(0);
+							return false;
+						}
+					default:
+						break;
+				}
+			}
+			/*
+			try {
+				Thread.sleep(1000);
+			}
+			catch (Exception e) {
+				
+			}
+			*/
+		}
+	}
+	
+	public void loginHandler() {
+		System.out.println("loginHandler running");
+		Parser parser = new Parser();
+		while (true) {
+			System.out.println("In loginHandling loop");
+			Message message = null;
+			message = getMessage(message);
+			System.out.println("Client received an object of type = " + message.getType() + "\nStatus = " + message.getStatus());
+			messageQueue.add(message);
+			
+			if (messageQueue.size() > 0 ) {
+				switch (messageQueue.get(0).getType()) {
+					case "player":
+						System.out.println("Client received player object");
+	
+						setPlayer(parser.parsePlayer(messageQueue.get(0).getText()));
+						getMessageQueue().remove(0);
+
+						break;
+					case "login":
+						System.out.println("Client received login object");
+
+						if(messageQueue.get(0).getStatus().equals("success")) {
+							
+							setLogin(1);
+							System.out.println("login success");
+							getMessageQueue().remove(0);
+							return;
+						}
+						else {
+							setLogin(-1);
+							getMessageQueue().remove(0);
+							return;
+						}
+						
+					default:
+						break;
+				}
+			}
+			/*
+			try {
+				Thread.sleep(1000);
+			}
+			catch (Exception e) {
+				
+			}
+			*/
+		}
+	}
+	
+	public void messageHandler() {
+		System.out.println("MessageHandler running");
+		Parser parser = new Parser();
+		
+		while (true) {
+			System.out.println("In MessageHandling loop");
+			Message message = null;
+			message = getMessage(message);
+			System.out.println("Client received an object");
+			messageQueue.add(message);
+			
+			if (messageQueue.size() > 0 ) {
+				switch (messageQueue.get(0).getType()) {
+					case "lobby room":
+						System.out.println("Client received lobby room object");
+						setLobbyRoom(parser.parseLobbyRoom(messageQueue.get(0).getText()));
+						
+
+						getMessageQueue().remove(0);
+						break;
+					case "room":
+						System.out.println("Client received room object");
+						setRoom(parser.parseRoom(messageQueue.get(0).getText()));
+						if (messageQueue.size() > 0) {
+							for (int x = 0; x < getRoom().getPlayersInRoom().size(); ++x) {
+								if(player.getUsername().equals(getRoom().getPlayersInRoom().get(x).getUsername())) {
+									setPlayer(getRoom().getPlayersInRoom().get(x));
+								}
+							
+							}
+						}
+						
+						getMessageQueue().remove(0);
+						break;
+					
+					default:
+						break;
+				}
+			}
+			/*
+			try {
+				Thread.sleep(1000);
+			}
+			catch (Exception e) {
+				
+			}
+			*/
+		}
+	}
+	
+	/*
+	// Creating a new thread for handing messages might be too CPU intensive. Goin to implement this with another option.
 	// MessageHandler will listen to messages and put them in a queue for processing
 	private static class MessageHandler implements Runnable {
 		private Client client;
@@ -216,18 +358,18 @@ public class Client {
 							break;
 					}
 				}
-				/*
+				
 				try {
 					Thread.sleep(1000);
 				}
 				catch (Exception e) {
 					
 				}
-				*/
+				
 			}
 		}
 	}
-	
+	*/
 
 	// Use this for GUI
 	// Login function to log onto server
@@ -235,7 +377,7 @@ public class Client {
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
 		
-		System.out.println("Sent message");
+		System.out.println("Sent login message");
 	}
 
 	
