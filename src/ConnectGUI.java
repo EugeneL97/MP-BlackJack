@@ -39,7 +39,28 @@ public class ConnectGUI extends javax.swing.JFrame {
         setVisible(true);
     }
 
-
+    private void connectToClient() {
+    	String ip = txtIpAddress.getText();
+        int portNumber = Integer.valueOf(txtPortNumber.getText());
+        try {
+        	
+        	client = new Client(ip, portNumber);
+        	Boolean connect = client.connectHandler();
+        	
+        	if (connect) {
+        		setVisible(false);
+                dispose();
+                System.out.println("Client ip = " + client.socket);
+                LoginGUI window = new LoginGUI(client);
+         		window.getLoginFrame().setLocationRelativeTo(null); // center on screen
+         		window.getLoginFrame().setVisible(true); // make visible
+        	}
+        	
+        }
+        catch(Exception e) {
+        	
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -78,20 +99,7 @@ public class ConnectGUI extends javax.swing.JFrame {
         btnConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConnectActionPerformed(evt);
-                String ip = txtIpAddress.getText();
-                int portNumber = Integer.valueOf(txtPortNumber.getText());
-                try {
-                	client = new Client(ip, portNumber);
-                	setVisible(false);
-                    dispose();
-                    System.out.println("Client ip = " + client.socket);
-                    LoginGUI window = new LoginGUI(client);
-             		window.getLoginFrame().setLocationRelativeTo(null); // center on screen
-             		window.getLoginFrame().setVisible(true); // make visible
-                }
-                catch(Exception e) {
-                	
-                }
+                connectToClient();
                
             }
         });
