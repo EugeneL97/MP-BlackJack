@@ -1,7 +1,17 @@
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
 
 public class LobbyGUI extends javax.swing.JFrame {
 
     private Client client;
+    private LobbyRoom lobbyRoom;
+    
+    public LobbyRoom getLobbyRoom() {
+    	return lobbyRoom;
+    }
 
     /**
      * Creates new form LobbyGUI
@@ -10,6 +20,8 @@ public class LobbyGUI extends javax.swing.JFrame {
      */
     public LobbyGUI(Client client) {
         this.client = client;
+        this.lobbyRoom = new LobbyRoom();
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -61,7 +73,54 @@ public class LobbyGUI extends javax.swing.JFrame {
         textField2 = new javax.swing.JTextField();
         textField3 = new javax.swing.JTextField();
         textField4 = new javax.swing.JTextField();
+      
+        btnRefreshRooms = new JButton(); 
+        btnRefreshRooms.setFont(new Font("Segoe Script", 1, 12)); // NOI18N
+        btnRefreshRooms.setText("Refresh Rooms");
+        btnRefreshRooms.addActionListener(e -> refreshRooms(e)); 
+        
+      
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
+        	textField0.setText("");
+        }
+        else {
+        	textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
+        	
+        }
+        
+        textField1 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 2) {
+        	textField1.setText("");
+        }
+        else {
+        	textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
+        }
 
+        textField2 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 3) {
+        	textField2.setText("");
+        }
+        else {
+        	textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
+        }
+        
+        textField3 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
+        	textField3.setText("");
+        }
+        else {
+        	textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
+        }
+        
+        textField4 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
+        	textField4.setText("");
+        }
+        else {
+        	textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+        }
+
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -83,6 +142,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnJoinRoom0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJoinRoom0ActionPerformed(evt);
+                int roomNumber = 0;
+                joinRoomNumber(roomNumber);
             }
         });
 
@@ -99,6 +160,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnJoinRoom1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJoinRoom1ActionPerformed(evt);
+                int roomNumber = 1;
+                joinRoomNumber(roomNumber);
             }
         });
 
@@ -107,6 +170,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnJoinRoom2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJoinRoom2ActionPerformed(evt);
+                int roomNumber = 2;
+                joinRoomNumber(roomNumber);
             }
         });
 
@@ -115,6 +180,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnJoinRoom3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJoinRoom3ActionPerformed(evt);
+                int roomNumber = 3;
+                joinRoomNumber(roomNumber);
             }
         });
 
@@ -123,6 +190,8 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnJoinRoom4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnJoinRoom4ActionPerformed(evt);
+                int roomNumber = 4;
+                joinRoomNumber(roomNumber);
             }
         });
 
@@ -151,6 +220,7 @@ public class LobbyGUI extends javax.swing.JFrame {
                                 .addGap(154, 154, 154)
                                 .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(btnAountInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(btnRefreshRooms, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE) 
                                     .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addGap(142, 142, 142)))
                 .addContainerGap())
@@ -186,6 +256,8 @@ public class LobbyGUI extends javax.swing.JFrame {
                 .addComponent(lblName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnAountInfo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRefreshRooms) 
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -266,9 +338,10 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
-            int roomNumber = 0;
-            joinRoomNumber(roomNumber);
+            this.lobbyRoom.addPlayer(0, client.getPlayer().getUsername());
+            
         } catch (Exception ex) {
+        
 
         }
     }//GEN-LAST:event_btnJoinRoom0ActionPerformed
@@ -276,8 +349,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
         // TODO add your handling code here:
         try {
-        	int roomNumber = 1;
-        	joinRoomNumber(roomNumber);
+        	this.lobbyRoom.addPlayer(1, client.getPlayer().getUsername());
         } catch (Exception ex) {
 
         }
@@ -286,8 +358,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
         // TODO add your handling code here:
         try {
-        	int roomNumber = 2;
-        	joinRoomNumber(roomNumber);
+        	this.lobbyRoom.addPlayer(2, client.getPlayer().getUsername());
         } catch (Exception ex) {
 
         }
@@ -296,8 +367,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
         // TODO add your handling code here:
         try {
-        	int roomNumber = 3;
-        	joinRoomNumber(roomNumber);
+        	this.lobbyRoom.addPlayer(3, client.getPlayer().getUsername());
         } catch (Exception ex) {
 
         }
@@ -306,18 +376,62 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
         // TODO add your handling code here:
         try {
-        	int roomNumber = 4;
-        	joinRoomNumber(roomNumber);
+        	this.lobbyRoom.addPlayer(4, client.getPlayer().getUsername());
         } catch (Exception ex) {
 
         }
+       
     }//GEN-LAST:event_btnJoinRoom4ActionPerformed
 
     private void joinRoomNumber(int roomNumber) {
-    	if (client.getRoom().getPlayersInRoom().size() < 6) {
+    	if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
     		client.joinRoom(roomNumber);
     	}
     }
+    
+    public void refreshRooms(ActionEvent evt) {
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
+        	textField0.setText("");
+        }
+        else {
+        	textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
+        }
+    	
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 2) {
+        	textField1.setText("");
+        }
+        else {
+        	textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
+        }
+    	
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 3) {
+        	textField2.setText("");
+        }
+        else {
+        	textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
+        }
+    	
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
+        	textField3.setText("");
+        }
+        else {
+        	textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
+        }
+    	
+    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
+        	textField4.setText("");
+        }
+        else {
+        	textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+        }
+    	
+    	System.out.println(client.getLobbyRoom().getPlayersInRoom(0));
+    	revalidate();
+        repaint();
+        setVisible(true);
+    }
+    
+    
     
     /**
      * @param args the command line arguments
@@ -336,12 +450,6 @@ public class LobbyGUI extends javax.swing.JFrame {
         });
     }
 
-    private void updateGUI() {
-    	revalidate();
-    	repaint();
-    	setVisible(true);
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAountInfo;
     private javax.swing.JButton btnJoinRoom0;
@@ -361,5 +469,6 @@ public class LobbyGUI extends javax.swing.JFrame {
     private javax.swing.JTextField textField2;
     private javax.swing.JTextField textField3;
     private javax.swing.JTextField textField4;
+    private JButton btnRefreshRooms;
     // End of variables declaration//GEN-END:variables
 }

@@ -134,7 +134,9 @@ public class LoginGUI {
 		if (client.getLogin() == 1) {
 			System.out.println("client login = " + client.getLogin());
 			
-			new LobbyGUI(client).setupLobbyPanel(); 
+			LobbyGUI lobbyGUI = new LobbyGUI(client); 
+			client.setLobbyGUI(lobbyGUI);
+			lobbyGUI.setupLobbyPanel();
 			loginFrame.dispose();
 			
 		}

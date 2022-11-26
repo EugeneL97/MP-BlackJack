@@ -43,7 +43,7 @@ public class Driver {
 		
 		// Test parsing Room
 		Shoe shoe = new Shoe();
-		ArrayList<Player> playersInRoom = new ArrayList<Player>();
+		Player [] playersInRoom = new Player [6];
 		int roomNumber = 23;
 		int readyToStart = 1;
 		ArrayList<String> username = new ArrayList<String>();
@@ -56,16 +56,18 @@ public class Driver {
 		int currentAction = 0;
 		int isPlayer = 1;
 		int isSitting = 1;
+		String score = "not bust";
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
 		shoe = new Shoe();
 		currentHand.add(new ArrayList<Card>());
 		
+		for (int y = 0; y < 1; ++y) {
+			currentHand.get(0).add(shoe.dealCard());
+		}
+		
 		for (int x = 0; x < 3; ++x) {
-			for (int y = 0; y < 3; ++y) {
-				currentHand.get(0).add(shoe.dealCard());
-			}
 			
-			playersInRoom.add(new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand));
+			playersInRoom[x] = new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand);
 		}
 	
 		Room room;
@@ -197,8 +199,41 @@ public class Driver {
 		
 		*/
 		
-		Driver driver = new Driver();
-		driver.dealer();
+		Shoe shoe = new Shoe();
+		Player [] playersInRoom = new Player [6];
+		int roomNumber = 23;
+		int readyToStart = 1;
+		ArrayList<String> username = new ArrayList<String>();
+		username.add("harvey");
+		username.add("md44l");
+		username.add("bmagic");
+
+		int playerState = 2;
+		int accountBalance = 50000;
+		int currentAction = 0;
+		int isPlayer = 1;
+		int isSitting = 1;
+		String score = "not bust";
+		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
+		shoe = new Shoe();
+		currentHand.add(new ArrayList<Card>());
+		
+		for (int y = 0; y < 1; ++y) {
+			currentHand.get(0).add(shoe.dealCard());
+		}
+		
+		for (int x = 0; x < 3; ++x) {
+			
+			playersInRoom[x] = new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand);
+		}
+	
+		Room room;
+		Room newRoom;
+		room = new Room(roomNumber, readyToStart, playersInRoom, shoe);
+		System.out.println(room.toString());
+		Message message = new Message("room", "", room.toString());
+		newRoom = parser.parseRoom(message.getText());
+		System.out.println(newRoom.toString());
 		
 		
 		
@@ -206,13 +241,13 @@ public class Driver {
 	
 	public void dealer() {
 		Server server = new Server();
-		server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
-		server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
-		server.getRooms().get(0).getPlayersInRoom().get(0).setScore(bust(0, 0, 0, server));
+		server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+		server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+		server.getRooms().get(0).getPlayersInRoom()[0].setScore(bust(0, 0, 0, server));
 		
-		while (!server.getRooms().get(0).getPlayersInRoom().get(0).getScore().equals("bust")) {
+		while (!server.getRooms().get(0).getPlayersInRoom()[0].getScore().equals("bust")) {
 			if (tally(0, 0, 0, server) < 13) {
-				server.getRooms().get(0).getPlayersInRoom().get(0).acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
+				server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
 				
 				bust(0, 0, 0, server);
 			}
@@ -231,14 +266,14 @@ public class Driver {
 
 		
 		// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
-		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
-			if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
-					|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
-					|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).size(); ++y) {
+			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 11
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 12
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 13) {
 				tmpArray1.add(10);
 			}
 			else {
-				tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+				tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue());
 			}
 		}	
 		
@@ -310,14 +345,14 @@ public class Driver {
 		tmpArray1.add(new ArrayList<Integer>());
 		
 		// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
-		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).size(); ++y) {
-			if (server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 11
-					|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 12
-					|| server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).size(); ++y) {
+			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 11
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 12
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 13) {
 				tmpArray1.get(0).add(10);
 			}
 			else {
-				tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom().get(playerIndex).getCurrentHand().get(handIndex).get(y).getValue());
+				tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue());
 			}
 		}	
 		

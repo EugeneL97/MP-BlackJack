@@ -12,8 +12,11 @@ public class Client {
 	private Room room;
 	private ArrayList<Message> messageQueue;
 	private int login;
-	private Boolean refreshLobbyGUI;
-	private Boolean refreshRoomGUI;
+	private Boolean refreshLobbyRoomGUI;
+	private Boolean refreshGameRoomGUI;
+	private ConnectGUI connectGUI;
+	private LoginGUI loginGUI;
+	private LobbyGUI lobbyGUI;
 	
 	public Client() throws Exception {
 		this.socket = null;
@@ -23,8 +26,9 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
-		this.refreshLobbyGUI = false;
-		this.refreshRoomGUI = true;
+		this.refreshLobbyRoomGUI = false;
+		this.refreshGameRoomGUI = false;
+		this.lobbyRoom = new LobbyRoom();
 		
 	}
 	
@@ -36,7 +40,7 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
-		
+		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
 		
@@ -44,12 +48,28 @@ public class Client {
 		new Thread(messageHandler).start();
 	}
 	
+	public LobbyGUI getLobbyGUI() {
+		return lobbyGUI;
+	}
+	
+	public void setLobbyGUI(LobbyGUI lobbyGUI) {
+		this.lobbyGUI = lobbyGUI;
+	}
+	
 	public static void main(String [] args) throws Exception {
 		//String ip = "127.0.1.1";
 		//int port = 59898;
 		// Create a new instance of client
 		Client client = new Client();
+		new ConnectGUI(client).setupConnectPanel();
 		
+		System.out.println(client.socket);
+		
+		
+		
+		
+		/*
+		// Testing code
 		// check to see if correct arguments were provided
 		if (args.length != 2) {
 			System.out.println("Please enter IP address followed by port number after java Client.java. i.e. java Client.java 127.0.0.1 7777\n");
@@ -73,7 +93,7 @@ public class Client {
 		boolean logout = false;
 		
 		
-		/*
+		
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -96,7 +116,7 @@ public class Client {
 			client.closeConnection();
 			return;
 		}
-		*/
+		
 		
 		Parser parser = new Parser();
 		
@@ -135,13 +155,7 @@ public class Client {
 		Thread.sleep(1000);
 		System.out.println("Player after sending stand message = " + client.player.toString());
 		
-		// Loop for lobby
-		while(!logout) {
-			
-		
-		
-			
-		}
+		*/
 		
 		
 		client.closeConnection();
@@ -179,18 +193,11 @@ public class Client {
 							
 
 							client.getMessageQueue().remove(0);
+							//client.lobbyGUI.refreshRooms();
 							break;
 						case "room":
 							System.out.println("Client received room object");
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
-							if (client.messageQueue.size() > 0) {
-								for (int x = 0; x < client.getRoom().getPlayersInRoom().size(); ++x) {
-									if(client.player.getUsername().equals(client.getRoom().getPlayersInRoom().get(x).getUsername())) {
-										client.setPlayer(client.getRoom().getPlayersInRoom().get(x));
-									}
-								
-								}
-							}
 							
 							client.getMessageQueue().remove(0);
 							break;
@@ -411,8 +418,8 @@ public class Client {
 	}
 	
 	// If a player wants to sit down at a seat
-	public void sit() {
-		Message message = new Message("sit", "", "");
+	public void sit(int seatIndex) {
+		Message message = new Message("sit", Integer.toString(seatIndex), "");
 		sendMessage(message);
 	}
 	
@@ -486,19 +493,19 @@ public class Client {
 		this.login = login;
 	}
 	
-	public void setRefreshLobbyGUI(Boolean refresh) {
-		this.refreshLobbyGUI = refresh;
+	public void setRefreshLobbyRoomGUI(Boolean refresh) {
+		this.refreshLobbyRoomGUI = refresh;
 	}
 	
 	public Boolean getRefreshLobbyGUI() {
-		return this.refreshLobbyGUI;
+		return this.refreshLobbyRoomGUI;
 	}
 	
 	public void setRefreshRoomGUI(Boolean refresh) {
-		this.refreshRoomGUI = refresh;
+		this.refreshGameRoomGUI = refresh;
 	}
 	
 	public Boolean getRefreshRoomGUI() {
-		return this.refreshRoomGUI;
+		return this.refreshGameRoomGUI;
 	}
 }
