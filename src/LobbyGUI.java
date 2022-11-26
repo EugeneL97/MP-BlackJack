@@ -2,6 +2,11 @@
 public class LobbyGUI extends javax.swing.JFrame {
 
     private Client client;
+    private LobbyRoom lobbyRoom;
+    
+    public LobbyRoom getLobbyRoom() {
+    	return lobbyRoom;
+    }
 
     /**
      * Creates new form LobbyGUI
@@ -10,6 +15,8 @@ public class LobbyGUI extends javax.swing.JFrame {
      */
     public LobbyGUI(Client client) {
         this.client = client;
+        this.lobbyRoom = new LobbyRoom();
+        
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -266,8 +273,10 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
-            //client.joinRoom(0).
+            this.lobbyRoom.addPlayer(0, client.getPlayer().getUsername());
+            this.textField0.setText(lobbyRoom.playersInRoom(0));
         } catch (Exception ex) {
+        
 
         }
     }//GEN-LAST:event_btnJoinRoom0ActionPerformed
@@ -275,7 +284,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
         // TODO add your handling code here:
         try {
-
+        	this.lobbyRoom.addPlayer(1, client.getPlayer().getUsername());
+            this.textField1.setText(lobbyRoom.playersInRoom(1));
         } catch (Exception ex) {
 
         }
@@ -284,7 +294,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
         // TODO add your handling code here:
         try {
-
+        	this.lobbyRoom.addPlayer(2, client.getPlayer().getUsername());
+            this.textField2.setText(lobbyRoom.playersInRoom(2));
         } catch (Exception ex) {
 
         }
@@ -293,7 +304,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
         // TODO add your handling code here:
         try {
-
+        	this.lobbyRoom.addPlayer(3, client.getPlayer().getUsername());
+            this.textField3.setText(lobbyRoom.playersInRoom(3));
         } catch (Exception ex) {
 
         }
@@ -302,10 +314,12 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
         // TODO add your handling code here:
         try {
-
+        	this.lobbyRoom.addPlayer(4, client.getPlayer().getUsername());
+            this.textField4.setText(lobbyRoom.playersInRoom(4));
         } catch (Exception ex) {
 
         }
+       
     }//GEN-LAST:event_btnJoinRoom4ActionPerformed
 
     
