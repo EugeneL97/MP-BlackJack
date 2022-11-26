@@ -61,7 +61,7 @@ public class LobbyRoom {
 	
 	public boolean removePlayer(int roomNumber, String player) {
 		if (roomNumber >= 0 && roomNumber < numberOfRooms) {
-			clientLobbyRoom.get(roomNumber).remove(player);
+			return clientLobbyRoom.get(roomNumber).remove(player);
 		}
 		
 		return false;
@@ -70,7 +70,7 @@ public class LobbyRoom {
 	public String playersInRoom(int roomNumber) {
 		String output = null;
 		
-		if (roomNumber <= this.numberOfRooms) {
+		if (roomNumber < this.numberOfRooms) {
 			output = "";
 			
 			for (int x = 0; x < clientLobbyRoom.get(roomNumber).size(); ++x) {
