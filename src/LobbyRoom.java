@@ -71,7 +71,7 @@ public class LobbyRoom {
 	public String getPlayersInRoom(int roomNumber) {
 		String output = null;
 		
-		if (roomNumber <= this.numberOfRooms) {
+		if (roomNumber < this.numberOfRooms) {
 			output = "";
 			
 			for (int x = 0; x < clientLobbyRoom.get(roomNumber).size(); ++x) {
