@@ -12,6 +12,8 @@ public class Client {
 	private Room room;
 	private ArrayList<Message> messageQueue;
 	private int login;
+	private Boolean refreshLobbyGUI;
+	private Boolean refreshRoomGUI;
 	
 	public Client() throws Exception {
 		this.socket = null;
@@ -21,6 +23,9 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
+		this.refreshLobbyGUI = false;
+		this.refreshRoomGUI = true;
+		
 	}
 	
 	public Client(String ip, int port) throws Exception {
@@ -169,6 +174,7 @@ public class Client {
 					switch (client.messageQueue.get(0).getType()) {
 						case "lobby room":
 							System.out.println("Client received lobby room object");
+							
 							client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
 							
 
@@ -229,14 +235,7 @@ public class Client {
 	}
 	
 
-	// Use this for GUI
-	// Login function to log onto server
-	public void login (String username, String password) {
-		Message message = new Message("login", "", username + "#" + password);
-		sendMessage(message);
-		
-		System.out.println("Sent message");
-	}
+	
 
 	
 	/*
@@ -388,6 +387,15 @@ public class Client {
 	}
 	
 	
+	// Use this for GUI
+	// Login function to log onto server
+	public void login (String username, String password) {
+		Message message = new Message("login", "", username + "#" + password);
+		sendMessage(message);
+		
+		System.out.println("Sent message");
+	}
+	
 	// If player requests join room use this function to send request to server
 	public void joinRoom(int roomNumber) {
 		//String [] tmpLine = line.split(",");
@@ -476,5 +484,21 @@ public class Client {
 	
 	public void setLogin(int login) {
 		this.login = login;
+	}
+	
+	public void setRefreshLobbyGUI(Boolean refresh) {
+		this.refreshLobbyGUI = refresh;
+	}
+	
+	public Boolean getRefreshLobbyGUI() {
+		return this.refreshLobbyGUI;
+	}
+	
+	public void setRefreshRoomGUI(Boolean refresh) {
+		this.refreshRoomGUI = refresh;
+	}
+	
+	public Boolean getRefreshRoomGUI() {
+		return this.refreshRoomGUI;
 	}
 }
