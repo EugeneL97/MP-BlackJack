@@ -17,17 +17,30 @@ public class Room {
 	// Then set readyToStart = 1 and repeat cycle all over again.
 	
 	private int readyToStart;
-	private ArrayList<Player> playersInRoom;
+	private int numOfPlayers;
+	private final int MAX_PLAYERS = 6;
+	//private ArrayList<Player> playersInRoom;
+	private Player [] playersInRoom = new Player [6];
 	private Shoe shoe;
 	
 	public Room(int roomNumber) {
 		this.roomNumber = roomNumber;
 		this.readyToStart = 0;
-		this.playersInRoom = new ArrayList<Player>();
-		
+		//this.playersInRoom = new ArrayList<Player>();
+		this.numOfPlayers = 0;
 		// Each time a room is created, a dealer is automatically added to the room
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
-		this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand));
+		//this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand));
+		for (int x = 0; x < 6; ++x) {
+			if (x == 0) {
+				this.playersInRoom[0] = new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand);
+				++numOfPlayers;
+			}
+			else {
+				this.playersInRoom[x] = null;
+			}
+		}
+		
 		
 		this.shoe = new Shoe();
 	}
@@ -40,6 +53,7 @@ public class Room {
 		
 	}
 	
+	/*
 	public Room(int roomNumber, int readyToStart,
 			ArrayList<Player> playersInRoom, Shoe shoe) {
 		
@@ -47,23 +61,35 @@ public class Room {
 		this.roomNumber = roomNumber;
 		this.readyToStart = readyToStart;
 
-		/*
+		
 		for (int x = 0; x < currentPlayers.size(); ++x) {
 			this.currentPlayers.add(currentPlayers.get(x));
-		}*/
+		}
 		
 		this.playersInRoom = new ArrayList<Player>();
 		
-		/*
+		
 		for (int x = 0; x < playersInRoom.size(); ++x) {
 			this.playersInRoom.add(playersInRoom.get(x));
-		}*/
+		}
 		this.playersInRoom = playersInRoom;
 		
 		this.shoe = shoe;
 	}
-
+	*/
 	
+	public Room(int roomNumber, int readyToStart,
+			Player [] playersInRoom, Shoe shoe) {
+		
+		super();
+		this.roomNumber = roomNumber;
+		this.readyToStart = readyToStart;
+		this.playersInRoom = playersInRoom;
+		this.playersInRoom = playersInRoom;
+		this.shoe = shoe;
+	}
+	
+	/*
 	public String toString() {
 		String output = "";
 		
@@ -79,6 +105,33 @@ public class Room {
 		
 		return output;
 	}
+	*/
+	
+	public String toString() {
+		String output = "";
+		
+		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(MAX_PLAYERS) + "%";
+		
+		for (int x = 0; x < MAX_PLAYERS; ++x) {
+			if (playersInRoom[x] != null) {
+				output += playersInRoom[x].toString();
+				output += "%";
+			}
+			else {
+				output += null;
+				output += "%";
+			}
+		}
+		
+		
+		output += shoe.toString();
+		
+		return output;
+	}
+	
+	public int getMAXPLAYERS() {
+		return MAX_PLAYERS;
+	}
 	
 	public int getRoomNumber() {
 		return roomNumber;
@@ -88,11 +141,26 @@ public class Room {
 		this.roomNumber = roomNumber;
 	}
 
+	public int getNumOfPlayers() {
+		return numOfPlayers;
+	}
+	
+	/*
 	public ArrayList<Player> getPlayersInRoom() {
 		return playersInRoom;
 	}
-
+	*/
+	public Player [] getPlayersInRoom() {
+		return playersInRoom;
+	}
+	
+	/*
 	public void setPlayersInRoom(ArrayList<Player> playersInRoom) {
+		this.playersInRoom = playersInRoom;
+	}
+	*/
+	
+	public void setPlayersInRoom(Player[] playersInRoom) {
 		this.playersInRoom = playersInRoom;
 	}
 
@@ -112,8 +180,9 @@ public class Room {
 		this.shoe = shoe;
 	}
 	
-	public void addPlayer(Player player) {
-		if (this.playersInRoom.size() < 6) {
+	/*
+	public void addPlayer(int index, Player player) {
+		if (index < 6) {
 			this.playersInRoom.add(player);
 		}
 	}
@@ -121,6 +190,21 @@ public class Room {
 	public void removePlayer(Player player) {
 		if (this.playersInRoom.size() > 0) {
 			this.playersInRoom.remove(player);
+		}
+	}
+	*/
+	
+	public void addPlayer(int index, Player player) {
+		if (index < 6) {
+			this.playersInRoom[index] = player;
+			++numOfPlayers;
+		}
+	}
+	
+	public void removePlayer(int index) {
+		if (numOfPlayers > 1) {
+			this.playersInRoom[index] = null;
+			--numOfPlayers;
 		}
 	}
 }

@@ -42,8 +42,13 @@ public class Parser {
 		Room tmp = null;
 		int roomNumber;
 		int readyToStart;
-		int numberOfPlayersInRoom;
-		ArrayList<Player> playersInRoom = new ArrayList<Player>();
+		int MAX_PLAYERS;
+		Player [] playersInRoom = new Player [6];
+		
+		for (int x = 0; x < 6; ++x) {
+			playersInRoom[x] = null;
+		}
+		
 		Shoe shoe;
 		
 		String [] room;
@@ -52,11 +57,18 @@ public class Parser {
 		
 		roomNumber = Integer.parseInt(room[0]);
 		readyToStart = Integer.parseInt(room[1]);
-		numberOfPlayersInRoom= Integer.parseInt(room[2]);
+		MAX_PLAYERS = Integer.parseInt(room[2]);
 		
-		for (int x = 3; x < 3 + numberOfPlayersInRoom; ++x) {
-			Player player = parsePlayer(room[x]);
-			playersInRoom.add(player);
+		
+		for (int x = 3; x < 3 + MAX_PLAYERS; ++x) {
+			if (room[x] != null) {
+				
+				Player player = parsePlayer(room[x]);
+				playersInRoom[x - 3] = player;
+			}
+			else {
+				playersInRoom[x - 3] = null;
+			}
 		}
 		
 		shoe = parseShoe(room[room.length - 1]);
@@ -81,31 +93,39 @@ public class Parser {
 		int size;
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
 		
-		playerInfo = message.split("#");
-		
-		username = playerInfo[0];
-		playerState = Integer.parseInt(playerInfo[1]);
-		roomNumber = Integer.parseInt(playerInfo[2]);
-		accountBalance = Integer.parseInt(playerInfo[3]);
-		currentAction = Integer.parseInt(playerInfo[4]);
-		wager = Integer.parseInt(playerInfo[5]);
-		seatIndex = Integer.parseInt(playerInfo[6]);
-		score = playerInfo[7];
-		size = Integer.parseInt(playerInfo[8]);
-		
-		
-		if (size > 0) {
-			for (int x = 0; x < size; ++x) {
-				currentHand.add(new ArrayList<Card>());
+		if (!message.equals("null")) {
+			
+			
+			playerInfo = message.split("#");
+			
+			username = playerInfo[0];
+			playerState = Integer.parseInt(playerInfo[1]);
+			roomNumber = Integer.parseInt(playerInfo[2]);
+			accountBalance = Integer.parseInt(playerInfo[3]);
+			currentAction = Integer.parseInt(playerInfo[4]);
+			wager = Integer.parseInt(playerInfo[5]);
+			seatIndex = Integer.parseInt(playerInfo[6]);
+			score = playerInfo[7];
+			size = Integer.parseInt(playerInfo[8]);
+			
+			
+			if (size > 0) {
+				for (int x = 0; x < size; ++x) {
+					currentHand.add(new ArrayList<Card>());
+				}
+				
+				for (int x = 9; x < playerInfo.length; x += 3) {
+					currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
+				}
 			}
 			
-			for (int x = 9; x < playerInfo.length; x += 3) {
-				currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
-			}
+				
+			player = new Player(username, playerState, roomNumber, accountBalance, currentAction, wager, seatIndex, score, currentHand);
+		}
+		else {
+			return null;
 		}
 		
-			
-		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, wager, seatIndex, score, currentHand);
 		
 		return player;
 	}

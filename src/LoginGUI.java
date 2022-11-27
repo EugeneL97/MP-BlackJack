@@ -1,20 +1,14 @@
-import java.io.*;
-import javax.swing.*;
-import java.awt.LayoutManager;
-import java.awt.FlowLayout;
+import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.JPasswordField;
-import javax.swing.JButton;
-import javax.swing.JSeparator;
-import java.awt.event.ActionListener;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class LoginGUI {
 	
@@ -25,11 +19,17 @@ public class LoginGUI {
 	private JFrame frameLoginSystem;
 	private Client client;
 	
+	public JFrame getLoginFrame() {
+		return loginFrame;
+	}
+	
 	public static void main (String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Client client = new Client();
+					String ip = "127.0.1.1";
+					int port = 59898;
+					Client client = new Client(ip, port);
 					LoginGUI window = new LoginGUI(client);
 					window.loginFrame.setLocationRelativeTo(null); // center on screen
 					window.loginFrame.setVisible(true); // make visible
@@ -49,7 +49,11 @@ public class LoginGUI {
 		this.client = client;
 	}
 	
-	private void startUp() {
+	public void giveFalse(Boolean time) {
+		time = false;
+	}
+	
+	public void startUp() {
 		loginFrame = new JFrame();
 		loginFrame.setBounds(200, 200, 500, 300);
 		loginFrame.setSize(900, 650);
@@ -89,16 +93,9 @@ public class LoginGUI {
 		
 		String password = txtPassword.getText();
 		String username = txtUsername.getText();
-		Boolean login = client.login(username, password);
 		
-			if (password.equals("pass") && username.equals("user")) {
-				txtPassword.setText(null);
-				txtUsername.setText(null);
-			} else {
-				JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
-				txtPassword.setText(null);
-				txtUsername.setText(null);
-			}
+		
+		login();
 		}
 		
 		});
@@ -118,5 +115,37 @@ public class LoginGUI {
 		});
 		exitButton.setBounds(475, 375, 150, 45);
 		loginFrame.getContentPane().add(exitButton);
+	}
+	
+	public void login() {
+		// Get user input from LoginGUI
+		String password = txtPassword.getText();
+		String username = txtUsername.getText();
+		
+		// Execute login by sending a login message to the server
+		client.login(username, password);
+		
+		// Busy wait until server gets the message, responds, then server adjusts the value of client.login to either 1 or -1
+		while(client.getLogin() == 0) {
+			System.out.println("client login = " + client.getLogin());
+		}	
+		
+		// Login success, create LobbyGUI and close LoginGUI
+		if (client.getLogin() == 1) {
+			System.out.println("client login = " + client.getLogin());
+			
+			LobbyGUI lobbyGUI = new LobbyGUI(client); 
+			client.setLobbyGUI(lobbyGUI);
+			lobbyGUI.setupLobbyPanel();
+			loginFrame.dispose();
+			
+		}
+		// Login failed. Reset client.login = 0 so the busy wait loop will work again.
+		else if (client.getLogin() == -1){
+			JOptionPane.showMessageDialog(null, "Invalid Username and/or Password", "Login Error", JOptionPane.ERROR_MESSAGE);
+			txtPassword.setText(null);
+			txtUsername.setText(null);
+			client.setLogin(0);
+		}
 	}
 }

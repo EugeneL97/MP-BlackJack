@@ -3,7 +3,7 @@ import java.net.*;
 import java.util.*;
 
 public class Client {
-	private Socket socket;
+	public Socket socket;
 	private ObjectInputStream input;
 	private ObjectOutputStream output;
 	private Scanner userInput;
@@ -11,20 +11,65 @@ public class Client {
 	private LobbyRoom lobbyRoom;
 	private Room room;
 	private ArrayList<Message> messageQueue;
+	private int login;
+	private Boolean refreshLobbyRoomGUI;
+	private Boolean refreshGameRoomGUI;
+	private ConnectGUI connectGUI;
+	private LoginGUI loginGUI;
+	private LobbyGUI lobbyGUI;
 	
 	public Client() throws Exception {
-		this.socket = new Socket("127.0.1.1", 59898);
+		this.socket = null;
+		this.input = null;
+		this.output = null;
+		this.userInput = null;
+		this.messageQueue = new ArrayList<Message>();
+		this.room = new Room(-1);
+		this.login = 0;
+		this.refreshLobbyRoomGUI = false;
+		this.refreshGameRoomGUI = false;
+		this.lobbyRoom = new LobbyRoom();
+		
+	}
+	
+	public Client(String ip, int port) throws Exception {
+		this.socket = new Socket(ip, port);
 		this.input = new ObjectInputStream(socket.getInputStream());
 		this.output = new ObjectOutputStream(socket.getOutputStream());
 		this.userInput = new Scanner(System.in);
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
+		this.login = 0;
+		this.lobbyRoom = new LobbyRoom();
+		// Create a message handler for the client
+		MessageHandler messageHandler = new MessageHandler(this);
+		
+		// Spawn a new thread for the client
+		new Thread(messageHandler).start();
+	}
+	
+	public LobbyGUI getLobbyGUI() {
+		return lobbyGUI;
+	}
+	
+	public void setLobbyGUI(LobbyGUI lobbyGUI) {
+		this.lobbyGUI = lobbyGUI;
 	}
 	
 	public static void main(String [] args) throws Exception {
+		//String ip = "127.0.1.1";
+		//int port = 59898;
 		// Create a new instance of client
 		Client client = new Client();
+		new ConnectGUI(client).setupConnectPanel();
 		
+		System.out.println(client.socket);
+		
+		
+		
+		
+		/*
+		// Testing code
 		// check to see if correct arguments were provided
 		if (args.length != 2) {
 			System.out.println("Please enter IP address followed by port number after java Client.java. i.e. java Client.java 127.0.0.1 7777\n");
@@ -47,8 +92,8 @@ public class Client {
 		boolean proceedToLobby = false;
 		boolean logout = false;
 		
-		/*
-		// 
+		
+		
 		// Login and register loop
 		while(!proceedToLobby && loginAttempts < 3) {
 			System.out.println("Enter \"1\" to login or \"2\" to register");
@@ -71,7 +116,7 @@ public class Client {
 			client.closeConnection();
 			return;
 		}
-		*/
+		
 		
 		Parser parser = new Parser();
 		
@@ -100,18 +145,17 @@ public class Client {
 		Thread.sleep(1000);
 		System.out.println("Player after sending deal message = " + client.player.toString());
 		
+		message = new Message("hit", "", "");
+		client.sendMessage(message);
+		Thread.sleep(1000);
+		System.out.println("Player after sending hit message = " + client.player.toString());
+		
 		message = new Message("stand", "100", "");
 		client.sendMessage(message);
 		Thread.sleep(1000);
 		System.out.println("Player after sending stand message = " + client.player.toString());
 		
-		// Loop for lobby
-		while(!logout) {
-			
-		
-		
-			
-		}
+		*/
 		
 		
 		client.closeConnection();
@@ -130,29 +174,57 @@ public class Client {
 		
 		@Override
 		public void run() {
+			System.out.println("MessageHandler running");
 			Parser parser = new Parser();
 			
 			while (true) {
+				System.out.println("In MessageHandling loop");
 				Message message = null;
 				message = client.getMessage(message);
+				System.out.println("Client received an object");
 				client.messageQueue.add(message);
 				
 				if (client.messageQueue.size() > 0 ) {
 					switch (client.messageQueue.get(0).getType()) {
 						case "lobby room":
+							System.out.println("Client received lobby room object");
+							
 							client.setLobbyRoom(parser.parseLobbyRoom(client.messageQueue.get(0).getText()));
 							
 
 							client.getMessageQueue().remove(0);
+							//client.lobbyGUI.refreshRooms();
 							break;
 						case "room":
+							System.out.println("Client received room object");
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
-							if (client.getRoom().getPlayersInRoom().size() > 1) {
-								client.player = client.getRoom().getPlayersInRoom().get(1);
-							}
 							
 							client.getMessageQueue().remove(0);
 							break;
+						case "login":
+							System.out.println("Client received login object");
+
+							if(client.messageQueue.get(0).getStatus().equals("success")) {
+								
+								client.setLogin(1);
+								System.out.println("login success");
+								client.getMessageQueue().remove(0);
+							}
+							else {
+								client.setLogin(-1);
+								client.getMessageQueue().remove(0);
+							}
+
+							break;
+							
+						case "player":
+							System.out.println("Client received player object");
+
+							client.setPlayer(parser.parsePlayer(client.messageQueue.get(0).getText()));
+							client.getMessageQueue().remove(0);
+
+							break;
+							
 						default:
 							break;
 					}
@@ -169,15 +241,21 @@ public class Client {
 		}
 	}
 	
+
+	
+
+	
+	/*
+	// This is a duplicate function from above. It is for testing purposes.
 	// Login function to log onto server
-	public boolean login (String username, String password) {
+	public boolean login () {
 		boolean login = false;
-		/* For testing purposes
+
 		System.out.printf("Enter username: ");
 		String username = userInput.nextLine();
 		System.out.printf("Enter password: ");
 		String password = userInput.nextLine();
-		*/
+		Parser parser = new Parser();
 		
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
@@ -187,6 +265,9 @@ public class Client {
 		
 		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
 			System.out.println("Login successful");
+			Message playerMessage = null;
+			playerMessage = getMessage(playerMessage);
+			this.setPlayer(parser.parsePlayer(playerMessage.toString()));
 			userInput.close();
 			return true;
 		}
@@ -196,6 +277,26 @@ public class Client {
 		
 		return login;
 	}
+	*/
+	
+	
+	// Use this for the GUI
+	// Register a new user
+	public Boolean register(String username, String password) {
+		Message message = new Message("register", "", username + "#" + password);
+		sendMessage(message);
+		
+		Message replyMessage = null;
+		replyMessage = getMessage(replyMessage);
+		
+		if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("success")) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
 	
 	// Register a new user
 	public void register() {
@@ -270,6 +371,8 @@ public class Client {
 	    timer.schedule(task, delay);
 	}
 	
+	
+	
 	// Closes connection to server.
 	public void closeConnection() {
 		try {
@@ -291,6 +394,15 @@ public class Client {
 	}
 	
 	
+	// Use this for GUI
+	// Login function to log onto server
+	public void login (String username, String password) {
+		Message message = new Message("login", "", username + "#" + password);
+		sendMessage(message);
+		
+		System.out.println("Sent message");
+	}
+	
 	// If player requests join room use this function to send request to server
 	public void joinRoom(int roomNumber) {
 		//String [] tmpLine = line.split(",");
@@ -306,8 +418,8 @@ public class Client {
 	}
 	
 	// If a player wants to sit down at a seat
-	public void sit() {
-		Message message = new Message("sit", "", "");
+	public void sit(int seatIndex) {
+		Message message = new Message("sit", Integer.toString(seatIndex), "");
 		sendMessage(message);
 	}
 	
@@ -318,8 +430,8 @@ public class Client {
 	}
 	
 	// If a player wants to be deal the first two cards
-	public void deal() {
-		Message message = new Message("deal", "", "");
+	public void deal(int wager) {
+		Message message = new Message("deal", Integer.toString(wager), "");
 		sendMessage(message);
 	}
 	
@@ -371,5 +483,29 @@ public class Client {
 	
 	public void setMessageQueue (ArrayList<Message> messageQueue) {
 		this.messageQueue = messageQueue;
+	}
+	
+	public int getLogin() {
+		return this.login;
+	}
+	
+	public void setLogin(int login) {
+		this.login = login;
+	}
+	
+	public void setRefreshLobbyRoomGUI(Boolean refresh) {
+		this.refreshLobbyRoomGUI = refresh;
+	}
+	
+	public Boolean getRefreshLobbyGUI() {
+		return this.refreshLobbyRoomGUI;
+	}
+	
+	public void setRefreshRoomGUI(Boolean refresh) {
+		this.refreshGameRoomGUI = refresh;
+	}
+	
+	public Boolean getRefreshRoomGUI() {
+		return this.refreshGameRoomGUI;
 	}
 }
