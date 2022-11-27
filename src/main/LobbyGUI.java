@@ -46,6 +46,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         }
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**

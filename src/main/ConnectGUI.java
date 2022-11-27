@@ -39,6 +39,7 @@ public class ConnectGUI extends javax.swing.JFrame {
 
     public void setupConnectPanel() {
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
 
@@ -169,7 +170,6 @@ public class ConnectGUI extends javax.swing.JFrame {
                                 .addContainerGap())
         );
 
-        setLocationRelativeTo(null);
         pack();
     }// </editor-fold>//GEN-END:initComponents
 

@@ -45,6 +45,7 @@ public class AccountInfoGUI extends javax.swing.JFrame {
 
         }
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**
