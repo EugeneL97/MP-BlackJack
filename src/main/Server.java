@@ -1341,6 +1341,7 @@ public class Server {
 				sendMessage(message);
 				
 				message = new Message("player", "", player.toString());
+				sendMessage(message);
 				server.setNewMessage(false);
 			}
 		}
