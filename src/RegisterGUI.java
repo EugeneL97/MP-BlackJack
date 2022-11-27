@@ -48,7 +48,7 @@ public class RegisterGUI {
 			this.client = client;
 		}
 		
-		public void startUp() {
+		private void startUp() {
 			registerFrame = new JFrame();
 			registerFrame.setBounds(200, 200, 500, 300);
 			registerFrame.setSize(900, 650);

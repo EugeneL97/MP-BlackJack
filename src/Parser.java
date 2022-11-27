@@ -77,6 +77,7 @@ public class Parser {
 		int currentAction;
 		int wager;
 		int seatIndex;
+		String score = null;
 		int size;
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
 		
@@ -89,7 +90,8 @@ public class Parser {
 		currentAction = Integer.parseInt(playerInfo[4]);
 		wager = Integer.parseInt(playerInfo[5]);
 		seatIndex = Integer.parseInt(playerInfo[6]);
-		size = Integer.parseInt(playerInfo[7]);
+		score = playerInfo[7];
+		size = Integer.parseInt(playerInfo[8]);
 		
 		
 		if (size > 0) {
@@ -97,13 +99,13 @@ public class Parser {
 				currentHand.add(new ArrayList<Card>());
 			}
 			
-			for (int x = 8; x < playerInfo.length; x += 3) {
+			for (int x = 9; x < playerInfo.length; x += 3) {
 				currentHand.get(Integer.parseInt(playerInfo[x])).add(new Card(Integer.parseInt(playerInfo[x + 1]), playerInfo[x + 2]));
 			}
 		}
 		
 			
-		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, wager, seatIndex, currentHand);
+		player = new Player(username, playerState, roomNumber, accountBalance, currentAction, wager, seatIndex, score, currentHand);
 		
 		return player;
 	}

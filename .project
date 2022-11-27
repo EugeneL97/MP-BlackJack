@@ -14,11 +14,5 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src/RegisterGUI.java</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/BlackJack%20Game/BlackJackGUI/src/RegisterGUI.java</locationURI>
-		</link>
-	</linkedResources>
+	
 </projectDescription>
