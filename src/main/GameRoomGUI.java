@@ -34,7 +34,7 @@ public class GameRoomGUI extends JFrame {
     private JTextArea textAreaPlayer5;
     private JTextField player5Wager;
     private JLabel lblPlayer5Wager;
-    private JTextArea textAreaPlayer6;
+    private JTextArea textAreaPlayer0;
     private JPanel panelGameRoomButtons;
     private JButton btnSitOut;
     private JButton btnLeaveRoom;
@@ -45,8 +45,12 @@ public class GameRoomGUI extends JFrame {
     private JButton btnHit;
     private JButton btnDeal;
 
+    private JTextField[] playerWagers = new JTextField[6];
+    private JTextArea[] playerTextAreas = new JTextArea[6];
+
     // Client variable
     private Client client;
+    private int wager;
 
     public GameRoomGUI(Client client) {
         this.client = client;
@@ -66,30 +70,38 @@ public class GameRoomGUI extends JFrame {
 
     private void initComponents() {
 
+        for (int i = 0; playerTextAreas.length > i; i++) {
+            playerTextAreas[i] = new JTextArea();
+        }
+
+        for (int i = 0; playerWagers.length > i; i++) {
+            playerWagers[i] = new JTextField();
+        }
+
         panelGameRoomTitle = new JPanel();
         lblTitle = new JLabel();
         panelGameRoom = new JPanel();
-        textAreaPlayer1 = new JTextArea();
-        player1Wager = new JTextField();
+        textAreaPlayer1 = playerTextAreas[1];
+        player1Wager = playerWagers[1];
         lblPlayer1Wager = new JLabel();
         btnTakeSeat1 = new JButton();
         btnTakeSeat2 = new JButton();
-        textAreaPlayer2 = new JTextArea();
-        player2Wager = new JTextField();
+        textAreaPlayer2 = playerTextAreas[2];
+        player2Wager = playerWagers[2];
         lblPlayer2Wager = new JLabel();
         btnTakeSeat3 = new JButton();
-        textAreaPlayer3 = new JTextArea();
-        player3Wager = new JTextField();
+        textAreaPlayer3 = playerTextAreas[3];
+        player3Wager = playerWagers[3];
         lblPlayer3Wager = new JLabel();
         btnTakeSeat4 = new JButton();
-        textAreaPlayer4 = new JTextArea();
-        player4Wager = new JTextField();
+        textAreaPlayer4 = playerTextAreas[4];
+        player4Wager = playerWagers[4];
         lblPlayer4Wager = new JLabel();
         btnTakeSeat5 = new JButton();
-        textAreaPlayer5 = new JTextArea();
-        player5Wager = new JTextField();
+        textAreaPlayer5 = playerTextAreas[5];
+        player5Wager = playerWagers[5];
         lblPlayer5Wager = new JLabel();
-        textAreaPlayer6 = new JTextArea();
+        textAreaPlayer0 = playerTextAreas[0];
         panelGameRoomButtons = new JPanel();
         btnSitOut = new JButton();
         btnLeaveRoom = new JButton();
@@ -99,6 +111,7 @@ public class GameRoomGUI extends JFrame {
         btnDouble = new JButton();
         btnHit = new JButton();
         btnDeal = new JButton();
+        wager = 0;
 
         //======== this ========
         setBackground(new Color(0x003300));
@@ -109,8 +122,8 @@ public class GameRoomGUI extends JFrame {
         {
             panelGameRoomTitle.setBackground(new Color(0x003300));
             panelGameRoomTitle.setLayout(new GridBagLayout());
-            ((GridBagLayout)panelGameRoomTitle.getLayout()).rowHeights = new int[] {0, 0};
-            ((GridBagLayout)panelGameRoomTitle.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowHeights = new int[]{0, 0};
+            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
 
             //---- lblTitle ----
             lblTitle.setText("Game Room");
@@ -227,8 +240,8 @@ public class GameRoomGUI extends JFrame {
             lblPlayer5Wager.setForeground(Color.white);
 
             //---- textAreaPlayer6 ----
-            textAreaPlayer6.setFont(new Font("Roboto", Font.PLAIN, 14));
-            textAreaPlayer6.setBorder(new TitledBorder(null, "Dealer", TitledBorder.CENTER, TitledBorder.TOP,
+            textAreaPlayer0.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer0.setBorder(new TitledBorder(null, "Dealer", TitledBorder.CENTER, TitledBorder.TOP,
                     new Font("Roboto", Font.BOLD, 14)));
 
             GroupLayout panelGameRoomLayout = new GroupLayout(panelGameRoom);
@@ -258,7 +271,7 @@ public class GameRoomGUI extends JFrame {
                                                     .addComponent(player3Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
                                             .addComponent(textAreaPlayer3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(btnTakeSeat3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textAreaPlayer6, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(textAreaPlayer0, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
                                     .addGap(203, 203, 203)
                                     .addGroup(panelGameRoomLayout.createParallelGroup()
                                             .addGroup(GroupLayout.Alignment.TRAILING, panelGameRoomLayout.createParallelGroup()
@@ -324,7 +337,7 @@ public class GameRoomGUI extends JFrame {
                                                                     .addGap(6, 6, 6)
                                                                     .addComponent(btnTakeSeat4))))
                                             .addGroup(panelGameRoomLayout.createSequentialGroup()
-                                                    .addComponent(textAreaPlayer6)
+                                                    .addComponent(textAreaPlayer0)
                                                     .addGap(53, 53, 53)
                                                     .addGroup(panelGameRoomLayout.createParallelGroup()
                                                             .addComponent(lblPlayer3Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
@@ -356,18 +369,22 @@ public class GameRoomGUI extends JFrame {
             //---- btnBet50 ----
             btnBet50.setText("Bet 50");
             btnBet50.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnBet50.addActionListener(e -> wager += 50);
 
             //---- btnBet100 ----
             btnBet100.setText("Bet 100");
             btnBet100.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnBet100.addActionListener(e -> wager += 100);
 
             //---- btnBet500 ----
             btnBet500.setText("Bet 500");
             btnBet500.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnBet500.addActionListener(e -> wager += 500);
 
             //---- btnDouble ----
             btnDouble.setText("Double Bet");
             btnDouble.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnDouble.addActionListener(e -> wager *= 2);
 
             //---- btnHit ----
             btnHit.setText("HIT");
@@ -449,6 +466,10 @@ public class GameRoomGUI extends JFrame {
 
     }
 
+    public static void main(String args[]) throws Exception {
+        new GameRoomGUI(new Client()).setupGameRoom();
+    }
+
     public void setupGameRoom() {
         setVisible(true);
     }
@@ -457,6 +478,35 @@ public class GameRoomGUI extends JFrame {
         client.sit(seatIndex);
     }
 
+    public void refreshGUI() {
+
+        for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
+            if (i == 0)
+                playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
+            else {
+                if (i == client.getPlayer().getSeatIndex()) {
+                    playerTextAreas[i].setBorder(new TitledBorder(null, client.getPlayer().getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
+                            new Font("Roboto", Font.BOLD, 14)));
+                    playerWagers[i].setText(String.valueOf(wager));
+                } else {
+                    if (client.getRoom().getPlayersInRoom()[i] != null) {
+                        playerTextAreas[i].setBorder(new TitledBorder(null, client.getRoom().getPlayersInRoom()[i].getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
+                                new Font("Roboto", Font.BOLD, 14)));
+                        playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
+                        playerWagers[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].getWager()));
+                    } else {
+                        playerTextAreas[i].setBorder(new TitledBorder(null, "Player " + i, TitledBorder.CENTER, TitledBorder.TOP,
+                                new Font("Roboto", Font.BOLD, 14)));
+                        playerTextAreas[i].setText("");
+                        playerWagers[i].setText("");
+                    }
+                }
+            }
+        }
+
+        setVisible(true);
+
+    }
     public void leaveRoom() {
         client.leaveRoom();
         setVisible(false);
@@ -466,6 +516,10 @@ public class GameRoomGUI extends JFrame {
 
     public void deal(int wager) {
         client.deal(wager);
+    }
+
+    public void setWager() {
+
     }
 
     public void sitOut() {
