@@ -566,6 +566,7 @@ public class GameRoomGUI extends JFrame {
                 if (i == client.getPlayer().getSeatIndex()) {
                     playerTextAreas[i].setBorder(new TitledBorder(null, client.getPlayer().getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
                             new Font("Roboto", Font.BOLD, 14)));
+                    playerTextAreas[i].setText(String.valueOf(client.getPlayer().showHand()));
                     playerWagers[i].setText(String.valueOf(wager));
                     playerTextAreas[i].setEnabled(true);
                     playerWagers[i].setEnabled(true);
