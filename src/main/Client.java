@@ -205,6 +205,7 @@ public class Client {
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
 							
 							client.getMessageQueue().remove(0);
+							System.out.println("new room object = " + client.getRoom().toString());
 							break;
 						case "login":
 							System.out.println("Client received login object");
