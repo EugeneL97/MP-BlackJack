@@ -44,6 +44,7 @@ public class GameRoomGUI extends JFrame {
     private JButton btnDouble;
     private JButton btnHit;
     private JButton btnDeal;
+    private JLabel lblPlayerFunds;
 
     private JTextField[] playerWagers = new JTextField[6];
     private JTextArea[] playerTextAreas = new JTextArea[6];
@@ -119,6 +120,7 @@ public class GameRoomGUI extends JFrame {
         btnHit = new JButton();
         btnDeal = new JButton();
         wager = 0;
+        lblPlayerFunds = new JLabel();
 
         //======== this ========
         setBackground(new Color(0x003300));
@@ -137,6 +139,14 @@ public class GameRoomGUI extends JFrame {
             lblTitle.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
             lblTitle.setForeground(Color.white);
             panelGameRoomTitle.add(lblTitle, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
+
+            //---- lbllPlayerFunds ----
+            lblPlayerFunds.setText(String.valueOf(client.getPlayer().getAccountBalance()));
+            lblPlayerFunds.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
+            lblPlayerFunds.setForeground(Color.white);
+            panelGameRoomTitle.add(lblPlayerFunds, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 5), 0, 0));
         }
@@ -496,7 +506,7 @@ public class GameRoomGUI extends JFrame {
         client.sit(seatIndex);
         btnBet50.setEnabled(true);
         btnBet100.setEnabled(true);
-        btnBet100.setEnabled(true);
+        btnBet500.setEnabled(true);
         btnDouble.setEnabled(true);
         btnHit.setEnabled(true);
         btnDeal.setEnabled(true);
@@ -510,7 +520,7 @@ public class GameRoomGUI extends JFrame {
     public void leaveSeat() {
         btnBet50.setEnabled(false);
         btnBet100.setEnabled(false);
-        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
         btnDouble.setEnabled(false);
         btnHit.setEnabled(false);
         btnDeal.setEnabled(false);
@@ -530,7 +540,7 @@ public class GameRoomGUI extends JFrame {
         client.sitOut();
         btnBet50.setEnabled(false);
         btnBet100.setEnabled(false);
-        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
         btnDouble.setEnabled(false);
         btnHit.setEnabled(false);
         btnDeal.setEnabled(false);
@@ -540,18 +550,24 @@ public class GameRoomGUI extends JFrame {
     public void startRound() {
         btnBet50.setEnabled(true);
         btnBet100.setEnabled(true);
-        btnBet100.setEnabled(true);
+        btnBet500.setEnabled(true);
         btnDouble.setEnabled(true);
         btnHit.setEnabled(true);
         btnDeal.setEnabled(true);
         btnSitOut.setEnabled(true);
     }
 
+    public void endRound() {
+        wager = 0;
+        refreshGUI();
+    }
+
     public void setWager(int wager) {
 
-        if (wager == 2)
+        if (wager == 2) {
             this.wager *= 2;
-        else
+            client.doubleDown();
+        } else
             this.wager += wager;
 
         refreshGUI();
@@ -607,16 +623,8 @@ public class GameRoomGUI extends JFrame {
             client.deal(this.wager);
     }
 
-    public void setWager() {
-
-    }
-
     public void hit() {
         client.hit();
-    }
-
-    public void doubleDown() {
-        client.doubleDown();
     }
 
 }
