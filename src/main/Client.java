@@ -205,6 +205,11 @@ public class Client {
 							client.setRoom(parser.parseRoom(client.messageQueue.get(0).getText()));
 							
 							client.getMessageQueue().remove(0);
+							
+							if(client.getPlayer().getRoomNumber() != -1) {
+								client.gameRoomGUI.refreshGUI();
+							}
+							
 							System.out.println("new room object = " + client.getRoom().toString());
 							break;
 						case "login":
@@ -462,5 +467,9 @@ public class Client {
 	
 	public Boolean getRefreshRoomGUI() {
 		return this.refreshGameRoomGUI;
+	}
+	
+	public void setGameRoomGUI(GameRoomGUI gameRoomGUI) {
+		this.gameRoomGUI = gameRoomGUI;
 	}
 }
