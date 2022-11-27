@@ -304,17 +304,16 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom(int roomNumber) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
-            this.lobbyRoom.addPlayer(roomNumber, client.getPlayer().getUsername());
-            this.client.joinRoom(roomNumber);
-
             if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
+                this.lobbyRoom.addPlayer(roomNumber, client.getPlayer().getUsername());
+                this.client.joinRoom(roomNumber);
                 client.joinRoom(roomNumber);
+                new GameRoomGUI().setupGameRoom(client);
+                setVisible(false);
+                dispose();
+            } else {
+                JOptionPane.showMessageDialog(panelLobby, "Room is full!");
             }
-
-            new GameRoomGUI().setupGameRoom(client);
-            setVisible(false);
-            dispose();
-            
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLobby, "Unable to join room!");
 
