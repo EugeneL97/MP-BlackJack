@@ -15,330 +15,446 @@ import javax.swing.border.*;
  */
 public class GameRoomGUI extends JFrame {
 
+    // GUI variables
+    private JPanel panelGameRoomTitle;
+    private JLabel lblTitle;
+    private JPanel panelGameRoom;
+    private JTextArea textAreaPlayer1;
+    private JTextField player1Wager;
+    private JLabel lblPlayer1Wager;
+    private JButton btnTakeSeat1;
+    private JButton btnTakeSeat2;
+    private JTextArea textAreaPlayer2;
+    private JTextField player2Wager;
+    private JLabel lblPlayer2Wager;
+    private JButton btnTakeSeat3;
+    private JTextArea textAreaPlayer3;
+    private JTextField player3Wager;
+    private JLabel lblPlayer3Wager;
+    private JButton btnTakeSeat4;
+    private JTextArea textAreaPlayer4;
+    private JTextField player4Wager;
+    private JLabel lblPlayer4Wager;
+    private JButton btnTakeSeat5;
+    private JTextArea textAreaPlayer5;
+    private JTextField player5Wager;
+    private JLabel lblPlayer5Wager;
+    private JTextArea textAreaPlayer6;
+    private JPanel panelGameRoomButtons;
+    private JButton btnSitOut;
+    private JButton btnLeaveRoom;
+    private JButton btnBet50;
+    private JButton btnBet100;
+    private JButton btnBet500;
+    private JButton btnDouble;
+    private JButton btnHit;
+    private JButton btnDeal;
+
+    // Client variable
     private Client client;
 
-    public GameRoomGUI() {
+    public GameRoomGUI(Client client) {
+        this.client = client;
+
+        try {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (Exception ex) {}
+
         initComponents();
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
-        panel1 = new JPanel();
-        label1 = new JLabel();
-        panel3 = new JPanel();
-        textareaPlayer0 = new JTextArea();
-        textArea6 = new JTextArea();
-        textAreaPlayer4 = new JTextArea();
-        button9 = new JButton();
-        button10 = new JButton();
+        panelGameRoomTitle = new JPanel();
+        lblTitle = new JLabel();
+        panelGameRoom = new JPanel();
         textAreaPlayer1 = new JTextArea();
+        player1Wager = new JTextField();
+        lblPlayer1Wager = new JLabel();
+        btnTakeSeat1 = new JButton();
+        btnTakeSeat2 = new JButton();
         textAreaPlayer2 = new JTextArea();
+        player2Wager = new JTextField();
+        lblPlayer2Wager = new JLabel();
+        btnTakeSeat3 = new JButton();
         textAreaPlayer3 = new JTextArea();
-        button11 = new JButton();
-        button13 = new JButton();
-        button12 = new JButton();
-        btnDouble = new JButton();
+        player3Wager = new JTextField();
+        lblPlayer3Wager = new JLabel();
+        btnTakeSeat4 = new JButton();
+        textAreaPlayer4 = new JTextArea();
+        player4Wager = new JTextField();
+        lblPlayer4Wager = new JLabel();
+        btnTakeSeat5 = new JButton();
+        textAreaPlayer5 = new JTextArea();
+        player5Wager = new JTextField();
+        lblPlayer5Wager = new JLabel();
+        textAreaPlayer6 = new JTextArea();
+        panelGameRoomButtons = new JPanel();
+        btnSitOut = new JButton();
+        btnLeaveRoom = new JButton();
         btnBet50 = new JButton();
         btnBet100 = new JButton();
         btnBet500 = new JButton();
-        btnLeaveRoom = new JButton();
-        btnSitOut = new JButton();
+        btnDouble = new JButton();
         btnHit = new JButton();
         btnDeal = new JButton();
-        textField1 = new JTextField();
-        lblFunds2 = new JLabel();
-        textField3 = new JTextField();
-        lblFunds4 = new JLabel();
-        textField5 = new JTextField();
-        lblFunds6 = new JLabel();
-        textField2 = new JTextField();
-        lblFunds3 = new JLabel();
-        textField4 = new JTextField();
-        lblFunds5 = new JLabel();
 
         //======== this ========
+        setBackground(new Color(0x003300));
+        setForeground(new Color(0x003300));
         var contentPane = getContentPane();
 
-        //======== panel1 ========
+        //======== panelGameRoomTitle ========
         {
-            panel1.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {0, 0};
-            ((GridBagLayout)panel1.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+            panelGameRoomTitle.setBackground(new Color(0x003300));
+            panelGameRoomTitle.setLayout(new GridBagLayout());
+            ((GridBagLayout)panelGameRoomTitle.getLayout()).rowHeights = new int[] {0, 0};
+            ((GridBagLayout)panelGameRoomTitle.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
 
-            //---- label1 ----
-            label1.setText("Game Room");
-            label1.setHorizontalAlignment(SwingConstants.CENTER);
-            label1.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
-            panel1.add(label1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 5), 0, 0));
+            //---- lblTitle ----
+            lblTitle.setText("Game Room");
+            lblTitle.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
+            lblTitle.setForeground(Color.white);
+            panelGameRoomTitle.add(lblTitle, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 5), 0, 0));
         }
 
-        //======== panel3 ========
+        //======== panelGameRoom ========
         {
-
-            //---- textareaPlayer0 ----
-            textareaPlayer0.setPreferredSize(new Dimension(200, 200));
-            textareaPlayer0.setBorder(new TitledBorder(null, "Player 1", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-
-            //---- textArea6 ----
-            textArea6.setPreferredSize(new Dimension(200, 200));
-            textArea6.setBorder(new TitledBorder(null, "Dealer", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-
-            //---- textAreaPlayer4 ----
-            textAreaPlayer4.setPreferredSize(new Dimension(200, 200));
-            textAreaPlayer4.setBorder(new TitledBorder(null, "Player 5", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-
-            //---- button9 ----
-            button9.setText("Take a Seat");
-            button9.setMinimumSize(new Dimension(200, 30));
-            button9.setPreferredSize(new Dimension(200, 30));
-
-            //---- button10 ----
-            button10.setText("Take a Seat");
-            button10.setMinimumSize(new Dimension(200, 30));
-            button10.setPreferredSize(new Dimension(200, 30));
+            panelGameRoom.setBackground(new Color(0x003300));
+            panelGameRoom.setForeground(Color.black);
 
             //---- textAreaPlayer1 ----
-            textAreaPlayer1.setPreferredSize(new Dimension(200, 200));
-            textAreaPlayer1.setBorder(new TitledBorder(null, "Player 2", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
+            textAreaPlayer1.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer1.setBorder(new TitledBorder(null, "Player 1", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player1Wager ----
+            player1Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
+
+            //---- lblPlayer1Wager ----
+            lblPlayer1Wager.setText("Wager");
+            lblPlayer1Wager.setFont(new Font("Roboto", Font.BOLD, 16));
+            lblPlayer1Wager.setPreferredSize(new Dimension(40, 17));
+            lblPlayer1Wager.setHorizontalAlignment(SwingConstants.CENTER);
+            lblPlayer1Wager.setForeground(Color.white);
+
+            //---- btnTakeSeat1 ----
+            btnTakeSeat1.setText("Take Seat");
+            btnTakeSeat1.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnTakeSeat2 ----
+            btnTakeSeat2.setText("Take Seat");
+            btnTakeSeat2.setFont(new Font("Roboto", Font.PLAIN, 12));
 
             //---- textAreaPlayer2 ----
-            textAreaPlayer2.setPreferredSize(new Dimension(200, 200));
-            textAreaPlayer2.setBorder(new TitledBorder(null, "Player 3", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
+            textAreaPlayer2.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer2.setBorder(new TitledBorder(null, "Player 2", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player2Wager ----
+            player2Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
+
+            //---- lblPlayer2Wager ----
+            lblPlayer2Wager.setText("Wager");
+            lblPlayer2Wager.setFont(new Font("Roboto", Font.BOLD, 16));
+            lblPlayer2Wager.setPreferredSize(new Dimension(40, 17));
+            lblPlayer2Wager.setHorizontalAlignment(SwingConstants.CENTER);
+            lblPlayer2Wager.setForeground(Color.white);
+
+            //---- btnTakeSeat3 ----
+            btnTakeSeat3.setText("Take Seat");
+            btnTakeSeat3.setFont(new Font("Roboto", Font.PLAIN, 12));
 
             //---- textAreaPlayer3 ----
-            textAreaPlayer3.setPreferredSize(new Dimension(200, 200));
-            textAreaPlayer3.setBorder(new TitledBorder(null, "Player 4", TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
+            textAreaPlayer3.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer3.setBorder(new TitledBorder(null, "Player 3", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
 
-            //---- button11 ----
-            button11.setText("Take a Seat");
-            button11.setMinimumSize(new Dimension(200, 30));
-            button11.setPreferredSize(new Dimension(200, 30));
+            //---- player3Wager ----
+            player3Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
-            //---- button13 ----
-            button13.setText("Take a Seat");
-            button13.setMinimumSize(new Dimension(200, 30));
-            button13.setPreferredSize(new Dimension(200, 30));
+            //---- lblPlayer3Wager ----
+            lblPlayer3Wager.setText("Wager");
+            lblPlayer3Wager.setFont(new Font("Roboto", Font.BOLD, 16));
+            lblPlayer3Wager.setPreferredSize(new Dimension(40, 17));
+            lblPlayer3Wager.setHorizontalAlignment(SwingConstants.CENTER);
+            lblPlayer3Wager.setForeground(Color.white);
 
-            //---- button12 ----
-            button12.setText("Take a Seat");
-            button12.setMinimumSize(new Dimension(200, 30));
-            button12.setPreferredSize(new Dimension(200, 30));
+            //---- btnTakeSeat4 ----
+            btnTakeSeat4.setText("Take Seat");
+            btnTakeSeat4.setFont(new Font("Roboto", Font.PLAIN, 12));
 
-            //---- button3 ----
-            btnDouble.setText("Double");
+            //---- textAreaPlayer4 ----
+            textAreaPlayer4.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer4.setBorder(new TitledBorder(null, "Player 4", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
 
-            //---- button5 ----
-            btnBet50.setText("Bet 50");
+            //---- player4Wager ----
+            player4Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
-            //---- button4 ----
-            btnBet100.setText("Bet 100");
+            //---- lblPlayer4Wager ----
+            lblPlayer4Wager.setText("Wager");
+            lblPlayer4Wager.setFont(new Font("Roboto", Font.BOLD, 16));
+            lblPlayer4Wager.setPreferredSize(new Dimension(40, 17));
+            lblPlayer4Wager.setHorizontalAlignment(SwingConstants.CENTER);
+            lblPlayer4Wager.setForeground(Color.white);
 
-            //---- button6 ----
-            btnBet500.setText("Bet 500");
+            //---- btnTakeSeat5 ----
+            btnTakeSeat5.setText("Take Seat");
+            btnTakeSeat5.setFont(new Font("Roboto", Font.PLAIN, 12));
 
-            //---- button1 ----
-            btnLeaveRoom.setText("Leave Room");
-            btnLeaveRoom.addActionListener(evt -> leaveRoom());
+            //---- textAreaPlayer5 ----
+            textAreaPlayer5.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer5.setBorder(new TitledBorder(null, "Player 5", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
 
-            //---- button2 ----
-            btnSitOut.setText("Sit Out");
+            //---- player5Wager ----
+            player5Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
-            //---- button7 ----
-            btnHit.setText("Hit");
+            //---- lblPlayer5Wager ----
+            lblPlayer5Wager.setText("Wager");
+            lblPlayer5Wager.setFont(new Font("Roboto", Font.BOLD, 16));
+            lblPlayer5Wager.setPreferredSize(new Dimension(40, 17));
+            lblPlayer5Wager.setHorizontalAlignment(SwingConstants.CENTER);
+            lblPlayer5Wager.setForeground(Color.white);
 
-            //---- button8 ----
-            btnDeal.setText("Deal");
+            //---- textAreaPlayer6 ----
+            textAreaPlayer6.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer6.setBorder(new TitledBorder(null, "Dealer", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
 
-            //---- lblFunds2 ----
-            lblFunds2.setText("Funds");
-
-            //---- lblFunds3 ----
-            lblFunds3.setText("Funds");
-
-            //---- lblFunds4 ----
-            lblFunds4.setText("Funds");
-
-            //---- lblFunds5 ----
-            lblFunds5.setText("Funds");
-
-            //---- lblFunds6 ----
-            lblFunds6.setText("Funds");
-
-            GroupLayout panel3Layout = new GroupLayout(panel3);
-            panel3.setLayout(panel3Layout);
-            panel3Layout.setHorizontalGroup(
-                panel3Layout.createParallelGroup()
-                    .addGroup(panel3Layout.createSequentialGroup()
-                        .addGroup(panel3Layout.createParallelGroup()
-                            .addGroup(panel3Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGroup(panel3Layout.createParallelGroup()
-                                            .addComponent(button11, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(btnSitOut, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                                                .addComponent(btnLeaveRoom, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
-                                        .addGroup(panel3Layout.createParallelGroup()
-                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                .addGap(118, 118, 118)
-                                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(btnDouble, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(btnBet50, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(btnBet100, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
-                                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(btnBet500, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))))
-                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                .addGap(130, 130, 130)
-                                                .addGroup(panel3Layout.createParallelGroup()
-                                                    .addComponent(textArea6, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(button13, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(textAreaPlayer2, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                                    .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(lblFunds6)
-                                                        .addGap(6, 6, 6)
-                                                        .addComponent(textField5, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)))))
-                                        .addGap(137, 137, 137)
-                                        .addComponent(button12, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
-                                            .addComponent(textareaPlayer0, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textAreaPlayer1, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(GroupLayout.Alignment.LEADING, panel3Layout.createSequentialGroup()
-                                                .addComponent(lblFunds2)
-                                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(textField1, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(button9, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(508, 508, 508)
-                                        .addGroup(panel3Layout.createParallelGroup()
-                                            .addComponent(textAreaPlayer3, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textAreaPlayer4, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(button10, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(panel3Layout.createSequentialGroup()
-                                                .addComponent(lblFunds4)
-                                                .addGap(6, 6, 6)
-                                                .addComponent(textField3, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))))))
-                            .addGroup(panel3Layout.createSequentialGroup()
-                                .addGap(358, 358, 358)
-                                .addComponent(btnHit, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnDeal, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap(21, Short.MAX_VALUE))
+            GroupLayout panelGameRoomLayout = new GroupLayout(panelGameRoom);
+            panelGameRoom.setLayout(panelGameRoomLayout);
+            panelGameRoomLayout.setHorizontalGroup(
+                    panelGameRoomLayout.createParallelGroup()
+                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                    .addGroup(panelGameRoomLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                            .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                    .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                            .addComponent(lblPlayer2Wager, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(6, 6, 6)
+                                                            .addComponent(player2Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(textAreaPlayer2, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(btnTakeSeat2, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                    .addComponent(lblPlayer1Wager, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(player1Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(textAreaPlayer1, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnTakeSeat1, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 205, Short.MAX_VALUE)
+                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                    .addComponent(lblPlayer3Wager, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(6, 6, 6)
+                                                    .addComponent(player3Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(textAreaPlayer3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(btnTakeSeat3, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(textAreaPlayer6, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+                                    .addGap(203, 203, 203)
+                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panelGameRoomLayout.createParallelGroup()
+                                                    .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                            .addComponent(lblPlayer4Wager, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(6, 6, 6)
+                                                            .addComponent(player4Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(textAreaPlayer4, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(btnTakeSeat4, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))
+                                            .addGroup(GroupLayout.Alignment.TRAILING, panelGameRoomLayout.createParallelGroup()
+                                                    .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                            .addComponent(lblPlayer5Wager, GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+                                                            .addGap(6, 6, 6)
+                                                            .addComponent(player5Wager, GroupLayout.PREFERRED_SIZE, 144, GroupLayout.PREFERRED_SIZE))
+                                                    .addComponent(textAreaPlayer5, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
+                                                    .addComponent(btnTakeSeat5, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE))))
             );
-            panel3Layout.setVerticalGroup(
-                panel3Layout.createParallelGroup()
-                    .addGroup(panel3Layout.createSequentialGroup()
-                        .addGroup(panel3Layout.createParallelGroup()
-                            .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                .addComponent(textAreaPlayer4, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)
-                                .addComponent(textArea6, GroupLayout.DEFAULT_SIZE, 136, Short.MAX_VALUE))
-                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(textareaPlayer0, GroupLayout.PREFERRED_SIZE, 133, GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                            .addGroup(panel3Layout.createSequentialGroup()
-                                .addGap(5, 5, 5)
-                                .addComponent(button10, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                            .addGroup(GroupLayout.Alignment.TRAILING, panel3Layout.createSequentialGroup()
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(button9, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panel3Layout.createParallelGroup()
-                            .addGroup(panel3Layout.createSequentialGroup()
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(lblFunds2, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(textField1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGroup(panel3Layout.createParallelGroup()
-                                            .addComponent(lblFunds4, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(textField3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addComponent(textAreaPlayer1, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textAreaPlayer3, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textAreaPlayer2, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 156, GroupLayout.PREFERRED_SIZE))
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addGap(5, 5, 5)
-                                        .addComponent(button11, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panel3Layout.createSequentialGroup()
-                                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                            .addComponent(button13, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(button12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addComponent(btnHit, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                                    .addComponent(btnDeal, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnDouble, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnSitOut))
-                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnLeaveRoom, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnBet50)
-                                    .addComponent(btnBet500)
-                                    .addComponent(btnBet100)))
-                            .addGroup(panel3Layout.createSequentialGroup()
-                                .addGroup(panel3Layout.createParallelGroup()
-                                    .addComponent(lblFunds6, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(textField5, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 312, Short.MAX_VALUE)))
-                        .addContainerGap())
+            panelGameRoomLayout.setVerticalGroup(
+                    panelGameRoomLayout.createParallelGroup()
+                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                    .addGroup(panelGameRoomLayout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                    .addGroup(panelGameRoomLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                                                            .addComponent(lblPlayer1Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                                                            .addComponent(player1Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+                                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addComponent(textAreaPlayer1, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                                    .addComponent(btnTakeSeat1))
+                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                                            .addComponent(lblPlayer5Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                                    .addGap(1, 1, 1)
+                                                                                    .addComponent(player5Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(textAreaPlayer5, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(btnTakeSeat5)))
+                                                    .addGap(52, 52, 52)
+                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                                            .addComponent(lblPlayer2Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                                    .addGap(1, 1, 1)
+                                                                                    .addComponent(player2Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(textAreaPlayer2, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(btnTakeSeat2))
+                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                    .addGap(2, 2, 2)
+                                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                                            .addComponent(lblPlayer4Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                                    .addGap(1, 1, 1)
+                                                                                    .addComponent(player4Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(textAreaPlayer4, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                                    .addGap(6, 6, 6)
+                                                                    .addComponent(btnTakeSeat4))))
+                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                    .addComponent(textAreaPlayer6)
+                                                    .addGap(53, 53, 53)
+                                                    .addGroup(panelGameRoomLayout.createParallelGroup()
+                                                            .addComponent(lblPlayer3Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                                            .addGroup(panelGameRoomLayout.createSequentialGroup()
+                                                                    .addGap(1, 1, 1)
+                                                                    .addComponent(player3Wager, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)))
+                                                    .addGap(6, 6, 6)
+                                                    .addComponent(textAreaPlayer3, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(6, 6, 6)
+                                                    .addComponent(btnTakeSeat3)
+                                                    .addGap(2, 2, 2)))
+                                    .addContainerGap(61, Short.MAX_VALUE))
+            );
+        }
+
+        //======== panelGameRoomButtons ========
+        {
+            panelGameRoomButtons.setBackground(new Color(0x003300));
+
+            //---- btnSitOut ----
+            btnSitOut.setText("Sit Out");
+            btnSitOut.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnLeaveRoom ----
+            btnLeaveRoom.setText("Leave Room");
+            btnLeaveRoom.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnLeaveRoom.addActionListener(e -> leaveRoom());
+
+            //---- btnBet50 ----
+            btnBet50.setText("Bet 50");
+            btnBet50.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnBet100 ----
+            btnBet100.setText("Bet 100");
+            btnBet100.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnBet500 ----
+            btnBet500.setText("Bet 500");
+            btnBet500.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnDouble ----
+            btnDouble.setText("Double Bet");
+            btnDouble.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnHit ----
+            btnHit.setText("HIT");
+            btnHit.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            //---- btnDeal ----
+            btnDeal.setText("FINISH");
+            btnDeal.setFont(new Font("Roboto", Font.PLAIN, 12));
+
+            GroupLayout panelGameRoomButtonsLayout = new GroupLayout(panelGameRoomButtons);
+            panelGameRoomButtons.setLayout(panelGameRoomButtonsLayout);
+            panelGameRoomButtonsLayout.setHorizontalGroup(
+                    panelGameRoomButtonsLayout.createParallelGroup()
+                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                    .addGap(32, 32, 32)
+                                    .addGroup(panelGameRoomButtonsLayout.createParallelGroup()
+                                            .addComponent(btnSitOut, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                            .addComponent(btnLeaveRoom, GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE))
+                                    .addGap(180, 180, 180)
+                                    .addGroup(panelGameRoomButtonsLayout.createParallelGroup()
+                                            .addComponent(btnDouble, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                                    .addComponent(btnBet50, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(btnBet100, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(btnBet500, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+                                                    .addGap(0, 0, Short.MAX_VALUE))
+                                            .addComponent(btnHit, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGap(181, 181, 181)
+                                    .addComponent(btnDeal, GroupLayout.PREFERRED_SIZE, 153, GroupLayout.PREFERRED_SIZE)
+                                    .addGap(20, 20, 20))
+            );
+            panelGameRoomButtonsLayout.setVerticalGroup(
+                    panelGameRoomButtonsLayout.createParallelGroup()
+                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                    .addGroup(panelGameRoomButtonsLayout.createParallelGroup()
+                                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                                    .addComponent(btnHit, GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
+                                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                                    .addComponent(btnDouble))
+                                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                                    .addContainerGap()
+                                                    .addComponent(btnDeal, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(panelGameRoomButtonsLayout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                                            .addComponent(btnBet500)
+                                            .addComponent(btnBet100)
+                                            .addComponent(btnBet50)))
+                            .addGroup(panelGameRoomButtonsLayout.createSequentialGroup()
+                                    .addGap(15, 15, 15)
+                                    .addComponent(btnSitOut, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(btnLeaveRoom, GroupLayout.PREFERRED_SIZE, 36, GroupLayout.PREFERRED_SIZE)
+                                    .addContainerGap(15, Short.MAX_VALUE))
             );
         }
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
         contentPaneLayout.setHorizontalGroup(
-            contentPaneLayout.createParallelGroup()
-                .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(panel1, GroupLayout.DEFAULT_SIZE, 1026, Short.MAX_VALUE)
-                        .addComponent(panel3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addContainerGap())
-                .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addGap(44, 44, 44)
-                    .addComponent(lblFunds3)
-                    .addGap(6, 6, 6)
-                    .addComponent(textField2, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 510, Short.MAX_VALUE)
-                    .addComponent(lblFunds5)
-                    .addGap(6, 6, 6)
-                    .addComponent(textField4, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE)
-                    .addGap(26, 26, 26))
+                contentPaneLayout.createParallelGroup()
+                        .addComponent(panelGameRoomTitle, GroupLayout.DEFAULT_SIZE, 1008, Short.MAX_VALUE)
+                        .addComponent(panelGameRoom, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(panelGameRoomButtons, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         contentPaneLayout.setVerticalGroup(
-            contentPaneLayout.createParallelGroup()
-                .addGroup(contentPaneLayout.createSequentialGroup()
-                    .addComponent(panel1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                    .addGroup(contentPaneLayout.createParallelGroup()
-                        .addComponent(lblFunds3, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(textField2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblFunds5, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
-                        .addComponent(textField4, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap())
+                contentPaneLayout.createParallelGroup()
+                        .addGroup(contentPaneLayout.createSequentialGroup()
+                                .addComponent(panelGameRoomTitle, GroupLayout.PREFERRED_SIZE, 49, GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(panelGameRoom, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, 0)
+                                .addComponent(panelGameRoomButtons, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
         );
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
-    public void setupGameRoom(Client client) {
+    public void setupGameRoom() {
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.client = client;
+    }
+
+    public static void main(String agrs[]) throws Exception {
+        new GameRoomGUI(new Client()).setupGameRoom();
     }
 
     public void sit() {
@@ -368,38 +484,4 @@ public class GameRoomGUI extends JFrame {
         client.doubleDown();
     }
 
-    // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
-    private JPanel panel1;
-    private JLabel label1;
-    private JPanel panel3;
-    private JTextArea textareaPlayer0;
-    private JTextArea textArea6;
-    private JTextArea textAreaPlayer4;
-    private JButton button9;
-    private JButton button10;
-    private JTextArea textAreaPlayer1;
-    private JTextArea textAreaPlayer2;
-    private JTextArea textAreaPlayer3;
-    private JButton button11;
-    private JButton button13;
-    private JButton button12;
-    private JButton btnDouble;
-    private JButton btnBet50;
-    private JButton btnBet100;
-    private JButton btnBet500;
-    private JButton btnLeaveRoom;
-    private JButton btnSitOut;
-    private JButton btnHit;
-    private JButton btnDeal;
-    private JTextField textField1;
-    private JLabel lblFunds2;
-    private JTextField textField3;
-    private JLabel lblFunds4;
-    private JTextField textField5;
-    private JLabel lblFunds6;
-    private JTextField textField2;
-    private JLabel lblFunds3;
-    private JTextField textField4;
-    private JLabel lblFunds5;
-    // JFormDesigner - End of variables declaration  //GEN-END:variables  @formatter:ond
 }
