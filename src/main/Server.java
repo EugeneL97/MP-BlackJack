@@ -299,7 +299,7 @@ public class Server {
 					// set to 2 and currentAction set to -1. Cards dealt are not displayed in this state until readyToStart = 2.
 					case 1:
 						// If there's only 1 player in the room, proceed immediately to readyToStart = 2
-						if (server.getRooms().get(roomNumber).getPlayersInRoom().length == 2) {
+						if (server.getRooms().get(roomNumber).getNumOfPlayers() == 2) {
 							// Set room's readyToStart = 2
 							server.getRooms().get(roomNumber).setReadyToStart(2);
 							
@@ -583,7 +583,7 @@ public class Server {
 								}
 							}
 						}
-						/*
+						
 						// Set Dealer's score
 						server.getRooms().get(roomNumber).getPlayersInRoom()[0].setScore(bust(roomNumber, 0, 0));
 						
@@ -675,7 +675,7 @@ public class Server {
 						
 						
 						System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
-						*/
+						
 						// Set newMessage = true so the server will update the client with a new instance
 						// of server attributes rooms and lobbyRooms
 						server.setNewMessage(true);
@@ -830,6 +830,7 @@ public class Server {
 					// Player sits down to start playing game
 					case "sit":
 						index = Integer.parseInt(message.getStatus());
+										
 						// Player has sat down but not actively playing
 						player.setPlayerState(2);
 						
