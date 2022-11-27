@@ -14,6 +14,9 @@ import javax.swing.border.*;
  * @author unknown
  */
 public class GameRoomGUI extends JFrame {
+
+    private Client client;
+
     public GameRoomGUI() {
         initComponents();
     }
@@ -331,13 +334,10 @@ public class GameRoomGUI extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
-    public void setupGameRoom() {
+    public void setupGameRoom(Client client) {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-    }
-
-    public static void main(String args[]) {
-        new GameRoomGUI().setupGameRoom();
+        this.client = client;
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
