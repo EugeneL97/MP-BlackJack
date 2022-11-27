@@ -369,22 +369,22 @@ public class GameRoomGUI extends JFrame {
             //---- btnBet50 ----
             btnBet50.setText("Bet 50");
             btnBet50.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnBet50.addActionListener(e -> wager += 50);
+            btnBet50.addActionListener(e -> setWager(50));
 
             //---- btnBet100 ----
             btnBet100.setText("Bet 100");
             btnBet100.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnBet100.addActionListener(e -> wager += 100);
+            btnBet100.addActionListener(e -> setWager(100));
 
             //---- btnBet500 ----
             btnBet500.setText("Bet 500");
             btnBet500.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnBet500.addActionListener(e -> wager += 500);
+            btnBet500.addActionListener(e -> setWager(500));
 
             //---- btnDouble ----
             btnDouble.setText("Double Bet");
             btnDouble.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnDouble.addActionListener(e -> wager *= 2);
+            btnDouble.addActionListener(e -> setWager(2));
 
             //---- btnHit ----
             btnHit.setText("HIT");
@@ -393,6 +393,7 @@ public class GameRoomGUI extends JFrame {
             //---- btnDeal ----
             btnDeal.setText("DEAL");
             btnDeal.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnDeal.addActionListener(e -> deal());
 
             GroupLayout panelGameRoomButtonsLayout = new GroupLayout(panelGameRoomButtons);
             panelGameRoomButtons.setLayout(panelGameRoomButtonsLayout);
@@ -478,6 +479,17 @@ public class GameRoomGUI extends JFrame {
         client.sit(seatIndex);
     }
 
+    public void setWager(int wager) {
+
+        if (wager == 2)
+            this.wager *= 2;
+        else
+            this.wager += wager;
+
+        refreshGUI();
+
+    }
+
     public void refreshGUI() {
 
         for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
@@ -509,6 +521,7 @@ public class GameRoomGUI extends JFrame {
         setVisible(true);
 
     }
+
     public void leaveRoom() {
         client.leaveRoom();
         setVisible(false);
@@ -516,8 +529,11 @@ public class GameRoomGUI extends JFrame {
         new LobbyGUI(client).setupLobbyPanel();
     }
 
-    public void deal(int wager) {
-        client.deal(wager);
+    public void deal() {
+        if (this.wager == 0)
+            JOptionPane.showMessageDialog(panelGameRoom, "Set a wager!");
+        else
+            client.deal(this.wager);
     }
 
     public void setWager() {
