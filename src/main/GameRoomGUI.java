@@ -4,14 +4,9 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.GroupLayout;
 import javax.swing.border.*;
-/*
- * Created by JFormDesigner on Sat Nov 26 02:17:29 PST 2022
- */
-
-
 
 /**
- * @author unknown
+ * @author Brandon Murgic
  */
 public class GameRoomGUI extends JFrame {
 
@@ -70,7 +65,7 @@ public class GameRoomGUI extends JFrame {
     }
 
     private void initComponents() {
-        // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents  @formatter:off
+
         panelGameRoomTitle = new JPanel();
         lblTitle = new JLabel();
         panelGameRoom = new JPanel();
@@ -445,8 +440,8 @@ public class GameRoomGUI extends JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
         );
         pack();
-        setLocationRelativeTo(getOwner());
-        // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
+        setLocationRelativeTo(null);
+
     }
 
     public void setupGameRoom() {

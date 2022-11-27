@@ -98,8 +98,7 @@ public class Server {
 			
 		}
 	}
-	
-	
+
 	// This class will handle all the games that are running in each room
 	private static class GameHandler implements Runnable {
 		Server server;
@@ -949,9 +948,7 @@ public class Server {
 		}
 	}
 	 */
-	
-	
-	
+
 	// Each thread use this class and execute the method run()
 	private static class ClientHandler implements Runnable {
 		private final Socket clientSocket;

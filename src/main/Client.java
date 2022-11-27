@@ -13,6 +13,7 @@ public class Client {
 	private Room room;
 	private ArrayList<Message> messageQueue;
 	private int login;
+	private int register;
 	private Boolean refreshLobbyRoomGUI;
 	private Boolean refreshGameRoomGUI;
 	private ConnectGUI connectGUI;
@@ -28,6 +29,7 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
+		this.register = 0;
 		this.refreshLobbyRoomGUI = false;
 		this.refreshGameRoomGUI = false;
 		this.lobbyRoom = new LobbyRoom();
@@ -42,6 +44,7 @@ public class Client {
 		this.messageQueue = new ArrayList<Message>();
 		this.room = new Room(-1);
 		this.login = 0;
+		this.register = 0;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
@@ -226,7 +229,21 @@ public class Client {
 							client.getMessageQueue().remove(0);
 
 							break;
-							
+						case "register":
+							System.out.println("Client received register object");
+
+							if(client.messageQueue.get(0).getStatus().equals("success")) {
+
+								client.setRegister(1);
+								System.out.println("register success");
+								client.getMessageQueue().remove(0);
+							}
+							else {
+								client.setRegister(-1);
+								client.getMessageQueue().remove(0);
+							}
+
+							break;
 						default:
 							break;
 					}
@@ -243,43 +260,6 @@ public class Client {
 		}
 	}
 
-	// Use this for the GUI
-	// Register a new user
-	public Boolean register(String username, String password) {
-		Message message = new Message("register", "", username + "#" + password);
-		sendMessage(message);
-		
-		Message replyMessage = null;
-		replyMessage = getMessage(replyMessage);
-		
-		if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("success")) {
-			return true;
-		}
-		
-		return false;
-	}
-	
-	// Register a new user
-	public void register() {
-		System.out.printf("Enter username: ");
-		String username = userInput.nextLine();
-		System.out.printf("Enter password: ");
-		String password = userInput.nextLine();
-		
-		Message message = new Message("register", "", username + "#" + password);
-		sendMessage(message);
-		
-		Message replyMessage = null;
-		replyMessage = getMessage(replyMessage);
-		
-		if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("success")) {
-			System.out.println("Registration successful");
-		}
-		else if (replyMessage.getType().equals("register") && replyMessage.getStatus().equals("failed")) {
-			System.out.println(replyMessage.getText());
-		}
-	}
-	
 	// Receives message from server
 	public Message getMessage(Message message) {
 		try {
@@ -357,8 +337,16 @@ public class Client {
 	public void login (String username, String password) {
 		Message message = new Message("login", "", username + "#" + password);
 		sendMessage(message);
-		
-		System.out.println("Sent message");
+
+		System.out.println("Sent login message");
+	}
+
+	// Register a new user
+	public void register(String username, String password) {
+		Message message = new Message("register", "", username + "#" + password);
+		sendMessage(message);
+
+		System.out.println("Sent register message");
 	}
 	
 	// If player requests join room use this function to send request to server
@@ -450,7 +438,15 @@ public class Client {
 	public void setLogin(int login) {
 		this.login = login;
 	}
-	
+
+	public int getRegister() {
+		return this.register;
+	}
+
+	public void setRegister(int register) {
+		this.register = register;
+	}
+
 	public void setRefreshLobbyRoomGUI(Boolean refresh) {
 		this.refreshLobbyRoomGUI = refresh;
 	}
