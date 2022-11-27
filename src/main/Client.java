@@ -235,6 +235,7 @@ public class Client {
 							client.getMessageQueue().remove(0);
 							System.out.println("new player object = " + client.getPlayer().toString());
 							break;
+							
 						case "register":
 							System.out.println("Client received register object");
 
@@ -361,48 +362,56 @@ public class Client {
 		//int roomNumber = Integer.parseInt(tmpLine[0]);
 		Message message = new Message("join room", Integer.toString(roomNumber), "");
 		sendMessage(message);
+		System.out.println("sent join room message");
 	}
 	
 	// If a player requests to log out of the server use this function to send request to server
 	public void logout() {
 		Message message = new Message("logout", "", "");
 		sendMessage(message);
+		System.out.println("sent log out message");
 	}
 	
 	// If a player wants to sit down at a seat
 	public void sit(int seatIndex) {
 		Message message = new Message("sit", Integer.toString(seatIndex), "");
 		sendMessage(message);
+		System.out.println("sent sit message at index " + seatIndex);
 	}
 	
 	// If a player wants to leave the room
 	public void leaveRoom() {
 		Message message = new Message("leave room", "", "");
 		sendMessage(message);
+		System.out.println("sent leave room message");
 	}
 	
 	// If a player wants to be deal the first two cards
 	public void deal(int wager) {
 		Message message = new Message("deal", Integer.toString(wager), "");
 		sendMessage(message);
+		System.out.println("sent deal message with wager amount = " + wager);
 	}
 	
 	// If a player wants to sit out of the current round and wait for the next round
 	public void sitOut() {
 		Message message = new Message("sit out", "", "");
 		sendMessage(message);
+		System.out.println("sent sit out message");
 	}
 	
 	// If a player wants to doubl down on current bet
 	public void doubleDown() {
 		Message message = new Message("double down", "", "");
 		sendMessage(message);
+		System.out.println("sent double down message");
 	}
 	
 	// If player is in a room and is actively playing and requests a hit, use this function to send request to server
 	public void hit() {
 		Message message = new Message("hit", "", "");
 		sendMessage(message);
+		System.out.println("sent hit message");
 	}
 	
 	public Player getPlayer() {
