@@ -1,3 +1,4 @@
+package main;
 import java.util.concurrent.CountDownLatch;
 
 public class ConnectGUI extends javax.swing.JFrame {

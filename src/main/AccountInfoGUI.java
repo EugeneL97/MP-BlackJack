@@ -1,3 +1,4 @@
+package main;
 public class AccountInfoGUI extends javax.swing.JFrame {
 
     private Client client;
