@@ -65,6 +65,7 @@ public class Server {
 		room4 = new GameHandler(server, 4);
 		System.out.println("Spawning thread for room 0");
 		new Thread(room0).start();
+		
 		System.out.println("Spawning thread for room 1");
 		new Thread(room1).start();
 		System.out.println("Spawning thread for room 2");
@@ -269,7 +270,7 @@ public class Server {
 		public void run() {
 			// For keeping track of player's score
 			String score = "";
-			System.out.println("Entering GameHandler Loop. Initial readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
+			//System.out.println("Entering GameHandler Loop. Initial readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 			
 			while(true) {
 				
@@ -286,9 +287,7 @@ public class Server {
 											+ "Setting readyToStart = 1");
 									server.getRooms().get(roomNumber).setReadyToStart(1);
 
-									// Set newMessage = true so the server will update the client with a new instance
-									// of server attributes rooms and lobbyRooms
-									server.setNewMessage(true);
+									
 								}
 							}	
 						}
@@ -309,9 +308,7 @@ public class Server {
 							
 							System.out.println("In GameHandler. readyToStart = 1 detected. There is only 1 player in room.\n"
 									+ "Setting readyToStart = 2");
-							// Set newMessage = true so the server will update the client with a new instance
-							// of server attributes rooms and lobbyRooms
-							server.setNewMessage(true);
+							
 							break;
 						}
 						else {
@@ -356,9 +353,7 @@ public class Server {
 							// Set room's readyToStart = 2
 							server.getRooms().get(roomNumber).setReadyToStart(2);
 							
-							// Set newMessage = true so the server will update the client with a new instance
-							// of server attributes rooms and lobbyRooms
-							server.setNewMessage(true);
+							
 							
 							break;
 								
@@ -441,9 +436,7 @@ public class Server {
 														score = "";
 													}
 													
-													// Set newMessage = true so the server will update the client with a new instance
-													// of server attributes rooms and lobbyRooms
-													server.setNewMessage(true);
+													
 													
 													break;
 												
@@ -489,9 +482,7 @@ public class Server {
 													}
 													
 													
-													// Set newMessage = true so the server will update the client with a new instance
-													// of server attributes rooms and lobbyRooms
-													server.setNewMessage(true);
+												
 													
 													break;
 													
@@ -556,9 +547,7 @@ public class Server {
 													// Set currentAction = -1 means player has not decided on anything
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(3);
 															
-													// Set newMessage = true so the server will update the client with a new instance
-													// of server attributes rooms and lobbyRooms
-													server.setNewMessage(true);
+													
 													break;
 												
 												// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
@@ -570,9 +559,7 @@ public class Server {
 													// Set currentAction = -1 means player has not decided on anything
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(4);
 															
-													// Set newMessage = true so the server will update the client with a new instance
-													// of server attributes rooms and lobbyRooms
-													server.setNewMessage(true);
+													
 													
 												default:
 													break;
@@ -674,7 +661,7 @@ public class Server {
 						
 						
 						
-						System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
+						//System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 						
 						// Set newMessage = true so the server will update the client with a new instance
 						// of server attributes rooms and lobbyRooms
@@ -781,12 +768,14 @@ public class Server {
 							updatePlayer();
 							logout = true;
 							
-							// Setting new message received by client to true
-							server.setNewMessage(true);
+							
 							
 						default:
 							break;
 					}
+					
+					// Setting new message received by client to true
+					server.setNewMessage(true);
 					checkNewMessage();
 				}
 				
@@ -871,14 +860,16 @@ public class Server {
 						// currentAction = -1 means player has not decided on anything
 						player.setCurrentAction(-1);
 						
-						// Setting new message received by client to true
-						server.setNewMessage(true);
+						
 						
 						// Return to calling function, the lobby loop.
 						return;
 						
 					default:
 				}
+				
+				// Setting new message received by client to true
+				server.setNewMessage(true);
 				checkNewMessage();
 			}
 		}
@@ -918,8 +909,7 @@ public class Server {
 						// Set room's readyToStart = 1
 						server.getRooms().get(player.getRoomNumber()).setReadyToStart(1);
 						
-						// Setting new message received by client to true
-						server.setNewMessage(true);
+					
 
 						
 						
@@ -933,9 +923,7 @@ public class Server {
 							
 							// Set player action to hit which player receives an additional card
 							player.setCurrentAction(hit);
-							
-							// Setting new message received by client to true
-							server.setNewMessage(true);
+						
 						}
 						
 						
@@ -949,8 +937,7 @@ public class Server {
 						// currentAction = -1 means player has not decided on anything
 						player.setCurrentAction(sitOut);
 						
-						// Setting new message received by client to true
-						server.setNewMessage(true);
+						
 				
 						break;
 						
@@ -978,11 +965,8 @@ public class Server {
 						// update player account balance in the database
 						updatePlayer();
 						
-						// Setting new message received by client to true
-						server.setNewMessage(true);
 						
-						// Since newMessage was just set to true, send the class objects to the client.
-						checkNewMessage();
+						
 						
 						// Return to the calling function
 						return;
@@ -997,8 +981,7 @@ public class Server {
 							// Set currentAction = 2 means player wants to double down on the bet, so double the wager amount and receive one more card
 							player.setCurrentAction(doubleDown);
 							
-							// Setting new message received by client to true
-							server.setNewMessage(true);
+
 						}
 						
 						break;
@@ -1011,8 +994,7 @@ public class Server {
 						// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 						player.setCurrentAction(stand);
 						
-						// Setting new message received by client to true
-						server.setNewMessage(true);
+						
 				
 						break;
 						
@@ -1020,6 +1002,9 @@ public class Server {
 						break;
 						
 				}
+				
+				// Setting new message received by client to true
+				server.setNewMessage(true);
 				
 				// Send player the updated objects
 				checkNewMessage();
@@ -1067,8 +1052,9 @@ public class Server {
 		// Sends a message to the client
 		public void sendMessage(Message message) {
 			try {
+				output.reset();
 				output.writeObject(message);
-				//output.flush();
+				output.flush();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -1079,15 +1065,20 @@ public class Server {
 		// the server's lobbyRoom and rooms object.
 		public void checkNewMessage() {
 			if (server.getNewMessage()) {
-				System.out.println("Sending lobbyRoom and room object to client");
 				Message message = new Message("lobby room", "", server.getLobbyRooms().toString());
 				sendMessage(message);
-					
+				
+				System.out.println("Sending out LobbyRoom object = " + server.getLobbyRooms().toString());
+				
 				message = new Message("room", Integer.toString(player.getSeatIndex()), server.getRooms().get(player.getRoomNumber()).toString());
 				sendMessage(message);
 				
+				System.out.println("Sending out Room object = " + server.getRooms().toString());
+				
 				message = new Message("player", "", player.toString());
 				sendMessage(message);
+				
+				System.out.println("Sending out Player object = " + player.toString());
 				server.setNewMessage(false);
 			}
 		}
@@ -1122,7 +1113,7 @@ public class Server {
 			String [] loginInfo;
 			String username = null;
 			String password = null;
-			File file = new File(System.getProperty("user.dir") + "/database.txt");
+			File file = new File(System.getProperty("user.dir") + "/src/database.txt");
 			System.out.println("loginString = " +  loginString);
 
 			try {

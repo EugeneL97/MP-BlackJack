@@ -575,37 +575,45 @@ public class GameRoomGUI extends JFrame {
     }
 
     public void refreshGUI() {
-
-        for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
-            if (i == 0)
-                playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
-            else {
-                if (i == client.getPlayer().getSeatIndex()) {
-                    playerTextAreas[i].setBorder(new TitledBorder(null, client.getPlayer().getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
-                            new Font("Roboto", Font.BOLD, 14)));
-                    playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
-                    playerWagers[i].setText(String.valueOf(wager));
-                    playerTextAreas[i].setEnabled(true);
-                    playerWagers[i].setEnabled(true);
-                } else {
-                    if (client.getRoom().getPlayersInRoom()[i] != null) {
-                        playerTextAreas[i].setBorder(new TitledBorder(null, client.getRoom().getPlayersInRoom()[i].getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
-                                new Font("Roboto", Font.BOLD, 14)));
-                        playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
-                        playerWagers[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].getWager()));
-                    } else {
-                        playerTextAreas[i].setBorder(new TitledBorder(null, "Player " + i, TitledBorder.CENTER, TitledBorder.TOP,
-                                new Font("Roboto", Font.BOLD, 14)));
-                        playerTextAreas[i].setText("");
-                        playerWagers[i].setText("");
+    	try {
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                	System.out.println("refreshGUI executing");
+                    for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
+                        if (i == 0)
+                            playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
+                        else {
+                            if (i == client.getPlayer().getSeatIndex()) {
+                                playerTextAreas[i].setBorder(new TitledBorder(null, client.getPlayer().getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
+                                        new Font("Roboto", Font.BOLD, 14)));
+                                playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
+                                playerWagers[i].setText(String.valueOf(wager));
+                                playerTextAreas[i].setEnabled(true);
+                                playerWagers[i].setEnabled(true);
+                            } else {
+                                if (client.getRoom().getPlayersInRoom()[i] != null) {
+                                    playerTextAreas[i].setBorder(new TitledBorder(null, client.getRoom().getPlayersInRoom()[i].getUsername(), TitledBorder.CENTER, TitledBorder.TOP,
+                                            new Font("Roboto", Font.BOLD, 14)));
+                                    playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand()));
+                                    playerWagers[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].getWager()));
+                                } else {
+                                    playerTextAreas[i].setBorder(new TitledBorder(null, "Player " + i, TitledBorder.CENTER, TitledBorder.TOP,
+                                            new Font("Roboto", Font.BOLD, 14)));
+                                    playerTextAreas[i].setText("");
+                                    playerWagers[i].setText("");
+                                }
+                            }
+                        }
                     }
+
+                    revalidate();
+                    repaint();
                 }
-            }
+            });
+        } catch (Exception ex) {
+
         }
 
-        revalidate();
-        repaint();
-        setVisible(true);
 
     }
 
@@ -623,8 +631,14 @@ public class GameRoomGUI extends JFrame {
             client.deal(this.wager);
     }
 
+    public void setWager() {
+
+    }
+
     public void hit() {
         client.hit();
     }
+
+}
 
 }

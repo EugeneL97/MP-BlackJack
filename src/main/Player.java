@@ -90,13 +90,15 @@ public class Player {
 		
 		for (int x = 0; x < currentHand.size(); ++x) {
 			for (int y = 0; y < currentHand.get(x).size(); ++y) {
-				output += currentHand.get(x).get(y).showCard();
-				if (y != currentHand.get(x).size() - 1) {
-					output += ", ";
+				if (y + 1 < currentHand.get(x).size()) {
+					output += currentHand.get(x).get(y).showCard() + ", " + currentHand.get(x).get(y + 1).showCard() + "\n";
+					
+					y += 2;
 				}
 				else {
-					output += ".";
+					output += currentHand.get(x).get(y).showCard() + "\n";
 				}
+				
 			}
 		}
 		
