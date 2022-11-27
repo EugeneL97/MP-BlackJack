@@ -1219,6 +1219,9 @@ public class Server {
 						// Set currentAction = -1 means player has not decided on anything
 						player.setCurrentAction(notDecided);
 						
+						// Reset player's index number back to -1
+						player.setSeatIndex(-1);
+						
 						// Removing player to the server's attribute ArrayList<Room> rooms
 						server.getRooms().get(roomNumber).removePlayer(player.getSeatIndex());
 						
@@ -1439,7 +1442,7 @@ public class Server {
 			String username = null;
 			String password = null;
 			String output = null;
-			File file = new File(System.getProperty("user.dir") + "/database.txt");
+			File file = new File(System.getProperty("user.dir") + "/src/database.txt");
 			
 			try {
 				BufferedReader myReader = new BufferedReader(new FileReader(file));
