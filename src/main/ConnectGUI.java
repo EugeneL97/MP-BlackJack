@@ -33,7 +33,7 @@ public class ConnectGUI extends javax.swing.JFrame {
         }
         //</editor-fold>
         initComponents();
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
     
     public void setupConnectPanel() {

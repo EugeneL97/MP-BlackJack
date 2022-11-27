@@ -14,6 +14,9 @@ import javax.swing.border.*;
  * @author unknown
  */
 public class GameRoomGUI extends JFrame {
+
+    private Client client;
+
     public GameRoomGUI() {
         initComponents();
     }
@@ -34,14 +37,14 @@ public class GameRoomGUI extends JFrame {
         button11 = new JButton();
         button13 = new JButton();
         button12 = new JButton();
-        button3 = new JButton();
-        button5 = new JButton();
-        button4 = new JButton();
-        button6 = new JButton();
-        button1 = new JButton();
-        button2 = new JButton();
-        button7 = new JButton();
-        button8 = new JButton();
+        btnDouble = new JButton();
+        btnBet50 = new JButton();
+        btnBet100 = new JButton();
+        btnBet500 = new JButton();
+        btnLeaveRoom = new JButton();
+        btnSitOut = new JButton();
+        btnHit = new JButton();
+        btnDeal = new JButton();
         textField1 = new JTextField();
         lblFunds2 = new JLabel();
         textField3 = new JTextField();
@@ -124,34 +127,41 @@ public class GameRoomGUI extends JFrame {
             button12.setPreferredSize(new Dimension(200, 30));
 
             //---- button3 ----
-            button3.setText("Double");
+            btnDouble.setText("Double");
 
             //---- button5 ----
-            button5.setText("Bet 50");
+            btnBet50.setText("Bet 50");
 
             //---- button4 ----
-            button4.setText("Bet 100");
+            btnBet100.setText("Bet 100");
 
             //---- button6 ----
-            button6.setText("Bet 500");
+            btnBet500.setText("Bet 500");
 
             //---- button1 ----
-            button1.setText("Leave Room");
+            btnLeaveRoom.setText("Leave Room");
+            btnLeaveRoom.addActionListener(evt -> leaveRoom());
 
             //---- button2 ----
-            button2.setText("Sit Out");
+            btnSitOut.setText("Sit Out");
 
             //---- button7 ----
-            button7.setText("Hit");
+            btnHit.setText("Hit");
 
             //---- button8 ----
-            button8.setText("Deal");
+            btnDeal.setText("Deal");
 
             //---- lblFunds2 ----
             lblFunds2.setText("Funds");
 
+            //---- lblFunds3 ----
+            lblFunds3.setText("Funds");
+
             //---- lblFunds4 ----
             lblFunds4.setText("Funds");
+
+            //---- lblFunds5 ----
+            lblFunds5.setText("Funds");
 
             //---- lblFunds6 ----
             lblFunds6.setText("Funds");
@@ -169,19 +179,19 @@ public class GameRoomGUI extends JFrame {
                                         .addGroup(panel3Layout.createParallelGroup()
                                             .addComponent(button11, GroupLayout.PREFERRED_SIZE, 229, GroupLayout.PREFERRED_SIZE)
                                             .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(button2, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
-                                                .addComponent(button1, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
+                                                .addComponent(btnSitOut, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                                                .addComponent(btnLeaveRoom, GroupLayout.Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)))
                                         .addGroup(panel3Layout.createParallelGroup()
                                             .addGroup(panel3Layout.createSequentialGroup()
                                                 .addGap(118, 118, 118)
                                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(button3, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                    .addComponent(btnDouble, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                     .addGroup(panel3Layout.createSequentialGroup()
-                                                        .addComponent(button5, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(btnBet50, GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(button4, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(btnBet100, GroupLayout.PREFERRED_SIZE, 87, GroupLayout.PREFERRED_SIZE)
                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                                        .addComponent(button6, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))))
+                                                        .addComponent(btnBet500, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))))
                                             .addGroup(panel3Layout.createSequentialGroup()
                                                 .addGap(130, 130, 130)
                                                 .addGroup(panel3Layout.createParallelGroup()
@@ -214,9 +224,9 @@ public class GameRoomGUI extends JFrame {
                                                 .addComponent(textField3, GroupLayout.PREFERRED_SIZE, 189, GroupLayout.PREFERRED_SIZE))))))
                             .addGroup(panel3Layout.createSequentialGroup()
                                 .addGap(358, 358, 358)
-                                .addComponent(button7, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnHit, GroupLayout.PREFERRED_SIZE, 149, GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(button8, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(btnDeal, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(21, Short.MAX_VALUE))
             );
             panel3Layout.setVerticalGroup(
@@ -264,18 +274,18 @@ public class GameRoomGUI extends JFrame {
                                             .addComponent(button12, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panel3Layout.createParallelGroup()
-                                    .addComponent(button7, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
-                                    .addComponent(button8, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(btnHit, GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                                    .addComponent(btnDeal, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(button3, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(button2))
+                                    .addComponent(btnDouble, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnSitOut))
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(panel3Layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                    .addComponent(button1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(button5)
-                                    .addComponent(button6)
-                                    .addComponent(button4)))
+                                    .addComponent(btnLeaveRoom, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnBet50)
+                                    .addComponent(btnBet500)
+                                    .addComponent(btnBet100)))
                             .addGroup(panel3Layout.createSequentialGroup()
                                 .addGroup(panel3Layout.createParallelGroup()
                                     .addComponent(lblFunds6, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)
@@ -284,12 +294,6 @@ public class GameRoomGUI extends JFrame {
                         .addContainerGap())
             );
         }
-
-        //---- lblFunds3 ----
-        lblFunds3.setText("Funds");
-
-        //---- lblFunds5 ----
-        lblFunds5.setText("Funds");
 
         GroupLayout contentPaneLayout = new GroupLayout(contentPane);
         contentPane.setLayout(contentPaneLayout);
@@ -331,13 +335,37 @@ public class GameRoomGUI extends JFrame {
         // JFormDesigner - End of component initialization  //GEN-END:initComponents  @formatter:on
     }
 
-    public void setupGameRoom() {
+    public void setupGameRoom(Client client) {
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.client = client;
     }
 
-    public static void main(String args[]) {
-        new GameRoomGUI().setupGameRoom();
+    public void sit() {
+
+    }
+
+    public void leaveRoom() {
+        client.leaveRoom();
+        setVisible(false);
+        dispose();
+        new LobbyGUI(client).setupLobbyPanel();
+    }
+
+    public void deal(int wager) {
+        client.deal(wager);
+    }
+
+    public void sitOut() {
+        client.sitOut();
+    }
+
+    public void hit() {
+        client.hit();
+    }
+
+    public void doubleDown() {
+        client.doubleDown();
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables  @formatter:off
@@ -355,14 +383,14 @@ public class GameRoomGUI extends JFrame {
     private JButton button11;
     private JButton button13;
     private JButton button12;
-    private JButton button3;
-    private JButton button5;
-    private JButton button4;
-    private JButton button6;
-    private JButton button1;
-    private JButton button2;
-    private JButton button7;
-    private JButton button8;
+    private JButton btnDouble;
+    private JButton btnBet50;
+    private JButton btnBet100;
+    private JButton btnBet500;
+    private JButton btnLeaveRoom;
+    private JButton btnSitOut;
+    private JButton btnHit;
+    private JButton btnDeal;
     private JTextField textField1;
     private JLabel lblFunds2;
     private JTextField textField3;

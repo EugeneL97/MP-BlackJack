@@ -18,6 +18,7 @@ public class Client {
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
+	private GameRoomGUI gameRoomGUI;
 	
 	public Client() throws Exception {
 		this.socket = null;
@@ -241,46 +242,7 @@ public class Client {
 			}
 		}
 	}
-	
 
-	
-
-	
-	/*
-	// This is a duplicate function from above. It is for testing purposes.
-	// Login function to log onto server
-	public boolean login () {
-		boolean login = false;
-
-		System.out.printf("Enter username: ");
-		String username = userInput.nextLine();
-		System.out.printf("Enter password: ");
-		String password = userInput.nextLine();
-		Parser parser = new Parser();
-		
-		Message message = new Message("login", "", username + "#" + password);
-		sendMessage(message);
-		
-		Message replyMessage = null;
-		replyMessage = getMessage(replyMessage);
-		
-		if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("success")) {
-			System.out.println("Login successful");
-			Message playerMessage = null;
-			playerMessage = getMessage(playerMessage);
-			this.setPlayer(parser.parsePlayer(playerMessage.toString()));
-			userInput.close();
-			return true;
-		}
-		else if (replyMessage.getType().equals("login") && replyMessage.getStatus().equals("failed")) {
-			System.out.println("Login failed");
-		}
-		
-		return login;
-	}
-	*/
-	
-	
 	// Use this for the GUI
 	// Register a new user
 	public Boolean register(String username, String password) {
@@ -296,8 +258,6 @@ public class Client {
 		
 		return false;
 	}
-	
-	
 	
 	// Register a new user
 	public void register() {
@@ -371,9 +331,7 @@ public class Client {
 	    long delay = 10000L;
 	    timer.schedule(task, delay);
 	}
-	
-	
-	
+
 	// Closes connection to server.
 	public void closeConnection() {
 		try {
@@ -393,8 +351,7 @@ public class Client {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	// Use this for GUI
 	// Login function to log onto server
 	public void login (String username, String password) {
@@ -482,7 +439,7 @@ public class Client {
 		return this.messageQueue;
 	}
 	
-	public void setMessageQueue (ArrayList<Message> messageQueue) {
+	public void setMessageQueue(ArrayList<Message> messageQueue) {
 		this.messageQueue = messageQueue;
 	}
 	
