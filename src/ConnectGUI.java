@@ -38,6 +38,7 @@ public class ConnectGUI extends javax.swing.JFrame {
     
     public void setupConnectPanel() {
         setVisible(true);
+        setLocationRelativeTo(null); 
     }
 
 
