@@ -85,6 +85,23 @@ public class Player {
 		return output;
 	}
 
+	public String showHand() {
+		String output = "";
+		
+		for (int x = 0; x < currentHand.size(); ++x) {
+			for (int y = 0; y < currentHand.get(x).size(); ++y) {
+				output += currentHand.get(x).get(y).showCard();
+				if (y != currentHand.get(x).size() - 1) {
+					output += ", ";
+				}
+				else {
+					output += ".";
+				}
+			}
+		}
+		
+		return output;
+	}
 	
 	public String getScore() {
 		return score;
