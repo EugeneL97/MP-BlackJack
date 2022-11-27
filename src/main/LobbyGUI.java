@@ -142,13 +142,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         btnJoinRoom0.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom0.setText("Join Room 0");
-        btnJoinRoom0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom0ActionPerformed(evt);
-                int roomNumber = 0;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom0.addActionListener(evt -> joinRoomNumber(0) );
 
         btnLogOff.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnLogOff.setText("Log Off");
@@ -160,43 +154,19 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         btnJoinRoom1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom1.setText("Join Room 1");
-        btnJoinRoom1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom1ActionPerformed(evt);
-                int roomNumber = 1;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom1.addActionListener(evt -> joinRoomNumber(1) );
 
         btnJoinRoom2.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom2.setText("Join Room 2");
-        btnJoinRoom2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom2ActionPerformed(evt);
-                int roomNumber = 2;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom2.addActionListener(evt -> joinRoomNumber(2));
 
         btnJoinRoom3.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom3.setText("Join Room 3");
-        btnJoinRoom3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom3ActionPerformed(evt);
-                int roomNumber = 3;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom3.addActionListener(evt -> joinRoomNumber(3));
 
         btnJoinRoom4.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom4.setText("Join Room 4");
-        btnJoinRoom4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom4ActionPerformed(evt);
-                int roomNumber = 4;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom4.addActionListener(evt -> joinRoomNumber(4));
 
         lblName.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -390,7 +360,9 @@ public class LobbyGUI extends javax.swing.JFrame {
             client.joinRoom(roomNumber);
             GameRoomGUI newRoom = new GameRoomGUI(client);
             newRoom.setupGameRoom();
-
+            System.out.println("join room button clicked");
+            dispose();
+            setVisible(false);
         }
     }
 
