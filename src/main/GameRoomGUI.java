@@ -403,6 +403,7 @@ public class GameRoomGUI extends JFrame {
             btnHit.setText("HIT");
             btnHit.setFont(new Font("Roboto", Font.PLAIN, 12));
             btnHit.setEnabled(false);
+            btnHit.addActionListener(e -> hit());
 
             //---- btnDeal ----
             btnDeal.setText("DEAL");
