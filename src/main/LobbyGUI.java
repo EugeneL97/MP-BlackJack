@@ -2,8 +2,7 @@ package main;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
+import javax.swing.*;
 
 public class LobbyGUI extends javax.swing.JFrame {
 
@@ -138,63 +137,29 @@ public class LobbyGUI extends javax.swing.JFrame {
             }
         });
 
-        btnJoinRoom0.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        btnJoinRoom0.setText("Join Room 0");
-        btnJoinRoom0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom0ActionPerformed(evt);
-                int roomNumber = 0;
-                joinRoomNumber(roomNumber);
-            }
-        });
-
         btnLogOff.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnLogOff.setText("Log Off");
-        btnLogOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOffActionPerformed(evt);
-            }
-        });
+        btnLogOff.addActionListener(evt -> btnLogOffActionPerformed(evt));
+
+        btnJoinRoom0.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom0.setText("Join Room 0");
+        btnJoinRoom0.addActionListener(evt -> btnJoinRoom(0));
 
         btnJoinRoom1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom1.setText("Join Room 1");
-        btnJoinRoom1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom1ActionPerformed(evt);
-                int roomNumber = 1;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom1.addActionListener(evt -> btnJoinRoom(1));
 
         btnJoinRoom2.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom2.setText("Join Room 2");
-        btnJoinRoom2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom2ActionPerformed(evt);
-                int roomNumber = 2;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom2.addActionListener(evt -> btnJoinRoom(2));
 
         btnJoinRoom3.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom3.setText("Join Room 3");
-        btnJoinRoom3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom3ActionPerformed(evt);
-                int roomNumber = 3;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom3.addActionListener(evt -> btnJoinRoom(3));
 
         btnJoinRoom4.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom4.setText("Join Room 4");
-        btnJoinRoom4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom4ActionPerformed(evt);
-                int roomNumber = 4;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom4.addActionListener(evt -> btnJoinRoom(4));
 
         lblName.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -336,59 +301,22 @@ public class LobbyGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
+    private void btnJoinRoom(int roomNumber) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
-            this.lobbyRoom.addPlayer(0, client.getPlayer().getUsername());
+            this.lobbyRoom.addPlayer(roomNumber, client.getPlayer().getUsername());
+            this.client.joinRoom(roomNumber);
+            new GameRoomGUI().setupGameRoom(client);
+
+            if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
+                client.joinRoom(roomNumber);
+            }
             
         } catch (Exception ex) {
-        
+            JOptionPane.showMessageDialog(panelLobby, "Unable to join room!");
 
         }
     }//GEN-LAST:event_btnJoinRoom0ActionPerformed
-
-    private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(1, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom1ActionPerformed
-
-    private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(2, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom2ActionPerformed
-
-    private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(3, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom3ActionPerformed
-
-    private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(4, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-       
-    }//GEN-LAST:event_btnJoinRoom4ActionPerformed
-
-    private void joinRoomNumber(int roomNumber) {
-    	if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
-    		client.joinRoom(roomNumber);
-    	}
-    }
     
     public void refreshRooms(ActionEvent evt) {
     	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
@@ -431,9 +359,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         repaint();
         setVisible(true);
     }
-    
-    
-    
+
     /**
      * @param args the command line arguments
      */
