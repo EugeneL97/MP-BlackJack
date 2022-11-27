@@ -1219,6 +1219,9 @@ public class Server {
 						// Set currentAction = -1 means player has not decided on anything
 						player.setCurrentAction(notDecided);
 						
+						// Set roomNumber back to default value of -1
+						player.setRoomNumber(-1);
+						
 						// Reset player's index number back to -1
 						player.setSeatIndex(-1);
 						
