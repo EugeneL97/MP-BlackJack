@@ -306,11 +306,14 @@ public class LobbyGUI extends javax.swing.JFrame {
         try {
             this.lobbyRoom.addPlayer(roomNumber, client.getPlayer().getUsername());
             this.client.joinRoom(roomNumber);
-            new GameRoomGUI().setupGameRoom(client);
 
             if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
                 client.joinRoom(roomNumber);
             }
+
+            new GameRoomGUI().setupGameRoom(client);
+            setVisible(false);
+            dispose();
             
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(panelLobby, "Unable to join room!");
