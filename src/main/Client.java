@@ -181,12 +181,10 @@ public class Client {
 		public void run() {
 			System.out.println("MessageHandler running");
 			Parser parser = new Parser();
-			
+			System.out.println("In MessageHandling loop");
 			while (true) {
-				System.out.println("In MessageHandling loop");
 				Message message = null;
 				message = client.getMessage(message);
-				System.out.println("Client received an object");
 				client.messageQueue.add(message);
 				
 				if (client.messageQueue.size() > 0 ) {
@@ -210,7 +208,7 @@ public class Client {
 								client.gameRoomGUI.refreshGUI();
 							}
 							
-							System.out.println("new room object = " + client.getRoom().toString());
+							System.out.println("new room object = " + client.getRoom().showRoom());
 							break;
 						case "login":
 							System.out.println("Client received login object");
@@ -287,6 +285,7 @@ public class Client {
 	// Sends message to server
 	public void sendMessage(Message message) {
 		try {
+			output.reset();
 			output.writeObject(message);
 			output.flush();
 		}
