@@ -18,6 +18,7 @@ public class Client {
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
+	private GameRoomGUI gameRoomGUI;
 	
 	public Client() throws Exception {
 		this.socket = null;
