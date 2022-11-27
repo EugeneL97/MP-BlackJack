@@ -504,6 +504,8 @@ public class GameRoomGUI extends JFrame {
             }
         }
 
+        revalidate();
+        repaint();
         setVisible(true);
 
     }
