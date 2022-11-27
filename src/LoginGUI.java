@@ -61,7 +61,6 @@ public class LoginGUI {
 		loginFrame.setSize(900, 650);
 		loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		loginFrame.getContentPane().setLayout(null);
-		//LayoutManager layout = new FlowLayout();
 		loginFrame.setTitle("BlackJack Login Window");
 		loginFrame.setResizable(false);
 		loginFrame.getContentPane().setBackground(Color.lightGray);

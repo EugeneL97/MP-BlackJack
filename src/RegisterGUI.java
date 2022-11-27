@@ -53,7 +53,6 @@ public class RegisterGUI {
 			registerFrame.setSize(900, 650);
 			registerFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			registerFrame.getContentPane().setLayout(null);
-			//LayoutManager layout = new FlowLayout();
 			registerFrame.setTitle("BlackJack Register Window");
 			registerFrame.setResizable(false);
 			registerFrame.getContentPane().setBackground(Color.lightGray);

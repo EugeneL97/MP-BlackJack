@@ -73,7 +73,6 @@ public class RegisterOrLoginGUI {
 				public void actionPerformed(ActionEvent e) {
 			
 					// link this button to RegisterGUI
-				
 				}
 			
 			});
