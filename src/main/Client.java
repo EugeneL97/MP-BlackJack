@@ -228,7 +228,7 @@ public class Client {
 
 							client.setPlayer(parser.parsePlayer(client.messageQueue.get(0).getText()));
 							client.getMessageQueue().remove(0);
-
+							System.out.println("new player object = " + client.getPlayer().toString());
 							break;
 						case "register":
 							System.out.println("Client received register object");
