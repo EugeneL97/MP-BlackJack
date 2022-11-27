@@ -448,10 +448,6 @@ public class GameRoomGUI extends JFrame {
         setVisible(true);
     }
 
-    public static void main(String agrs[]) throws Exception {
-        new GameRoomGUI(new Client()).setupGameRoom();
-    }
-
     public void sit() {
 
     }
