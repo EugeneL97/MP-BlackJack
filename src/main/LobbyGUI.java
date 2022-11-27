@@ -6,6 +6,28 @@ import javax.swing.*;
 
 public class LobbyGUI extends javax.swing.JFrame {
 
+    // GUI variables
+    private javax.swing.JButton btnAountInfo;
+    private javax.swing.JButton btnJoinRoom0;
+    private javax.swing.JButton btnJoinRoom1;
+    private javax.swing.JButton btnJoinRoom2;
+    private javax.swing.JButton btnJoinRoom3;
+    private javax.swing.JButton btnJoinRoom4;
+    private javax.swing.JButton btnLogOff;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JLabel lblName;
+    private javax.swing.JPanel panelLobby;
+    private javax.swing.JTextField textField0;
+    private javax.swing.JTextField textField1;
+    private javax.swing.JTextField textField2;
+    private javax.swing.JTextField textField3;
+    private javax.swing.JTextField textField4;
+    private JButton btnRefreshRooms;
+
+    // Other GUIs' variables
     private Client client;
     private LobbyRoom lobbyRoom;
     
@@ -38,12 +60,8 @@ public class LobbyGUI extends javax.swing.JFrame {
     }
 
     public void setupLobbyPanel() {
-        try {
-
-        } catch (Exception ex) {
-
-        }
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -77,7 +95,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         btnRefreshRooms = new JButton(); 
         btnRefreshRooms.setFont(new Font("Segoe Script", 1, 12)); // NOI18N
         btnRefreshRooms.setText("Refresh Rooms");
-        btnRefreshRooms.addActionListener(e -> refreshRooms(e)); 
+        btnRefreshRooms.addActionListener(e -> refreshRooms(e));
         
       
     	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
@@ -302,13 +320,13 @@ public class LobbyGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void btnJoinRoom(int roomNumber) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
-        // TODO add your handling code here:
+
         try {
             if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
                 this.lobbyRoom.addPlayer(roomNumber, client.getPlayer().getUsername());
                 this.client.joinRoom(roomNumber);
                 client.joinRoom(roomNumber);
-                new GameRoomGUI().setupGameRoom(client);
+                new GameRoomGUI(client).setupGameRoom();
                 setVisible(false);
                 dispose();
             } else {
@@ -380,24 +398,5 @@ public class LobbyGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAountInfo;
-    private javax.swing.JButton btnJoinRoom0;
-    private javax.swing.JButton btnJoinRoom1;
-    private javax.swing.JButton btnJoinRoom2;
-    private javax.swing.JButton btnJoinRoom3;
-    private javax.swing.JButton btnJoinRoom4;
-    private javax.swing.JButton btnLogOff;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JLabel lblName;
-    private javax.swing.JPanel panelLobby;
-    private javax.swing.JTextField textField0;
-    private javax.swing.JTextField textField1;
-    private javax.swing.JTextField textField2;
-    private javax.swing.JTextField textField3;
-    private javax.swing.JTextField textField4;
-    private JButton btnRefreshRooms;
     // End of variables declaration//GEN-END:variables
 }
