@@ -144,10 +144,12 @@ public class GameRoomGUI extends JFrame {
             //---- btnTakeSeat1 ----
             btnTakeSeat1.setText("Take Seat");
             btnTakeSeat1.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat1.addActionListener(evt -> sit(1));
 
             //---- btnTakeSeat2 ----
             btnTakeSeat2.setText("Take Seat");
             btnTakeSeat2.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat2.addActionListener(evt -> sit(2));
 
             //---- textAreaPlayer2 ----
             textAreaPlayer2.setFont(new Font("Roboto", Font.PLAIN, 14));
@@ -167,6 +169,7 @@ public class GameRoomGUI extends JFrame {
             //---- btnTakeSeat3 ----
             btnTakeSeat3.setText("Take Seat");
             btnTakeSeat3.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat3.addActionListener(evt -> sit(3));
 
             //---- textAreaPlayer3 ----
             textAreaPlayer3.setFont(new Font("Roboto", Font.PLAIN, 14));
@@ -186,6 +189,7 @@ public class GameRoomGUI extends JFrame {
             //---- btnTakeSeat4 ----
             btnTakeSeat4.setText("Take Seat");
             btnTakeSeat4.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat4.addActionListener(evt -> sit(4));
 
             //---- textAreaPlayer4 ----
             textAreaPlayer4.setFont(new Font("Roboto", Font.PLAIN, 14));
@@ -205,6 +209,7 @@ public class GameRoomGUI extends JFrame {
             //---- btnTakeSeat5 ----
             btnTakeSeat5.setText("Take Seat");
             btnTakeSeat5.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat5.addActionListener(evt -> sit(5));
 
             //---- textAreaPlayer5 ----
             textAreaPlayer5.setFont(new Font("Roboto", Font.PLAIN, 14));
@@ -369,7 +374,7 @@ public class GameRoomGUI extends JFrame {
             btnHit.setFont(new Font("Roboto", Font.PLAIN, 12));
 
             //---- btnDeal ----
-            btnDeal.setText("FINISH");
+            btnDeal.setText("DEAL");
             btnDeal.setFont(new Font("Roboto", Font.PLAIN, 12));
 
             GroupLayout panelGameRoomButtonsLayout = new GroupLayout(panelGameRoomButtons);
@@ -448,8 +453,8 @@ public class GameRoomGUI extends JFrame {
         setVisible(true);
     }
 
-    public void sit() {
-
+    public void sit(int seatIndex) {
+        client.sit(seatIndex);
     }
 
     public void leaveRoom() {
