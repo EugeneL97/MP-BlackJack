@@ -219,20 +219,28 @@ public class Driver {
 		shoe = new Shoe();
 		currentHand.add(new ArrayList<Card>());
 		
+		Card card1 = new Card(5, "Heart");
+		Card card2 = new Card(1, "Heart");
+		Card card3 = new Card(12, "Heart");
+		Card card4 = new Card(12, "Heart");
 		
-		
-		for (int x = 0; x < 3; ++x) {
-			for (int y = 0; y < 1; ++y) {
-				currentHand.get(0).add(shoe.dealCard());
-			}
-			playersInRoom[x] = new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand);
-		}
+		currentHand.get(0).add(card1);
+		currentHand.get(0).add(card2);
+		currentHand.get(0).add(card3);
+		currentHand.get(0).add(card4);
+
+		playersInRoom[0] = new Player(username.get(0), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand);
+
 	
-		System.out.println("before clearing hand" + playersInRoom[0].showHand());
-		playersInRoom[0].clearHand();
-		System.out.println("after clearing hand" + playersInRoom[0].showHand());
 		
-		
+		Room room;
+		room = new Room(roomNumber, readyToStart, playersInRoom, shoe);
+		Driver driver = new Driver();
+		Server server = new Server();
+		server.getRooms().add(room);
+		System.out.println("Player cards = " + playersInRoom[0].showHand());
+		server.getRooms().get(0).addPlayer(0, playersInRoom[0]);
+		System.out.println("Tally =" + driver.tally(0,0,0,server));
 	}
 	
 	public void dealer() {
@@ -273,11 +281,13 @@ public class Driver {
 			}
 		}	
 		
-		
+		for (int x = 0; x < tmpArray1.size(); ++x) {
+			System.out.println(tmpArray1.get(x) + ", ");
+		}
+		// To keep track of the unchanged ace, where the ace is still = 11
 		int unchangedAce = -1;
-		// Check if there are any aces or values of 1 in tmpArray1. If an ace is found, make a duplicate of the current hand by copying it into tmpArray 2 
-		// and take note of the index value where the ace is found. Replace the value of the ace from 1 to 11 in tmpArray2, then add it to tmpArray1.
-		// by repeating this step, we can get all permutation of the values of the current hand where an ace could be either a 1 or an 11
+		
+		// Tally up the values in the hand
 		for (int i = 0; i < tmpArray1.size(); ++i) {
 			if (tmpArray1.get(i) == 1) {
 				if (total + 11 <= 21) {
@@ -304,10 +314,10 @@ public class Driver {
 					total -= 10;
 					unchangedAce = -1;
 				}
+				
 				else {
 					total += tmpArray1.get(i);
 				}
-				
 			}
 		}
 

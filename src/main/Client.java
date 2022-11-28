@@ -16,9 +16,9 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	private int login;
 	private int register;
-	private int canDeal;
-	private int endOfRound;
-	private int waitingToStart;
+	private Boolean canDeal;
+	private Boolean endOfRound;
+	private Boolean waitingToStart;
 	
 
 	private ConnectGUI connectGUI;
@@ -39,9 +39,9 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
-		this.canDeal = 0; 
-		this.endOfRound = 0;
-		this.waitingToStart = 0;
+		this.canDeal = true; 
+		this.endOfRound = false;
+		this.waitingToStart = true;
 		this.lobbyRoom = new LobbyRoom();
 		
 	}
@@ -55,9 +55,9 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
-		this.canDeal = 0;
-		this.endOfRound = 0;
-		this.waitingToStart = 0;
+		this.canDeal = true;
+		this.endOfRound = false;
+		this.waitingToStart = true;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
@@ -66,6 +66,20 @@ public class Client {
 		new Thread(messageHandler).start();
 	}
 	
+	public void checkWaitingToStart() {
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() == 0) {
+				setWaitingToStart(true);
+			}
+			else {
+				setWaitingToStart(false);
+			}
+			
+			if (getWaitingToStart()) {
+				gameRoomGUI.startRound();
+			}
+		}
+	}
 	
 	
 	public static void main(String [] args) throws Exception {
@@ -80,6 +94,11 @@ public class Client {
 		client.closeConnection();
 		
 		return;
+		
+	}
+	
+	public void checkDeal() {
+		
 	}
 	
 	// MessageHandler will listen to messages and put them in a queue for processing
@@ -169,7 +188,8 @@ public class Client {
 				}
 
 				client.checkCanDeal();
-				//client.checkEndOfRound();
+				client.checkEndOfRound();
+				client.checkWaitingToStart();
 			}
 		}
 	}
@@ -422,11 +442,11 @@ public class Client {
 		this.accountInfoGUI = accountInfoGUI;
 	}
 	
-	public int getCanDeal() {
+	public Boolean getCanDeal() {
 		return canDeal;
 	}
 
-	public void setCanDeal(int canDeal) {
+	public void setCanDeal(Boolean canDeal) {
 		this.canDeal = canDeal;
 	}
 	
@@ -439,60 +459,61 @@ public class Client {
 	}
 	
 	
-	public int getWaitingToStart() {
+	public Boolean getWaitingToStart() {
 		return waitingToStart;
 	}
 
-	public void setWaitingToStart(int waitingToStart) {
+	public void setWaitingToStart(Boolean waitingToStart) {
 		this.waitingToStart = waitingToStart;
 	}
 
 	public void checkCanDeal() {
 		if (player.getSeatIndex() != -1) {
-			if (room.getReadyToStart() <= 1){
-				setCanDeal(1);
+			if (room.getReadyToStart() > 1) {
+				System.out.println("cannot deal");
+				setCanDeal(false);
+			} else {
+				setCanDeal(true);
 				System.out.println("can deal");
 			}
-			else {
-				setCanDeal(-1);
-				System.out.println("cannot deal");
-			}
 			
-			if (getCanDeal() == 1) {
+			if (getCanDeal() == true) {
 				gameRoomGUI.startRound();
 				System.out.println("startRound executed");
-				setCanDeal(0);
 			}
 				
-			else if (getCanDeal() == -1){
+			else {
 				gameRoomGUI.middleOfRound();
 				System.out.println("middleOfRound executed");
-				setCanDeal(0);
 			}
 				
 		}
 	}
 	
-	public int getEndOfRound() {
+	public Boolean getEndOfRound() {
 		return endOfRound;
 	}
 
-	public void setEndOfRound(int endOfRound) {
+	public void setEndOfRound(Boolean endOfRound) {
 		this.endOfRound = endOfRound;
 	}
 	
 	public void checkEndOfRound () {
 		if (player.getSeatIndex() != -1) {
 			if (room.getReadyToStart() == 3) {
-				setEndOfRound(1);
+				setEndOfRound(true);
 			}
 			else {
-				setEndOfRound(-1);
+				setEndOfRound(false);
 			}
 			
-			if (getEndOfRound() == 1) {
+			if (getEndOfRound()) {
 				gameRoomGUI.endRound();
-				setEndOfRound(0);
+			}
+			
+			if (room.getReadyToStart() == 0) {
+				player.clearHand();
+				gameRoomGUI.startRound();
 			}
 		}
 		

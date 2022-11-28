@@ -463,146 +463,121 @@ public class GameRoomGUI extends JFrame {
     }
 
     public void sit(int seatIndex) {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	client.sit(seatIndex);
-                btnBet50.setEnabled(true);
-                btnBet100.setEnabled(true);
-                btnBet500.setEnabled(true);
-                btnDouble.setEnabled(false);
-                btnHit.setEnabled(true);
-                btnDealStand.setEnabled(true);
-                btnLeaveRoom.setEnabled(false);
-                btnSitOut.setEnabled(true);
+        refreshGUI();
+        client.sit(seatIndex);
+        btnBet50.setEnabled(true);
+        btnBet100.setEnabled(true);
+        btnBet500.setEnabled(true);
+        btnDouble.setEnabled(false);
+        btnHit.setEnabled(true);
+        btnDealStand.setEnabled(true);
+        btnLeaveRoom.setEnabled(false);
+        btnSitOut.setEnabled(true);
 
-                for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
-                    if (seatIndex == i) {
-                        takeSeatButtons[i - 1].setText("Leave Seat");
-                        takeSeatButtons[i - 1].removeActionListener(takeSeatButtons[seatIndex - 1].getActionListeners()[0]);
-                        takeSeatButtons[i - 1].addActionListener(e -> leaveSeat());
-                        playerWagers[i].setEnabled(true);
-                    } else {
-                        takeSeatButtons[i - 1].setEnabled(false);
-                    }
+        for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
+            if (seatIndex == i) {
+                takeSeatButtons[i - 1].setText("Leave Seat");
+                takeSeatButtons[i - 1].removeActionListener(takeSeatButtons[seatIndex - 1].getActionListeners()[0]);
+                takeSeatButtons[i - 1].addActionListener(e -> leaveSeat());
+                playerWagers[i].setEnabled(true);
+            } else {
+                takeSeatButtons[i - 1].setEnabled(false);
+            }
 
-                }
-                refreshGUI();
-            });
-        } catch (Exception ignored) {}
-        
+        }
+
     }
 
     public void leaveSeat() {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	btnBet50.setEnabled(false);
-                btnBet100.setEnabled(false);
-                btnBet500.setEnabled(false);
-                btnDouble.setEnabled(false);
-                btnHit.setEnabled(false);
-                btnDealStand.setEnabled(false);
-                btnLeaveRoom.setEnabled(true);
-                btnSitOut.setEnabled(false);
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(false);
+        btnHit.setEnabled(false);
+        btnDealStand.setEnabled(false);
+        btnLeaveRoom.setEnabled(true);
+        btnSitOut.setEnabled(false);
 
-                for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
-                    if ((client.getPlayer().getSeatIndex() - 1) != i)
-                        takeSeatButtons[i].setEnabled(true);
-                    else {
-                        takeSeatButtons[client.getPlayer().getSeatIndex() - 1].setText("Take Seat");
-                        takeSeatButtons[client.getPlayer().getSeatIndex() - 1].removeActionListener(takeSeatButtons[client.getPlayer().getSeatIndex() - 1].getActionListeners()[0]);
-                        takeSeatButtons[client.getPlayer().getSeatIndex() - 1].addActionListener(e -> sit(client.getPlayer().getSeatIndex()));
-                    }
-                }
+        for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
+            if ((client.getPlayer().getSeatIndex() - 1) != i)
+                takeSeatButtons[i].setEnabled(true);
+            else {
+                takeSeatButtons[client.getPlayer().getSeatIndex() - 1].setText("Take Seat");
+                takeSeatButtons[client.getPlayer().getSeatIndex() - 1].removeActionListener(takeSeatButtons[client.getPlayer().getSeatIndex() - 1].getActionListeners()[0]);
+                takeSeatButtons[client.getPlayer().getSeatIndex() - 1].addActionListener(e -> sit(client.getPlayer().getSeatIndex()));
+            }
+        }
 
-                //client.leaveSeat();
-                refreshGUI();
-            });
-        } catch (Exception ignored) {}
+        //client.leaveSeat();
+        refreshGUI();
     }
 
     public void sitOut() {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	client.sitOut();
-                btnBet50.setEnabled(false);
-                btnBet100.setEnabled(false);
-                btnBet500.setEnabled(false);
-                btnDouble.setEnabled(false);
-                btnHit.setEnabled(false);
-                btnDealStand.setEnabled(false);
-                btnLeaveRoom.setEnabled(false);
-                refreshGUI();
-            });
-        } catch (Exception ignored) {}
+        refreshGUI();
+        client.sitOut();
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(false);
+        btnHit.setEnabled(false);
+        btnDealStand.setEnabled(false);
+        btnLeaveRoom.setEnabled(false);
     }
 
     public void startRound() {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	wager = 0;
-                btnDealStand.setText("DEAL");
-                btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
-                btnDealStand.addActionListener(e -> deal());
-                btnBet50.setEnabled(true);
-                btnBet100.setEnabled(true);
-                btnBet500.setEnabled(true);
-                btnDouble.setEnabled(true);
-                btnHit.setEnabled(true);
-                btnDealStand.setEnabled(true);
-                playerWagers[client.getPlayer().getSeatIndex()].setEnabled(true);
+        wager = 0;
+        btnDealStand.setText("DEAL");
+        btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
+        btnDealStand.addActionListener(e -> deal());
+        btnBet50.setEnabled(true);
+        btnBet100.setEnabled(true);
+        btnBet500.setEnabled(true);
+        btnDouble.setEnabled(true);
+        btnHit.setEnabled(true);
+        btnDealStand.setEnabled(true);
+        playerWagers[client.getPlayer().getSeatIndex()].setEnabled(true);
 
-                refreshGUI();
-            });
-        } catch (Exception ignored) {}
+        refreshGUI();
     }
 
     public void endRound() {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-        	  btnBet50.setEnabled(false);
-              btnBet100.setEnabled(false);
-              btnBet500.setEnabled(false);
-              btnDouble.setEnabled(false);
-              btnHit.setEnabled(false);
-              btnDealStand.setEnabled(false);
-              playerWagers[client.getPlayer().getSeatIndex()].setEnabled(false);
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(false);
+        btnHit.setEnabled(false);
+        btnDealStand.setEnabled(false);
+        playerWagers[client.getPlayer().getSeatIndex()].setEnabled(false);
 
-              refreshGUI();
-            });
-        } catch (Exception ignored) {}
+        refreshGUI();
     }
 
     public void middleOfRound() {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	 btnBet50.setEnabled(false);
-                 btnBet100.setEnabled(false);
-                 btnBet500.setEnabled(false);
-                 btnDouble.setEnabled(true);
-                 btnHit.setEnabled(true);
-                 btnDealStand.setEnabled(true);
-                 btnSitOut.setEnabled(false);
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(true);
+        btnHit.setEnabled(true);
+        btnDealStand.setEnabled(true);
+        btnSitOut.setEnabled(false);
 
-                 btnDealStand.setText("STAND");
-                 btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
-                 btnDealStand.addActionListener(e -> stand());
-                 refreshGUI();
-            });
-        } catch (Exception ignored) {}
+        btnDealStand.setText("STAND");
+        btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
+        btnDealStand.addActionListener(e -> stand());
+        refreshGUI();
+
     }
 
     public void setWager(int wager) {
-    	try {
-            java.awt.EventQueue.invokeLater(() -> {
-            	if (wager == 2) {
-                    this.wager *= 2;
-                    client.doubleDown();
-                } else
-                    this.wager += wager;
-            	
-            	refreshGUI();
-            });
-        } catch (Exception ignored) {}
+
+        if (wager == 2) {
+            this.wager *= 2;
+            client.doubleDown();
+        } else
+            this.wager += wager;
+
+        refreshGUI();
+
     }
 
     public void refreshGUI() {
