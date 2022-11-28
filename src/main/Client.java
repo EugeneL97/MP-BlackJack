@@ -412,6 +412,11 @@ public class Client {
 		sendMessage(message);
 		System.out.println("sent hit message");
 	}
+
+	public void stand() {
+		Message message = new Message("stand", String.valueOf(player.getWager()), "");
+		sendMessage(message);
+	}
 	
 	public Player getPlayer() {
 		return this.player;
