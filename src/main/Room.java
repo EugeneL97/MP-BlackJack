@@ -17,6 +17,8 @@ public class Room {
 	// When all of the players in the room's currentAction = 3 or currentAction = -1, then tally the dealer's total against the players' total.
 	// Then set readyToStart = 1 and repeat cycle all over again.
 	
+	// readyToStart = 3 means game has reached end of round. Reset all cards and variables.
+	
 	private int readyToStart;
 	private int numOfPlayers;
 	private final int MAX_PLAYERS = 6;
