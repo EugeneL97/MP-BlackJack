@@ -75,17 +75,19 @@ public class Shoe {
 	
 	public Card dealCard() {
 		Card tmp = null;
-		int value = deck.get(0).getValue();
-		String suit = deck.get(0).getSuit();
+		
 		
 		if (deck.size() > 0) {
+			int value = deck.get(0).getValue();
+			String suit = deck.get(0).getSuit();
+			
 			tmp = new Card(value, suit);
 			deck.remove(0);
 		}
 		else {
 			generateCards();
 
-			tmp = new Card(value, suit);
+			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
 			deck.remove(0);
 		}
 		
