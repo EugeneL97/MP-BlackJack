@@ -1076,7 +1076,7 @@ public class Server {
 						Thread.sleep(100);
 					}
 					catch (Exception e) {
-						
+						e.printStackTrace();
 					}
 					*/
 				}
