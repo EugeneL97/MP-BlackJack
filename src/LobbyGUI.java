@@ -2,8 +2,9 @@
 public class LobbyGUI extends javax.swing.JFrame {
 
     private Client client;
+   
     private LobbyRoom lobbyRoom;
-    
+    //getter function.
     public LobbyRoom getLobbyRoom() {
     	return lobbyRoom;
     }
@@ -13,8 +14,11 @@ public class LobbyGUI extends javax.swing.JFrame {
      *
      * @param client to connect with
      */
+    // constructor.
     public LobbyGUI(Client client) {
+    	//assigning the value to client. 
         this.client = client;
+        //new object.
         this.lobbyRoom = new LobbyRoom();
         
         try {
@@ -27,6 +31,7 @@ public class LobbyGUI extends javax.swing.JFrame {
         } catch (Exception ex) {
         }
         //</editor-fold>
+        
         initComponents();
         this.lblName.setText(client.getPlayer().getUsername());
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -244,6 +249,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
     private void btnAountInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAountInfoActionPerformed
         try {
+        	// This will close the lobbyGUI and will show the accountInfoGUI
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     setVisible(false);
@@ -258,6 +264,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
     private void btnLogOffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogOffActionPerformed
         try {
+        	//close the lobbyGUI and will show the conecctGUI.
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
                     setVisible(false);
@@ -273,6 +280,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
         // TODO add your handling code here:
         try {
+        	// This will add client to the room 0. 
             this.lobbyRoom.addPlayer(0, client.getPlayer().getUsername());
             this.textField0.setText(lobbyRoom.playersInRoom(0));
         } catch (Exception ex) {
@@ -284,6 +292,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
         // TODO add your handling code here:
         try {
+        	//This will add client to the room 1.
         	this.lobbyRoom.addPlayer(1, client.getPlayer().getUsername());
             this.textField1.setText(lobbyRoom.playersInRoom(1));
         } catch (Exception ex) {
@@ -294,6 +303,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
         // TODO add your handling code here:
         try {
+        	//This will add client to the room 2.
         	this.lobbyRoom.addPlayer(2, client.getPlayer().getUsername());
             this.textField2.setText(lobbyRoom.playersInRoom(2));
         } catch (Exception ex) {
@@ -304,6 +314,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
         // TODO add your handling code here:
         try {
+        	//This will add client to the room 3.
         	this.lobbyRoom.addPlayer(3, client.getPlayer().getUsername());
             this.textField3.setText(lobbyRoom.playersInRoom(3));
         } catch (Exception ex) {
@@ -314,6 +325,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
         // TODO add your handling code here:
         try {
+        	//This will add client to the room 4.
         	this.lobbyRoom.addPlayer(4, client.getPlayer().getUsername());
             this.textField4.setText(lobbyRoom.playersInRoom(4));
         } catch (Exception ex) {
