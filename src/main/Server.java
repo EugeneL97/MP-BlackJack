@@ -295,6 +295,18 @@ public class Server {
 			
 			while(true) {				
 				switch (server.getRooms().get(roomNumber).getReadyToStart()) {
+					case roomStates.EndOfRound:
+						for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++y) {
+							if (server.getRooms().get(roomNumber).getPlayersInRoom()[y] != null) {
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].clearHand();
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setWager(0);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.SITTING);
+							}	
+						}
+						server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
+						
+	
 					case roomStates.WaitingToStart:
 						
 						// If room is not ready to start, check to see if any player's currentAction != -1.
@@ -586,10 +598,7 @@ public class Server {
 								}
 							}
 						}
-						
-						
-						
-						
+							
 
 						// Go through all the players in the room and check if they are still in or not
 						// If there are still players not standing or
@@ -645,21 +654,11 @@ public class Server {
 												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
 											}
 										}
-										// SeT playerState = 2 means player has chosen a seat and sat down. 
-										// until player gives a new command
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].setPlayerState(playerStates.SITTING);
-										
-										// Set currentAction = -1 means player has not decided on anything
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].setCurrentAction(currentActions.NO_DECISION);
-										
-										// Clear the player's hand
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].clearHand();
 									}
 								}
 								
 								// Reset game by setting readyToStart = 0
-								server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
-								
+								server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
 							}
 							// If dealer has blackjack or not bust
 							else {
@@ -688,21 +687,13 @@ public class Server {
 											}
 											
 										}
-										
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].setCurrentAction(currentActions.NO_DECISION);
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].setPlayerState(playerStates.SITTING);
-										
-										server.getRooms().get(roomNumber).getPlayersInRoom()[x].setWager(0);
 									}
-									
 								}
 								
 								// Reset game by setting readyToStart = 0
-								server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
+								server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
 							}
 						}
-						
-						
 						
 						//System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 						

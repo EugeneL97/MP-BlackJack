@@ -113,21 +113,24 @@ public class Client {
 	}
 	
 	public void checkEndOfRound () {
-		if (room.getReadyToStart() == 3) {
-			setEndOfRound(true);
-		}
-		else {
-			setEndOfRound(false);
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() == 3) {
+				setEndOfRound(true);
+			}
+			else {
+				setEndOfRound(false);
+			}
+			
+			if (getEndOfRound()) {
+				gameRoomGUI.endRound();
+			}
+			
+			if (room.getReadyToStart() == 0) {
+				player.clearHand();
+				gameRoomGUI.startRound();
+			}
 		}
 		
-		if (getEndOfRound()) {
-			gameRoomGUI.endRound();
-		}
-		
-		if (room.getReadyToStart() == 0) {
-			player.clearHand();
-			gameRoomGUI.startRound();
-		}
 	}
 	
 	public void checkCanDeal() {
@@ -276,6 +279,7 @@ public class Client {
 				}
 
 				client.checkCanDeal();
+				client.checkEndOfRound();
 			}
 		}
 	}
