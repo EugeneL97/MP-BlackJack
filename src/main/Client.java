@@ -60,9 +60,10 @@ public class Client {
 			setCanDeal(true);
 		}
 		
-		if (getCanDeal() == true) {
-			
-		}
+		if (getCanDeal() == true)
+			gameRoomGUI.startRound();
+		else
+			gameRoomGUI.endRound();
 	}
 	
 	public Boolean getCanDeal() {
@@ -89,99 +90,6 @@ public class Client {
 		new ConnectGUI(client).setupConnectPanel();
 		
 		System.out.println(client.socket);
-		
-		
-		
-		
-		/*
-		// Testing code
-		// check to see if correct arguments were provided
-		if (args.length != 2) {
-			System.out.println("Please enter IP address followed by port number after java Client.java. i.e. java Client.java 127.0.0.1 7777\n");
-			return;
-		}
-
-		System.out.println("Attemping to connect to server IP: " + args[0] + ":" + args[1]);
-		// connect to provided ip and port
-		//client.socket = new Socket(args[0], Integer.parseInt(args[1]));
-		client.socket = new Socket("127.0.1.1", 59898);
-		// creating input and output stream for class object
-		client.output = new ObjectOutputStream(client.socket.getOutputStream());
-		client.input = new ObjectInputStream(client.socket.getInputStream());
-		client.userInput = new Scanner(System.in);
-		
-	
-		
-		String line = null;
-		int loginAttempts = 0;
-		boolean proceedToLobby = false;
-		boolean logout = false;
-		
-		
-		
-		// Login and register loop
-		while(!proceedToLobby && loginAttempts < 3) {
-			System.out.println("Enter \"1\" to login or \"2\" to register");
-			line = client.userInput.nextLine();
-			
-			switch (line) {
-				case "1":
-					++loginAttempts;
-					proceedToLobby = client.login();
-					break;
-				case "2":
-					client.register();
-					break;
-			}
-		}
-		
-		
-		// If login attempts > 3 close the connection
-		if (loginAttempts >= 3) {
-			client.closeConnection();
-			return;
-		}
-		
-		
-		Parser parser = new Parser();
-		
-		// Create a message handler for the client
-		MessageHandler messageHandler = new MessageHandler(client);
-		
-		// Spawn a new thread for the client
-		new Thread(messageHandler).start();
-		
-		int roomNumber = 3;
-		
-		System.out.println("Room number before sending join room 3 = " + client.getRoom().getRoomNumber());
-		Message message = new Message("join room", Integer.toString(roomNumber), "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		
-		System.out.println("Room number after sending join room 3 = " + client.getRoom().getRoomNumber());
-		
-		message = new Message("sit", "", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending sit message = " + client.player.toString());
-		
-		message = new Message("deal", "100", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending deal message = " + client.player.toString());
-		
-		message = new Message("hit", "", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending hit message = " + client.player.toString());
-		
-		message = new Message("stand", "100", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending stand message = " + client.player.toString());
-		
-		*/
-		
 		
 		client.closeConnection();
 		
@@ -210,7 +118,6 @@ public class Client {
 				Message message = null;
 				message = client.getMessage(message);
 				client.messageQueue.add(message);
-				client.checkCanDeal();
 				
 				if (client.messageQueue.size() > 0 ) {
 					switch (client.messageQueue.get(0).getType()) {
@@ -278,14 +185,8 @@ public class Client {
 							break;
 					}
 				}
-				/*
-				try {
-					Thread.sleep(1000);
-				}
-				catch (Exception e) {
-					
-				}
-				*/
+
+				client.checkCanDeal();
 			}
 		}
 	}

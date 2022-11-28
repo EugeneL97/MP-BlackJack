@@ -528,15 +528,15 @@ public class Server {
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+															// Set currentAction = 3 means player has not decided on anything
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else if (score.equals("bust")){
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+															// Set currentAction = 3 means player has not decided on anything
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else {
 															// Set playerState = 4 until the round is over, that way no further checking of this player will occur
@@ -563,8 +563,8 @@ public class Server {
 													// until player gives a new command
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 													
-													// Set currentAction = -1 means player has not decided on anything
-													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+													// Set currentAction = 3 means player has not decided on anything
+													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 															
 													
 													break;
@@ -575,8 +575,8 @@ public class Server {
 													// until player gives a new command
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 													
-													// Set currentAction = -1 means player has not decided on anything
-													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 4
+													// Set currentAction = 4 means player has not decided on anything
+													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.SIT_OUT);
 															
 													
 													

@@ -107,12 +107,9 @@ public class Player {
 		// New implementation (BRANDON)
 		if (!currentHand.isEmpty())
 			for (int y = 0; currentHand.get(0).size() > y; ++y) {
-				System.out.print("y = " + y + " && " + " y % 2 = " + (y%2) + " => ");
 				if (y % 2 == 1) {
-					System.out.println("newline");
 					output += currentHand.get(0).get(y).showCard() + "\n";
 				} else {
-					System.out.println("comma");
 					output += currentHand.get(0).get(y).showCard() + ", ";
 				}
 
