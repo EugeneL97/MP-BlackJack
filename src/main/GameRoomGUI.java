@@ -12,6 +12,7 @@ public class GameRoomGUI extends JFrame {
 
     // GUI variables
     private JPanel panelGameRoomTitle;
+    private JPanel panelGameRoomTitleLabel;
     private JLabel lblTitle;
     private JPanel panelGameRoom;
     private JTextArea textAreaPlayer1;
@@ -45,6 +46,7 @@ public class GameRoomGUI extends JFrame {
     private JButton btnHit;
     private JButton btnDealStand;
     private JLabel lblPlayerFunds;
+    private JLabel lblPlayerFundsFake;
 
     private JTextField[] playerWagers = new JTextField[6];
     private JTextArea[] playerTextAreas = new JTextArea[6];
@@ -104,6 +106,7 @@ public class GameRoomGUI extends JFrame {
         }
 
         panelGameRoomTitle = new JPanel();
+        panelGameRoomTitleLabel = new JPanel();
         lblTitle = new JLabel();
         panelGameRoom = new JPanel();
         textAreaPlayer1 = playerTextAreas[1];
@@ -138,6 +141,7 @@ public class GameRoomGUI extends JFrame {
         btnDealStand = new JButton();
         wager = 0;
         lblPlayerFunds = new JLabel();
+        lblPlayerFundsFake = new JLabel();
 
         //======== this ========
         setBackground(new Color(0x003300));
@@ -147,30 +151,35 @@ public class GameRoomGUI extends JFrame {
         //======== panelGameRoomTitle ========
         {
             panelGameRoomTitle.setBackground(new Color(0x003300));
-            panelGameRoomTitle.setLayout(new GridBagLayout());
-            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowHeights = new int[]{0, 0};
-            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
+            panelGameRoomTitle.setLayout(new BorderLayout());
 
-            //---- lblTitle ----
-            lblTitle.setText("Game Room");
-            lblTitle.setFont(titleFont);
-            lblTitle.setForeground(Color.white);
-            panelGameRoomTitle.add(lblTitle, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
 
             //---- lbllPlayerFunds ----
             try {
-                lblPlayerFunds.setText(String.valueOf(client.getPlayer().getAccountBalance()));
+                lblPlayerFunds.setText("$" + client.getPlayer().getAccountBalance() + ".00");
+                lblPlayerFundsFake.setText("$" + client.getPlayer().getAccountBalance() + ".00");
             } catch (Exception e) {
                 lblPlayerFunds.setText("0");
+                lblPlayerFundsFake.setText("0");
             }
 
             lblPlayerFunds.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
             lblPlayerFunds.setForeground(Color.white);
-            panelGameRoomTitle.add(lblPlayerFunds, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
+            lblPlayerFundsFake.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
+            lblPlayerFundsFake.setForeground(new Color(0x003300));
+            panelGameRoomTitle.add(lblPlayerFunds, BorderLayout.WEST);
+            panelGameRoomTitle.add(lblPlayerFundsFake, BorderLayout.EAST);
+
+            //---- lblTitle ----
+            panelGameRoomTitleLabel.setBackground(new Color(0x003300));
+            panelGameRoomTitleLabel.setLayout(new GridBagLayout());
+            ((GridBagLayout) panelGameRoomTitleLabel.getLayout()).rowHeights = new int[]{0, 0};
+            ((GridBagLayout) panelGameRoomTitleLabel.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
+            lblTitle.setText("Game Room");
+            lblTitle.setFont(titleFont);
+            lblTitle.setForeground(Color.white);
+            panelGameRoomTitleLabel.add(lblTitle);
+            panelGameRoomTitle.add(panelGameRoomTitleLabel, BorderLayout.CENTER);
         }
 
         //======== panelGameRoom ========
@@ -459,7 +468,7 @@ public class GameRoomGUI extends JFrame {
         btnBet50.setEnabled(true);
         btnBet100.setEnabled(true);
         btnBet500.setEnabled(true);
-        btnDouble.setEnabled(true);
+        btnDouble.setEnabled(false);
         btnHit.setEnabled(true);
         btnDealStand.setEnabled(true);
         btnLeaveRoom.setEnabled(false);
@@ -576,12 +585,14 @@ public class GameRoomGUI extends JFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
                     if (i == 0)  // Update the dealers hand
-                        playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore()));
+                        playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                     else {  // Check all the other seats
                         if (i == client.getPlayer().getSeatIndex()) {  // If the seat is the current player's seat
                             playerBorders[i].setTitle(client.getPlayer().getUsername());
                             playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                             playerWagers[i].setText(String.valueOf(wager));
+                            lblPlayerFunds.setText("$" + client.getPlayer().getAccountBalance() + ".00");
+                            lblPlayerFundsFake.setText("$" + client.getPlayer().getAccountBalance() + ".00");
 
                             // Check if player is bust or blackjack
                             if (client.getRoom().getPlayersInRoom()[i].getScore().equals("bust") || client.getRoom().getPlayersInRoom()[i].getScore().equals("blackjack")) {
