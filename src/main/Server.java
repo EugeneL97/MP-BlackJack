@@ -1312,7 +1312,7 @@ public class Server {
 						output += "\n";
 					}
 				}
-				
+				 
 				// Rewrite database
 				System.out.println("Writing to file: " + output);
 				myWriter.write(output);
