@@ -87,23 +87,6 @@ public class Player {
 
 	public String showHand() {
 		String output = "";
-
-		/* Old implementation of sending current hand (YANG)
-		for (int x = 0; x < currentHand.size(); ++x) {
-			for (int y = 0; y < currentHand.get(x).size(); ++y) {
-				if (y + 1 < currentHand.get(x).size()) {
-					output += currentHand.get(x).get(y).showCard() + ", " + currentHand.get(x).get(y + 1).showCard() + "\n";
-
-					y += 2;
-				}
-				else {
-					output += currentHand.get(x).get(y).showCard() + "\n";
-				}
-
-			}
-		}
-		*/
-
 		// New implementation (BRANDON)
 		if (!currentHand.isEmpty())
 			for (int y = 0; currentHand.get(0).size() > y; ++y) {

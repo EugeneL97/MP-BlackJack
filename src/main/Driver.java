@@ -219,23 +219,18 @@ public class Driver {
 		shoe = new Shoe();
 		currentHand.add(new ArrayList<Card>());
 		
-		for (int y = 0; y < 1; ++y) {
-			currentHand.get(0).add(shoe.dealCard());
-		}
+		
 		
 		for (int x = 0; x < 3; ++x) {
-			
+			for (int y = 0; y < 1; ++y) {
+				currentHand.get(0).add(shoe.dealCard());
+			}
 			playersInRoom[x] = new Player(username.get(x), playerState, roomNumber, accountBalance, currentAction, isPlayer, isSitting, score, currentHand);
 		}
 	
-		Room room;
-		Room newRoom;
-		room = new Room(roomNumber, readyToStart, playersInRoom, shoe);
-		System.out.println(room.toString());
-		Message message = new Message("room", "", room.toString());
-		newRoom = parser.parseRoom(message.getText());
-		System.out.println(newRoom.toString());
-		
+		System.out.println("before clearing hand" + playersInRoom[0].showHand());
+		playersInRoom[0].clearHand();
+		System.out.println("after clearing hand" + playersInRoom[0].showHand());
 		
 		
 	}

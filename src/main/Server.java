@@ -456,8 +456,6 @@ public class Server {
 														score = "";
 													}
 													
-													
-													
 													break;
 												
 												// currentAction = 1 means player wants a hit, so players receives another card
@@ -479,20 +477,19 @@ public class Server {
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
+															// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else if (score.equals("bust")){
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
+															// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else {
-															// Set playerState = 4 until the round is over, that way no further checking of this player will occur
-															// until player gives a new command
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
+															// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.PLAYING);
 															
 															// Set currentAction = -1 means player has not decided on anything
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
@@ -503,7 +500,7 @@ public class Server {
 													
 													
 												
-													
+								
 													break;
 													
 												// currentAction = 2 means player wants to double down on the bet, so double the wager amount and receive one more card
@@ -540,9 +537,8 @@ public class Server {
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else {
-															// Set playerState = 4 until the round is over, that way no further checking of this player will occur
-															// until player gives a new command
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
+															// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.PLAYING);
 															
 															// Set currentAction = -1 means player has not decided on anything
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
@@ -961,7 +957,7 @@ public class Server {
 							// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
 							// by the server, set State = 2 so that server will not perform the same action again.
 							player.setPlayerState(playerStates.PLAYING);
-							
+							System.out.println("Player hit detected");
 							// Set player action to hit which player receives an additional card
 							player.setCurrentAction(currentActions.HIT);
 						

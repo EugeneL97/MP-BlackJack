@@ -81,4 +81,15 @@ public class Shoe {
 		
 		return tmp;
 	}
+	public int getShoeSize() {
+		return SHOE_SIZE;
+	}
+
+	public int getNumOfDecks() {
+		return numOfDecks;
+	}
+
+	public int getCutPoint() {
+		return cutPoint;
+	}
 }

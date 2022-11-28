@@ -550,7 +550,7 @@ public class GameRoomGUI extends JFrame {
         btnDouble.setEnabled(true);
         btnHit.setEnabled(true);
         btnDealStand.setEnabled(true);
-        btnSitOut.setEnabled(true);
+        btnSitOut.setEnabled(false);
 
         btnDealStand.setText("STAND");
         btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
