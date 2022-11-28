@@ -22,7 +22,54 @@ public class Client {
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
 	private GameRoomGUI gameRoomGUI;
+	private AccountInfoGUI accountInfoGUI;
+	private RegisterOrLoginGUI registerOrLoginGUI;
+	private RegisterGUI registerGUI;
 	
+	public RegisterGUI getRegisterGUI() {
+		return registerGUI;
+	}
+
+	public void setRegisterGUI(RegisterGUI registerGUI) {
+		this.registerGUI = registerGUI;
+	}
+
+	public RegisterOrLoginGUI getRegisterOrLoginGUI() {
+		return registerOrLoginGUI;
+	}
+
+	public void setRegisterOrLoginGUI(RegisterOrLoginGUI registerOrLoginGUI) {
+		this.registerOrLoginGUI = registerOrLoginGUI;
+	}
+
+	public AccountInfoGUI getAccountInfoGUI() {
+		return accountInfoGUI;
+	}
+
+	public ConnectGUI getConnectGUI() {
+		return connectGUI;
+	}
+
+	public void setConnectGUI(ConnectGUI connectGUI) {
+		this.connectGUI = connectGUI;
+	}
+
+	public LoginGUI getLoginGUI() {
+		return loginGUI;
+	}
+
+	public void setLoginGUI(LoginGUI loginGUI) {
+		this.loginGUI = loginGUI;
+	}
+
+	public GameRoomGUI getGameRoomGUI() {
+		return gameRoomGUI;
+	}
+
+	public void setAccountInfoGUI(AccountInfoGUI accountInfoGUI) {
+		this.accountInfoGUI = accountInfoGUI;
+	}
+
 	public Client() throws Exception {
 		this.socket = null;
 		this.input = null;
@@ -83,17 +130,28 @@ public class Client {
 	}
 	
 	public void checkCanDeal() {
-		if (room.getReadyToStart() >= 1) {
-			setCanDeal(false);
-		}
-		else {
-			setCanDeal(true);
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() >= 1) {
+				System.out.println("cannot deal");
+				setCanDeal(false);
+			}
+			else {
+				setCanDeal(true);
+				System.out.println("can deal");
+			}
+			
+			if (getCanDeal() == true) {
+				gameRoomGUI.startRound();
+				System.out.println("startRound executed");
+			}
+				
+			else {
+				gameRoomGUI.middleOfRound();
+				System.out.println("middleOfRound executed");
+			}
+				
 		}
 		
-		if (getCanDeal() == true)
-			gameRoomGUI.startRound();
-		else
-			gameRoomGUI.middleOfRound();
 	}
 	
 	public Boolean getCanDeal() {
@@ -171,6 +229,7 @@ public class Client {
 							}
 							
 							System.out.println("new room object = " + client.getRoom().showRoom());
+							
 							break;
 						case "login":
 							System.out.println("Client received login object");

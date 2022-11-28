@@ -282,7 +282,9 @@ public class LobbyGUI extends javax.swing.JFrame {
                 public void run() {
                     setVisible(false);
                     dispose();
-                    new AccountInfoGUI(client).setupAccountInfoPanel();
+                    AccountInfoGUI acctInfo = new AccountInfoGUI(client);
+                    client.setAccountInfoGUI(acctInfo);
+                    acctInfo.setupAccountInfoPanel();
                 }
             });
         } catch (Exception ex) {

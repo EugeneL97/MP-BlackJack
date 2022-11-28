@@ -80,8 +80,9 @@ public class RegisterOrLoginGUI {
 
                 // link this button to RegisterGUI
                 RegisterGUI window = new RegisterGUI(client);
-                window.getRegisterFrame().setLocationRelativeTo(null); // center on screen
-                window.getRegisterFrame().setVisible(true); // make visible
+                client.setRegisterGUI(window);
+                client.getRegisterGUI().getRegisterFrame().setLocationRelativeTo(null); // center on screen
+                client.getRegisterGUI().getRegisterFrame().setVisible(true); // make visible
                 registerFrame.setVisible(false);
                 registerFrame.dispose();
             }
@@ -97,8 +98,9 @@ public class RegisterOrLoginGUI {
         goToLoginButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 LoginGUI window = new LoginGUI(client);
-                window.getLoginFrame().setLocationRelativeTo(null); // center on screen
-                window.getLoginFrame().setVisible(true); // make visible
+                client.setLoginGUI(window);
+                client.getLoginGUI().getLoginFrame().setLocationRelativeTo(null); // center on screen
+                client.getLoginGUI().getLoginFrame().setVisible(true); // make visible
                 registerFrame.setVisible(false);
                 registerFrame.dispose();
 

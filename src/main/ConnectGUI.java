@@ -91,8 +91,9 @@ public class ConnectGUI extends javax.swing.JFrame {
                     System.out.println("Client ip = " + client.socket);
 
                     RegisterOrLoginGUI window = new RegisterOrLoginGUI(client);
-                    window.getRegisterFrame().setLocationRelativeTo(null); // center on screen
-                    window.getRegisterFrame().setVisible(true); // make visible
+                    client.setRegisterOrLoginGUI(window);
+                    client.getRegisterOrLoginGUI().getRegisterFrame().setLocationRelativeTo(null); // center on screen
+                    client.getRegisterOrLoginGUI().getRegisterFrame().setVisible(true); // make visible
 
                     /*
                     LoginGUI window = new LoginGUI(client);
