@@ -205,6 +205,9 @@ public class Player {
 	
 	// Removes a specific card at row index, column cardIndex of the 2D array ArrayList<ArrayList<Card>> currentHand.
 	public void removeCard(int index, int cardIndex) {
+		if (currentHand.size() == 1) {
+			clearHand();
+		}
 		if (index >= 0 && index < currentHand.size() && cardIndex >= 0 && cardIndex < currentHand.get(index).size()) {
 			this.currentHand.get(index).remove(cardIndex);
 		}
