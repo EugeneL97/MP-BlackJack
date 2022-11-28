@@ -12,6 +12,7 @@ public class GameRoomGUI extends JFrame {
 
     // GUI variables
     private JPanel panelGameRoomTitle;
+    private JPanel panelGameRoomTitleLabel;
     private JLabel lblTitle;
     private JPanel panelGameRoom;
     private JTextArea textAreaPlayer1;
@@ -45,6 +46,7 @@ public class GameRoomGUI extends JFrame {
     private JButton btnHit;
     private JButton btnDealStand;
     private JLabel lblPlayerFunds;
+    private JLabel lblPlayerFundsFake;
 
     private JTextField[] playerWagers = new JTextField[6];
     private JTextArea[] playerTextAreas = new JTextArea[6];
@@ -104,6 +106,7 @@ public class GameRoomGUI extends JFrame {
         }
 
         panelGameRoomTitle = new JPanel();
+        panelGameRoomTitleLabel = new JPanel();
         lblTitle = new JLabel();
         panelGameRoom = new JPanel();
         textAreaPlayer1 = playerTextAreas[1];
@@ -138,6 +141,7 @@ public class GameRoomGUI extends JFrame {
         btnDealStand = new JButton();
         wager = 0;
         lblPlayerFunds = new JLabel();
+        lblPlayerFundsFake = new JLabel();
 
         //======== this ========
         setBackground(new Color(0x003300));
@@ -147,30 +151,35 @@ public class GameRoomGUI extends JFrame {
         //======== panelGameRoomTitle ========
         {
             panelGameRoomTitle.setBackground(new Color(0x003300));
-            panelGameRoomTitle.setLayout(new GridBagLayout());
-            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowHeights = new int[]{0, 0};
-            ((GridBagLayout) panelGameRoomTitle.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
+            panelGameRoomTitle.setLayout(new BorderLayout());
 
-            //---- lblTitle ----
-            lblTitle.setText("Game Room");
-            lblTitle.setFont(titleFont);
-            lblTitle.setForeground(Color.white);
-            panelGameRoomTitle.add(lblTitle, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
 
             //---- lbllPlayerFunds ----
             try {
-                lblPlayerFunds.setText(String.valueOf(client.getPlayer().getAccountBalance()));
+                lblPlayerFunds.setText("$" + client.getPlayer().getAccountBalance() + ".00");
+                lblPlayerFundsFake.setText("$" + client.getPlayer().getAccountBalance() + ".00");
             } catch (Exception e) {
                 lblPlayerFunds.setText("0");
+                lblPlayerFundsFake.setText("0");
             }
 
             lblPlayerFunds.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
             lblPlayerFunds.setForeground(Color.white);
-            panelGameRoomTitle.add(lblPlayerFunds, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
-                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                    new Insets(0, 0, 0, 5), 0, 0));
+            lblPlayerFundsFake.setFont(new Font("Roboto", Font.BOLD | Font.ITALIC, 36));
+            lblPlayerFundsFake.setForeground(new Color(0x003300));
+            panelGameRoomTitle.add(lblPlayerFunds, BorderLayout.WEST);
+            panelGameRoomTitle.add(lblPlayerFundsFake, BorderLayout.EAST);
+
+            //---- lblTitle ----
+            panelGameRoomTitleLabel.setBackground(new Color(0x003300));
+            panelGameRoomTitleLabel.setLayout(new GridBagLayout());
+            ((GridBagLayout) panelGameRoomTitleLabel.getLayout()).rowHeights = new int[]{0, 0};
+            ((GridBagLayout) panelGameRoomTitleLabel.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
+            lblTitle.setText("Game Room");
+            lblTitle.setFont(titleFont);
+            lblTitle.setForeground(Color.white);
+            panelGameRoomTitleLabel.add(lblTitle);
+            panelGameRoomTitle.add(panelGameRoomTitleLabel, BorderLayout.CENTER);
         }
 
         //======== panelGameRoom ========
@@ -185,43 +194,12 @@ public class GameRoomGUI extends JFrame {
             lblPlayer1Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer1Wager.setForeground(Color.white);
 
-            //---- btnTakeSeat1 ----
-            btnTakeSeat1.setText("Take Seat");
-            btnTakeSeat1.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnTakeSeat1.addActionListener(evt -> sit(1));
-
-            //---- btnTakeSeat2 ----
-            btnTakeSeat2.setText("Take Seat");
-            btnTakeSeat2.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnTakeSeat2.addActionListener(evt -> sit(2));
-
-            //---- textAreaPlayer2 ----
-            textAreaPlayer2.setFont(new Font("Roboto", Font.PLAIN, 14));
-            textAreaPlayer2.setBorder(new TitledBorder(null, "Player 2", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("Roboto", Font.BOLD, 14)));
-
-            //---- player2Wager ----
-            player2Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
-
             //---- lblPlayer2Wager ----
             lblPlayer2Wager.setText("Wager");
             lblPlayer2Wager.setFont(new Font("Roboto", Font.BOLD, 16));
             lblPlayer2Wager.setPreferredSize(new Dimension(40, 17));
             lblPlayer2Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer2Wager.setForeground(Color.white);
-
-            //---- btnTakeSeat3 ----
-            btnTakeSeat3.setText("Take Seat");
-            btnTakeSeat3.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnTakeSeat3.addActionListener(evt -> sit(3));
-
-            //---- textAreaPlayer3 ----
-            textAreaPlayer3.setFont(new Font("Roboto", Font.PLAIN, 14));
-            textAreaPlayer3.setBorder(new TitledBorder(null, "Player 3", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("Roboto", Font.BOLD, 14)));
-
-            //---- player3Wager ----
-            player3Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
             //---- lblPlayer3Wager ----
             lblPlayer3Wager.setText("Wager");
@@ -230,38 +208,12 @@ public class GameRoomGUI extends JFrame {
             lblPlayer3Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer3Wager.setForeground(Color.white);
 
-            //---- btnTakeSeat4 ----
-            btnTakeSeat4.setText("Take Seat");
-            btnTakeSeat4.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnTakeSeat4.addActionListener(evt -> sit(4));
-
-            //---- textAreaPlayer4 ----
-            textAreaPlayer4.setFont(new Font("Roboto", Font.PLAIN, 14));
-            textAreaPlayer4.setBorder(new TitledBorder(null, "Player 4", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("Roboto", Font.BOLD, 14)));
-
-            //---- player4Wager ----
-            player4Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
-
             //---- lblPlayer4Wager ----
             lblPlayer4Wager.setText("Wager");
             lblPlayer4Wager.setFont(new Font("Roboto", Font.BOLD, 16));
             lblPlayer4Wager.setPreferredSize(new Dimension(40, 17));
             lblPlayer4Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer4Wager.setForeground(Color.white);
-
-            //---- btnTakeSeat5 ----
-            btnTakeSeat5.setText("Take Seat");
-            btnTakeSeat5.setFont(new Font("Roboto", Font.PLAIN, 12));
-            btnTakeSeat5.addActionListener(evt -> sit(5));
-
-            //---- textAreaPlayer5 ----
-            textAreaPlayer5.setFont(new Font("Roboto", Font.PLAIN, 14));
-            textAreaPlayer5.setBorder(new TitledBorder(null, "Player 5", TitledBorder.CENTER, TitledBorder.TOP,
-                    new Font("Roboto", Font.BOLD, 14)));
-
-            //---- player5Wager ----
-            player5Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
             //---- lblPlayer5Wager ----
             lblPlayer5Wager.setText("Wager");
@@ -516,7 +468,7 @@ public class GameRoomGUI extends JFrame {
         btnBet50.setEnabled(true);
         btnBet100.setEnabled(true);
         btnBet500.setEnabled(true);
-        btnDouble.setEnabled(true);
+        btnDouble.setEnabled(false);
         btnHit.setEnabled(true);
         btnDealStand.setEnabled(true);
         btnLeaveRoom.setEnabled(false);
@@ -584,11 +536,11 @@ public class GameRoomGUI extends JFrame {
         btnHit.setEnabled(true);
         btnDealStand.setEnabled(true);
         playerWagers[client.getPlayer().getSeatIndex()].setEnabled(true);
+
+        refreshGUI();
     }
 
     public void endRound() {
-        refreshGUI();
-
         btnBet50.setEnabled(false);
         btnBet100.setEnabled(false);
         btnBet500.setEnabled(false);
@@ -596,6 +548,24 @@ public class GameRoomGUI extends JFrame {
         btnHit.setEnabled(false);
         btnDealStand.setEnabled(false);
         playerWagers[client.getPlayer().getSeatIndex()].setEnabled(false);
+
+        refreshGUI();
+    }
+
+    public void middleOfRound() {
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(true);
+        btnHit.setEnabled(true);
+        btnDealStand.setEnabled(true);
+        btnSitOut.setEnabled(false);
+
+        btnDealStand.setText("STAND");
+        btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
+        btnDealStand.addActionListener(e -> stand());
+        refreshGUI();
+
     }
 
     public void setWager(int wager) {
@@ -615,12 +585,14 @@ public class GameRoomGUI extends JFrame {
             java.awt.EventQueue.invokeLater(() -> {
                 for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
                     if (i == 0)  // Update the dealers hand
-                        playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore()));
+                        playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                     else {  // Check all the other seats
                         if (i == client.getPlayer().getSeatIndex()) {  // If the seat is the current player's seat
                             playerBorders[i].setTitle(client.getPlayer().getUsername());
-                            playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore()));
+                            playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                             playerWagers[i].setText(String.valueOf(wager));
+                            lblPlayerFunds.setText("$" + client.getPlayer().getAccountBalance() + ".00");
+                            lblPlayerFundsFake.setText("$" + client.getPlayer().getAccountBalance() + ".00");
 
                             // Check if player is bust or blackjack
                             if (client.getRoom().getPlayersInRoom()[i].getScore().equals("bust") || client.getRoom().getPlayersInRoom()[i].getScore().equals("blackjack")) {

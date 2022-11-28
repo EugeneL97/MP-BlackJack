@@ -43,6 +43,12 @@ public class Server {
 		static final int IN_LOBBY = 0;
 	}
 
+	private static final class roomStates {
+		static final int WaitingToStart = 0;
+		static final int CountDown = 1;
+		static final int MiddleOfRound = 2;
+		static final int EndOfRound = 3;
+	}
 
 	public Server() {
 		this.rooms = new ArrayList<Room>();
@@ -84,7 +90,6 @@ public class Server {
 		room4 = new GameHandler(server, 4);
 		System.out.println("Spawning thread for room 0");
 		new Thread(room0).start();
-		
 		System.out.println("Spawning thread for room 1");
 		new Thread(room1).start();
 		System.out.println("Spawning thread for room 2");
@@ -177,6 +182,7 @@ public class Server {
 					if (total + tmpArray1.get(i) > 21 && unchangedAce != -1) {
 						total += tmpArray1.get(i);
 						total -= 10;
+						unchangedAce = -1;
 					}
 					else {
 						total += tmpArray1.get(i);
@@ -236,6 +242,7 @@ public class Server {
 					if (total + tmpArray1.get(i) > 21 && unchangedAce != -1) {
 						total += tmpArray1.get(i);
 						total -= 10;
+						unchangedAce = -1;
 					}
 					else {
 						total += tmpArray1.get(i);
@@ -275,14 +282,10 @@ public class Server {
 		
 		
 		public void dealerFunc() {
-			if (tally(0, 0, 0) >= 17) {
-				return;
-			} 
-			else {
+			while (tally(roomNumber, 0, 0) >= 17) {
 				server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
 				server.getRooms().get(0).getPlayersInRoom()[0].setScore(bust(0, 0, 0));
 			} 
-			
 		}
 		
 		@Override
@@ -291,10 +294,9 @@ public class Server {
 			String score = "";
 			//System.out.println("Entering GameHandler Loop. Initial readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 			
-			while(true) {
-				
+			while(true) {				
 				switch (server.getRooms().get(roomNumber).getReadyToStart()) {
-					case 0:
+					case roomStates.WaitingToStart:
 						
 						// If room is not ready to start, check to see if any player's currentAction != -1.
 						// If a player's currentAction != -1, then that means the game should start, therefore, change the
@@ -304,7 +306,7 @@ public class Server {
 								if (server.getRooms().get(roomNumber).getPlayersInRoom()[y].getCurrentAction() != -1) {
 									System.out.println("In GameHandler. readyToStart = 0 detected. Some player's currenAction != -1.\n"
 											+ "Setting readyToStart = 1");
-									server.getRooms().get(roomNumber).setReadyToStart(1);
+									server.getRooms().get(roomNumber).setReadyToStart(roomStates.CountDown);
 
 									
 								}
@@ -315,15 +317,17 @@ public class Server {
 					// If readyToStart = 1 then a player has made some action. In this state, if there are more than 1 player in the room a countdown timer
 					// for 10 seconds will begin if a player has not placed a bet, the player will not participate in this hand and their status will be
 					// set to 2 and currentAction set to -1. Cards dealt are not displayed in this state until readyToStart = 2.
-					case 1:
+					case roomStates.CountDown:
 						// If there's only 1 player in the room, proceed immediately to readyToStart = 2
 						if (server.getRooms().get(roomNumber).getNumOfPlayers() == 2) {
 							// Set room's readyToStart = 2
-							server.getRooms().get(roomNumber).setReadyToStart(2);
+							server.getRooms().get(roomNumber).setReadyToStart(roomStates.MiddleOfRound);
 							
 							// currentAction = 0 means player has clicked deal and wants to receive first two cards
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setCurrentAction(currentActions.DEAL);
 							
+							// Set dealer playerState to playing
+							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setPlayerState(playerStates.PLAYING);
 							
 							System.out.println("In GameHandler. readyToStart = 1 detected. There is only 1 player in room.\n"
 									+ "Setting readyToStart = 2");
@@ -334,6 +338,9 @@ public class Server {
 							// currentAction = 0 means player has clicked deal and wants to receive first two cards
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setCurrentAction(currentActions.DEAL);
 							
+							// Set dealer playerState to playing
+							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setPlayerState(playerStates.PLAYING);
+							
 							// Start countdown timer for 10 seconds, when timer is up the function will automatically
 							// set readyToStart = 2;
 							tenSecTilReadyToStart2();
@@ -343,7 +350,7 @@ public class Server {
 							// then set readyToStart = 2, then break out of the loop. Otherwise, wait until timer counts down to 0.
 							Boolean everyoneIsReady = true;
 							
-							while (server.getRooms().get(roomNumber).getReadyToStart() == 1) {
+							while (server.getRooms().get(roomNumber).getReadyToStart() == roomStates.CountDown) {
 								everyoneIsReady = true;
 								int numberOfPlayersInRoom = server.getRooms().get(roomNumber).getNumOfPlayers();
 								for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
@@ -370,7 +377,7 @@ public class Server {
 							}
 							
 							// Set room's readyToStart = 2
-							server.getRooms().get(roomNumber).setReadyToStart(2);
+							server.getRooms().get(roomNumber).setReadyToStart(roomStates.MiddleOfRound);
 							
 							
 							
@@ -379,14 +386,12 @@ public class Server {
 						}
 						
 					// If game is in readyToStart = 2, we wait for client actions and update them accordingly.
-					case 2:	
+					case roomStates.MiddleOfRound:	
 						//System.out.println("In GameHandler. readyToStart = 2 detected");
 						// If game is in readyToStart = 2, that means a player has chosen some action. If so, then
 						
-						if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == -1) {
-							//dealerFunc();
-						}
-						else if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == 0) {
+						
+						if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == currentActions.DEAL) {
 							// dealer receives first two cards, then set readyToStart = 2
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
@@ -407,10 +412,10 @@ public class Server {
 									
 										// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
 										// by the server, set State = 2 so that server will not perform the same action again.
-										case 3:
+										case playerStates.PLAYING:
 											switch(server.getRooms().get(roomNumber).getPlayersInRoom()[y].getCurrentAction()) {
 												// currentAction = 0 means player has clicked deal and wants to receive first two cards
-												case 0:
+												case currentActions.DEAL:
 													System.out.println("Player deal detected\n");
 													// Deal two cards to player
 													// Deal first card to player
@@ -455,12 +460,10 @@ public class Server {
 														score = "";
 													}
 													
-													
-													
 													break;
 												
 												// currentAction = 1 means player wants a hit, so players receives another card
-												case 1:
+												case currentActions.HIT:
 													System.out.println("Player hit detected\n");
 													// Deal one card to player
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
@@ -478,20 +481,19 @@ public class Server {
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
+															// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else if (score.equals("bust")){
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
+															// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else {
-															// Set playerState = 4 until the round is over, that way no further checking of this player will occur
-															// until player gives a new command
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
+															// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.PLAYING);
 															
 															// Set currentAction = -1 means player has not decided on anything
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
@@ -502,11 +504,11 @@ public class Server {
 													
 													
 												
-													
+								
 													break;
 													
 												// currentAction = 2 means player wants to double down on the bet, so double the wager amount and receive one more card
-												case 2:
+												case currentActions.DOUBLE:
 													System.out.println("Player double down detected\n");
 													// Deal one card to player
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
@@ -528,20 +530,19 @@ public class Server {
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+															// Set currentAction = 3 means player has not decided on anything
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else if (score.equals("bust")){
 															// set playerState = 4 until the round is over
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 															
-															// Set currentAction = -1 means player has not decided on anything
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+															// Set currentAction = 3 means player has not decided on anything
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 														}
 														else {
-															// Set playerState = 4 until the round is over, that way no further checking of this player will occur
-															// until player gives a new command
-															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
+															// playerState = 3 means server will see what player's currentAction to determine what the dealer and game logic should do. After the action has been updated
+															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.PLAYING);
 															
 															// Set currentAction = -1 means player has not decided on anything
 															server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
@@ -557,26 +558,26 @@ public class Server {
 													break;
 													
 												// currentAction = 3 means player wants to stand, meaning player is satisfied with the cards server should tally the score.
-												case 3:
+												case currentActions.STAND:
 													System.out.println("Player stand detected\n");
 													// Set playerState = 4 until the round is over, that way no further checking of this player will occur
 													// until player gives a new command
 													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
 													
-													// Set currentAction = -1 means player has not decided on anything
-													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 3
+													// Set currentAction = 3 means player has not decided on anything
+													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.STAND);
 															
 													
 													break;
 												
 												// currentAction = 4 means player wants to sit out of this current round. This is the default action when a player is created.
-												case 4:
+												case currentActions.SIT_OUT:
 													// Set playerState = 4 until the round is over, that way no further checking of this player will occur
 													// until player gives a new command
-													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.DONE);
+													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.SITTING);
 													
-													// Set currentAction = -1 means player has not decided on anything
-													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION); // was 4
+													// Set currentAction = 4 means player has not decided on anything
+													server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.SIT_OUT);
 															
 													
 													
@@ -589,106 +590,127 @@ public class Server {
 								}
 							}
 						}
-						
-						// Set Dealer's score
-						server.getRooms().get(roomNumber).getPlayersInRoom()[0].setScore(bust(roomNumber, 0, 0));
-						
-						// Check if Dealer has lost. If the dealer has lost, anyone who's score = not bust has won their wager
-						if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getScore().equals("bust")) {
-							System.out.println("Dealer has lost detected");
 							
-							for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
-								if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
-									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("not bust")) {
-										// Skip dealer
-										if (x != 0) {
-											// Add player's current wager to accountBalance
-											server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
-										}
-									}
-									
-									// Set playerState = 4 until the round is over, that way no further checking of this player will occur
-									// until player gives a new command
-									server.getRooms().get(roomNumber).getPlayersInRoom()[x].setPlayerState(playerStates.PLAYING);
-									
-									// Set currentAction = -1 means player has not decided on anything
-									server.getRooms().get(roomNumber).getPlayersInRoom()[x].setCurrentAction(currentActions.NO_DECISION);
-								}
-								
-							}
-							
-							// Reset game by setting readyToStart = 0
-							server.getRooms().get(roomNumber).setReadyToStart(0);
-							
-							// Reshuffle deck
-							server.getRooms().get(roomNumber).getShoe().generateCards();
-							
-						}
-						
-						Boolean endRound = true;
 
 						// Go through all the players in the room and check if they are still in or not
 						// If there are still players not standing or
 						for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
 							if (x != 0) {
 								if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
-									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() != 3 || server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() != 4) {
-										endRound = false;
+									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() == currentActions.STAND
+											|| server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() == currentActions.SIT_OUT) {
+										
+										// Reset game by setting readyToStart = 0
+										server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
+										
+										// Set newMessage = true so the server will update the client with a new instance
+										// of server attributes rooms and lobbyRooms
+										server.setNewMessage(true);
 									}
 								}
 							}
 						}
-
+						
 						// Go through all the players in the room and adjust their balance according to their bets and score
-						if(endRound) {
-							for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
-								if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
-									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("blackjack")) {
-										if (x != 0) {
-											// Add player's current wager to accountBalance
-											server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
-										}
-									}
-									else if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("bust")) {
-										if ( x != 0) {
-											// Subtract player's current wager from accountBalance
-											server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
-										}
-									}
-									else {
-										int dealerTally = tally(roomNumber, 0, 0);
-										if (x != 0) {
-											int playerTally = tally(roomNumber, x, 0);
-											
-											if(playerTally < dealerTally) {
-												// Subtract player's current wager from accountBalance
-												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
-											}
-											else if (playerTally == dealerTally) {
-												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setWager(0);
-											}
-											else if (playerTally > dealerTally) {
+						if(server.getRooms().get(roomNumber).getReadyToStart() == roomStates.EndOfRound) {
+							
+							// Dealer gets rest of cards to soft 17
+							dealerFunc();
+							
+							// Set newMessage to true so server will update client
+							server.setNewMessage(true);
+							
+							// Set Dealer's score
+							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setScore(bust(roomNumber, 0, 0));
+							
+							// Check if Dealer has lost. If the dealer has lost, anyone who's score = not bust has won their wager
+							if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getScore().equals("bust")) {
+								System.out.println("Dealer has lost detected");
+								
+								// Check all players in the room
+								for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
+									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
+										
+										// If the player has not bust or has blackjack
+										if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("not bust") || server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("blackjack")) {
+											// Skip dealer
+											if (x != 0) {
 												// Add player's current wager to accountBalance
 												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
 											}
 										}
-										
+										else {
+											// Skip dealer
+											if (x != 0) {
+												// Subtract player's current wager to accountBalance
+												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
+											}
+										}
 									}
-									
-									server.getRooms().get(roomNumber).getPlayersInRoom()[x].setCurrentAction(currentActions.NO_DECISION);
-									server.getRooms().get(roomNumber).getPlayersInRoom()[x].setPlayerState(playerStates.SITTING);
 								}
+								
+								// Reset game by setting readyToStart = 0
+								server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
+							}
+							// If dealer has blackjack or not bust
+							else {
+								// Check all players in the room
+								for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
+									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
+										if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getScore().equals("bust")) {
+											if ( x != 0) {
+												// Subtract player's current wager from accountBalance
+												server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
+											}
+										}
+										else {
+											int dealerTally = tally(roomNumber, 0, 0);
+											if (x != 0) {
+												int playerTally = tally(roomNumber, x, 0);
+												
+												if(playerTally < dealerTally) {
+													// Subtract player's current wager from accountBalance
+													server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() - server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
+												}
+												else if (playerTally > dealerTally) {
+													// Add player's current wager to accountBalance
+													server.getRooms().get(roomNumber).getPlayersInRoom()[x].setAccountBalance(server.getRooms().get(roomNumber).getPlayersInRoom()[x].getAccountBalance() + server.getRooms().get(roomNumber).getPlayersInRoom()[x].getWager());
+												}
+											}
+											
+										}
+									}
+								}
+								
+								// Reset game by setting readyToStart = 0
+								server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
 							}
 						}
-						
-						
 						
 						//System.out.println("readyToStart = " + server.getRooms().get(roomNumber).getReadyToStart());
 						
 						// Set newMessage = true so the server will update the client with a new instance
 						// of server attributes rooms and lobbyRooms
 						server.setNewMessage(true);
+						break;
+					case roomStates.EndOfRound:
+						for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++y) {
+							if (server.getRooms().get(roomNumber).getPlayersInRoom()[y] != null) {
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].clearHand();
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setWager(0);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setScore("not bust");
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.SITTING);
+							}	
+						}
+						server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
 						
+						// Set newMessage = true so the server will update the client with a new instance
+						// of server attributes rooms and lobbyRooms
+						server.setNewMessage(true);
+						break;
+					default:
+						break;
 				}
 			}
 		}
@@ -936,7 +958,7 @@ public class Server {
 							// playerState = 3 means server will see what player's currentAction to determine what the dealer should do. After the action has been updated
 							// by the server, set State = 2 so that server will not perform the same action again.
 							player.setPlayerState(playerStates.PLAYING);
-							
+							System.out.println("Player hit detected");
 							// Set player action to hit which player receives an additional card
 							player.setCurrentAction(currentActions.HIT);
 						
@@ -1046,13 +1068,14 @@ public class Server {
 			try {
 				while (message == null) {
 					message = (Message) input.readObject();
-					
+					/*
 					try {
 						Thread.sleep(100);
 					}
 					catch (Exception e) {
-						
+						e.printStackTrace();
 					}
+					*/
 				}
 
 				return message;
@@ -1291,7 +1314,7 @@ public class Server {
 						output += "\n";
 					}
 				}
-				
+				 
 				// Rewrite database
 				System.out.println("Writing to file: " + output);
 				myWriter.write(output);

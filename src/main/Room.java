@@ -17,6 +17,8 @@ public class Room {
 	// When all of the players in the room's currentAction = 3 or currentAction = -1, then tally the dealer's total against the players' total.
 	// Then set readyToStart = 1 and repeat cycle all over again.
 	
+	// readyToStart = 3 means game has reached end of round. Reset all cards and variables.
+	
 	private int readyToStart;
 	private int numOfPlayers;
 	private final int MAX_PLAYERS = 6;
@@ -34,7 +36,7 @@ public class Room {
 		//this.playersInRoom.add(new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand));
 		for (int x = 0; x < 6; ++x) {
 			if (x == 0) {
-				this.playersInRoom[0] = new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand);
+				this.playersInRoom[x] = new Player("Dealer", 2, this.roomNumber, 0, -1, 0, 0, "not bust", currentHand);
 				++numOfPlayers;
 			}
 			else {
@@ -54,31 +56,6 @@ public class Room {
 		
 	}
 	
-	/*
-	public Room(int roomNumber, int readyToStart,
-			ArrayList<Player> playersInRoom, Shoe shoe) {
-		
-		super();
-		this.roomNumber = roomNumber;
-		this.readyToStart = readyToStart;
-
-		
-		for (int x = 0; x < currentPlayers.size(); ++x) {
-			this.currentPlayers.add(currentPlayers.get(x));
-		}
-		
-		this.playersInRoom = new ArrayList<Player>();
-		
-		
-		for (int x = 0; x < playersInRoom.size(); ++x) {
-			this.playersInRoom.add(playersInRoom.get(x));
-		}
-		this.playersInRoom = playersInRoom;
-		
-		this.shoe = shoe;
-	}
-	*/
-	
 	public Room(int roomNumber, int readyToStart,
 			Player [] playersInRoom, Shoe shoe) {
 		
@@ -88,24 +65,6 @@ public class Room {
 		this.playersInRoom = playersInRoom;
 		this.shoe = shoe;
 	}
-	
-	/*
-	public String toString() {
-		String output = "";
-		
-		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(playersInRoom.size()) + "%";
-		
-		for (int x = 0; x < playersInRoom.size(); ++x) {
-			output += playersInRoom.get(x).toString();
-			output += "%";
-		}
-		
-		
-		output += shoe.toString();
-		
-		return output;
-	}
-	*/
 	
 	public String toString() {
 		String output = "";
@@ -145,9 +104,6 @@ public class Room {
 				output += "%";
 			}
 		}
-		
-		
-		output += shoe.toString();
 		
 		return output;
 	}
