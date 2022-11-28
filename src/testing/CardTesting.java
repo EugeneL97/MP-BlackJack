@@ -39,4 +39,14 @@ public class CardTesting {
 		
 		assertTrue(string1.equals(string2));
 	}
+	
+	@Test
+	public void showCardTest() {
+		int value = 5;
+		String suit = "Club";
+		Card card = new Card(value, suit);
+		
+		String toString = value + " of " + suit;
+		assertTrue(card.showCard().equals(toString));
+	}
 }
