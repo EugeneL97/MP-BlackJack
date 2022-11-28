@@ -90,7 +90,6 @@ public class Server {
 		room4 = new GameHandler(server, 4);
 		System.out.println("Spawning thread for room 0");
 		new Thread(room0).start();
-		
 		System.out.println("Spawning thread for room 1");
 		new Thread(room1).start();
 		System.out.println("Spawning thread for room 2");
@@ -281,7 +280,7 @@ public class Server {
 		
 		
 		public void dealerFunc() {
-			while (tally(0, 0, 0) >= 17) {
+			while (tally(roomNumber, 0, 0) >= 17) {
 				server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
 				server.getRooms().get(0).getPlayersInRoom()[0].setScore(bust(0, 0, 0));
 			} 
@@ -295,18 +294,6 @@ public class Server {
 			
 			while(true) {				
 				switch (server.getRooms().get(roomNumber).getReadyToStart()) {
-					case roomStates.EndOfRound:
-						for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++y) {
-							if (server.getRooms().get(roomNumber).getPlayersInRoom()[y] != null) {
-								server.getRooms().get(roomNumber).getPlayersInRoom()[y].clearHand();
-								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setWager(0);
-								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
-								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.SITTING);
-							}	
-						}
-						server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
-						
-	
 					case roomStates.WaitingToStart:
 						
 						// If room is not ready to start, check to see if any player's currentAction != -1.
@@ -337,6 +324,8 @@ public class Server {
 							// currentAction = 0 means player has clicked deal and wants to receive first two cards
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setCurrentAction(currentActions.DEAL);
 							
+							// Set dealer playerState to playing
+							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setPlayerState(playerStates.PLAYING);
 							
 							System.out.println("In GameHandler. readyToStart = 1 detected. There is only 1 player in room.\n"
 									+ "Setting readyToStart = 2");
@@ -346,6 +335,9 @@ public class Server {
 						else {
 							// currentAction = 0 means player has clicked deal and wants to receive first two cards
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setCurrentAction(currentActions.DEAL);
+							
+							// Set dealer playerState to playing
+							server.getRooms().get(roomNumber).getPlayersInRoom()[0].setPlayerState(playerStates.PLAYING);
 							
 							// Start countdown timer for 10 seconds, when timer is up the function will automatically
 							// set readyToStart = 2;
@@ -396,10 +388,8 @@ public class Server {
 						//System.out.println("In GameHandler. readyToStart = 2 detected");
 						// If game is in readyToStart = 2, that means a player has chosen some action. If so, then
 						
-						if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == currentActions.NO_DECISION) {
-							dealerFunc();
-						}
-						else if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == currentActions.DEAL) {
+						
+						if (server.getRooms().get(roomNumber).getPlayersInRoom()[0].getCurrentAction() == currentActions.DEAL) {
 							// dealer receives first two cards, then set readyToStart = 2
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
 							server.getRooms().get(roomNumber).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(roomNumber).getShoe().dealCard());
@@ -700,7 +690,25 @@ public class Server {
 						// Set newMessage = true so the server will update the client with a new instance
 						// of server attributes rooms and lobbyRooms
 						server.setNewMessage(true);
+						break;
+					case roomStates.EndOfRound:
+						for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++y) {
+							if (server.getRooms().get(roomNumber).getPlayersInRoom()[y] != null) {
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].clearHand();
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setWager(0);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setScore("not bust");
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setCurrentAction(currentActions.NO_DECISION);
+								server.getRooms().get(roomNumber).getPlayersInRoom()[y].setPlayerState(playerStates.SITTING);
+							}	
+						}
+						server.getRooms().get(roomNumber).setReadyToStart(roomStates.WaitingToStart);
 						
+						// Set newMessage = true so the server will update the client with a new instance
+						// of server attributes rooms and lobbyRooms
+						server.setNewMessage(true);
+						break;
+					default:
+						break;
 				}
 			}
 		}

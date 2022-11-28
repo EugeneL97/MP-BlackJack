@@ -18,6 +18,9 @@ public class Client {
 	private int register;
 	private Boolean canDeal;
 	private Boolean endOfRound;
+	private Boolean waitingToStart;
+	
+
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
@@ -26,50 +29,7 @@ public class Client {
 	private RegisterOrLoginGUI registerOrLoginGUI;
 	private RegisterGUI registerGUI;
 	
-	public RegisterGUI getRegisterGUI() {
-		return registerGUI;
-	}
-
-	public void setRegisterGUI(RegisterGUI registerGUI) {
-		this.registerGUI = registerGUI;
-	}
-
-	public RegisterOrLoginGUI getRegisterOrLoginGUI() {
-		return registerOrLoginGUI;
-	}
-
-	public void setRegisterOrLoginGUI(RegisterOrLoginGUI registerOrLoginGUI) {
-		this.registerOrLoginGUI = registerOrLoginGUI;
-	}
-
-	public AccountInfoGUI getAccountInfoGUI() {
-		return accountInfoGUI;
-	}
-
-	public ConnectGUI getConnectGUI() {
-		return connectGUI;
-	}
-
-	public void setConnectGUI(ConnectGUI connectGUI) {
-		this.connectGUI = connectGUI;
-	}
-
-	public LoginGUI getLoginGUI() {
-		return loginGUI;
-	}
-
-	public void setLoginGUI(LoginGUI loginGUI) {
-		this.loginGUI = loginGUI;
-	}
-
-	public GameRoomGUI getGameRoomGUI() {
-		return gameRoomGUI;
-	}
-
-	public void setAccountInfoGUI(AccountInfoGUI accountInfoGUI) {
-		this.accountInfoGUI = accountInfoGUI;
-	}
-
+	
 	public Client() throws Exception {
 		this.socket = null;
 		this.input = null;
@@ -81,6 +41,7 @@ public class Client {
 		this.register = 0;
 		this.canDeal = true; 
 		this.endOfRound = false;
+		this.waitingToStart = true;
 		this.lobbyRoom = new LobbyRoom();
 		
 	}
@@ -96,6 +57,7 @@ public class Client {
 		this.register = 0;
 		this.canDeal = true;
 		this.endOfRound = false;
+		this.waitingToStart = true;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
@@ -104,74 +66,21 @@ public class Client {
 		new Thread(messageHandler).start();
 	}
 	
-	public Boolean getEndOfRound() {
-		return endOfRound;
-	}
-
-	public void setEndOfRound(Boolean endOfRound) {
-		this.endOfRound = endOfRound;
-	}
-	
-	public void checkEndOfRound () {
+	public void checkWaitingToStart() {
 		if (player.getSeatIndex() != -1) {
-			if (room.getReadyToStart() == 3) {
-				setEndOfRound(true);
-			}
-			else {
-				setEndOfRound(false);
-			}
-			
-			if (getEndOfRound()) {
-				gameRoomGUI.endRound();
-			}
-			
 			if (room.getReadyToStart() == 0) {
-				player.clearHand();
-				gameRoomGUI.startRound();
+				setWaitingToStart(true);
 			}
-		}
-		
-	}
-	
-	public void checkCanDeal() {
-		if (player.getSeatIndex() != -1) {
-			if (room.getReadyToStart() > 1) {
-				System.out.println("cannot deal");
-				setCanDeal(false);
-			} else {
-				setCanDeal(true);
-				System.out.println("can deal");
+			else {
+				setWaitingToStart(false);
 			}
 			
-			if (getCanDeal() == true) {
+			if (getWaitingToStart()) {
 				gameRoomGUI.startRound();
-				System.out.println("startRound executed");
 			}
-				
-			else {
-				gameRoomGUI.middleOfRound();
-				System.out.println("middleOfRound executed");
-			}
-				
 		}
-		
 	}
 	
-	public Boolean getCanDeal() {
-		return canDeal;
-	}
-
-	public void setCanDeal(Boolean canDeal) {
-		this.canDeal = canDeal;
-	}
-	
-	public LobbyGUI getLobbyGUI() {
-		return lobbyGUI;
-	}
-	
-	public void setLobbyGUI(LobbyGUI lobbyGUI) {
-		this.lobbyGUI = lobbyGUI;
-	}
 	
 	public static void main(String [] args) throws Exception {
 		//String ip = "127.0.1.1";
@@ -280,6 +189,7 @@ public class Client {
 
 				client.checkCanDeal();
 				client.checkEndOfRound();
+				client.checkWaitingToStart();
 			}
 		}
 	}
@@ -487,5 +397,125 @@ public class Client {
 
 	public void setGameRoomGUI(GameRoomGUI gameRoomGUI) {
 		this.gameRoomGUI = gameRoomGUI;
+	}
+	public RegisterGUI getRegisterGUI() {
+		return registerGUI;
+	}
+
+	public void setRegisterGUI(RegisterGUI registerGUI) {
+		this.registerGUI = registerGUI;
+	}
+
+	public RegisterOrLoginGUI getRegisterOrLoginGUI() {
+		return registerOrLoginGUI;
+	}
+
+	public void setRegisterOrLoginGUI(RegisterOrLoginGUI registerOrLoginGUI) {
+		this.registerOrLoginGUI = registerOrLoginGUI;
+	}
+
+	public AccountInfoGUI getAccountInfoGUI() {
+		return accountInfoGUI;
+	}
+
+	public ConnectGUI getConnectGUI() {
+		return connectGUI;
+	}
+
+	public void setConnectGUI(ConnectGUI connectGUI) {
+		this.connectGUI = connectGUI;
+	}
+
+	public LoginGUI getLoginGUI() {
+		return loginGUI;
+	}
+
+	public void setLoginGUI(LoginGUI loginGUI) {
+		this.loginGUI = loginGUI;
+	}
+
+	public GameRoomGUI getGameRoomGUI() {
+		return gameRoomGUI;
+	}
+
+	public void setAccountInfoGUI(AccountInfoGUI accountInfoGUI) {
+		this.accountInfoGUI = accountInfoGUI;
+	}
+	
+	public Boolean getCanDeal() {
+		return canDeal;
+	}
+
+	public void setCanDeal(Boolean canDeal) {
+		this.canDeal = canDeal;
+	}
+	
+	public LobbyGUI getLobbyGUI() {
+		return lobbyGUI;
+	}
+	
+	public void setLobbyGUI(LobbyGUI lobbyGUI) {
+		this.lobbyGUI = lobbyGUI;
+	}
+	
+	
+	public Boolean getWaitingToStart() {
+		return waitingToStart;
+	}
+
+	public void setWaitingToStart(Boolean waitingToStart) {
+		this.waitingToStart = waitingToStart;
+	}
+
+	public void checkCanDeal() {
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() > 1) {
+				System.out.println("cannot deal");
+				setCanDeal(false);
+			} else {
+				setCanDeal(true);
+				System.out.println("can deal");
+			}
+			
+			if (getCanDeal() == true) {
+				gameRoomGUI.startRound();
+				System.out.println("startRound executed");
+			}
+				
+			else {
+				gameRoomGUI.middleOfRound();
+				System.out.println("middleOfRound executed");
+			}
+				
+		}
+	}
+	
+	public Boolean getEndOfRound() {
+		return endOfRound;
+	}
+
+	public void setEndOfRound(Boolean endOfRound) {
+		this.endOfRound = endOfRound;
+	}
+	
+	public void checkEndOfRound () {
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() == 3) {
+				setEndOfRound(true);
+			}
+			else {
+				setEndOfRound(false);
+			}
+			
+			if (getEndOfRound()) {
+				gameRoomGUI.endRound();
+			}
+			
+			if (room.getReadyToStart() == 0) {
+				player.clearHand();
+				gameRoomGUI.startRound();
+			}
+		}
+		
 	}
 }
