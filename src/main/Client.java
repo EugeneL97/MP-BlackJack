@@ -9,18 +9,67 @@ public class Client {
 	private ObjectOutputStream output;
 	private Scanner userInput;
 	private Player player;
+	
+
 	private LobbyRoom lobbyRoom;
 	private Room room;
 	private ArrayList<Message> messageQueue;
 	private int login;
 	private int register;
-	private Boolean refreshLobbyRoomGUI;
-	private Boolean refreshGameRoomGUI;
+	private Boolean canDeal;
+	private Boolean endOfRound;
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
 	private GameRoomGUI gameRoomGUI;
+	private AccountInfoGUI accountInfoGUI;
+	private RegisterOrLoginGUI registerOrLoginGUI;
+	private RegisterGUI registerGUI;
 	
+	public RegisterGUI getRegisterGUI() {
+		return registerGUI;
+	}
+
+	public void setRegisterGUI(RegisterGUI registerGUI) {
+		this.registerGUI = registerGUI;
+	}
+
+	public RegisterOrLoginGUI getRegisterOrLoginGUI() {
+		return registerOrLoginGUI;
+	}
+
+	public void setRegisterOrLoginGUI(RegisterOrLoginGUI registerOrLoginGUI) {
+		this.registerOrLoginGUI = registerOrLoginGUI;
+	}
+
+	public AccountInfoGUI getAccountInfoGUI() {
+		return accountInfoGUI;
+	}
+
+	public ConnectGUI getConnectGUI() {
+		return connectGUI;
+	}
+
+	public void setConnectGUI(ConnectGUI connectGUI) {
+		this.connectGUI = connectGUI;
+	}
+
+	public LoginGUI getLoginGUI() {
+		return loginGUI;
+	}
+
+	public void setLoginGUI(LoginGUI loginGUI) {
+		this.loginGUI = loginGUI;
+	}
+
+	public GameRoomGUI getGameRoomGUI() {
+		return gameRoomGUI;
+	}
+
+	public void setAccountInfoGUI(AccountInfoGUI accountInfoGUI) {
+		this.accountInfoGUI = accountInfoGUI;
+	}
+
 	public Client() throws Exception {
 		this.socket = null;
 		this.input = null;
@@ -30,8 +79,8 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
-		this.refreshLobbyRoomGUI = false;
-		this.refreshGameRoomGUI = false;
+		this.canDeal = true; 
+		this.endOfRound = false;
 		this.lobbyRoom = new LobbyRoom();
 		
 	}
@@ -45,12 +94,72 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
+		this.canDeal = true;
+		this.endOfRound = false;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
 		
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
+	}
+	
+	public Boolean getEndOfRound() {
+		return endOfRound;
+	}
+
+	public void setEndOfRound(Boolean endOfRound) {
+		this.endOfRound = endOfRound;
+	}
+	
+	public void checkEndOfRound () {
+		if (room.getReadyToStart() == 3) {
+			setEndOfRound(true);
+		}
+		else {
+			setEndOfRound(false);
+		}
+		
+		if (getEndOfRound()) {
+			gameRoomGUI.endRound();
+		}
+		
+		if (room.getReadyToStart() == 0) {
+			player.clearHand();
+			gameRoomGUI.startRound();
+		}
+	}
+	
+	public void checkCanDeal() {
+		if (player.getSeatIndex() != -1) {
+			if (room.getReadyToStart() > 1) {
+				System.out.println("cannot deal");
+				setCanDeal(false);
+			} else {
+				setCanDeal(true);
+				System.out.println("can deal");
+			}
+			
+			if (getCanDeal() == true) {
+				gameRoomGUI.startRound();
+				System.out.println("startRound executed");
+			}
+				
+			else {
+				gameRoomGUI.middleOfRound();
+				System.out.println("middleOfRound executed");
+			}
+				
+		}
+		
+	}
+	
+	public Boolean getCanDeal() {
+		return canDeal;
+	}
+
+	public void setCanDeal(Boolean canDeal) {
+		this.canDeal = canDeal;
 	}
 	
 	public LobbyGUI getLobbyGUI() {
@@ -70,102 +179,13 @@ public class Client {
 		
 		System.out.println(client.socket);
 		
-		
-		
-		
-		/*
-		// Testing code
-		// check to see if correct arguments were provided
-		if (args.length != 2) {
-			System.out.println("Please enter IP address followed by port number after java Client.java. i.e. java Client.java 127.0.0.1 7777\n");
-			return;
-		}
-
-		System.out.println("Attemping to connect to server IP: " + args[0] + ":" + args[1]);
-		// connect to provided ip and port
-		//client.socket = new Socket(args[0], Integer.parseInt(args[1]));
-		client.socket = new Socket("127.0.1.1", 59898);
-		// creating input and output stream for class object
-		client.output = new ObjectOutputStream(client.socket.getOutputStream());
-		client.input = new ObjectInputStream(client.socket.getInputStream());
-		client.userInput = new Scanner(System.in);
-		
-	
-		
-		String line = null;
-		int loginAttempts = 0;
-		boolean proceedToLobby = false;
-		boolean logout = false;
-		
-		
-		
-		// Login and register loop
-		while(!proceedToLobby && loginAttempts < 3) {
-			System.out.println("Enter \"1\" to login or \"2\" to register");
-			line = client.userInput.nextLine();
-			
-			switch (line) {
-				case "1":
-					++loginAttempts;
-					proceedToLobby = client.login();
-					break;
-				case "2":
-					client.register();
-					break;
-			}
-		}
-		
-		
-		// If login attempts > 3 close the connection
-		if (loginAttempts >= 3) {
-			client.closeConnection();
-			return;
-		}
-		
-		
-		Parser parser = new Parser();
-		
-		// Create a message handler for the client
-		MessageHandler messageHandler = new MessageHandler(client);
-		
-		// Spawn a new thread for the client
-		new Thread(messageHandler).start();
-		
-		int roomNumber = 3;
-		
-		System.out.println("Room number before sending join room 3 = " + client.getRoom().getRoomNumber());
-		Message message = new Message("join room", Integer.toString(roomNumber), "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		
-		System.out.println("Room number after sending join room 3 = " + client.getRoom().getRoomNumber());
-		
-		message = new Message("sit", "", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending sit message = " + client.player.toString());
-		
-		message = new Message("deal", "100", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending deal message = " + client.player.toString());
-		
-		message = new Message("hit", "", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending hit message = " + client.player.toString());
-		
-		message = new Message("stand", "100", "");
-		client.sendMessage(message);
-		Thread.sleep(1000);
-		System.out.println("Player after sending stand message = " + client.player.toString());
-		
-		*/
-		
-		
 		client.closeConnection();
 		
 		return;
+		
+	}
+	
+	public void checkDeal() {
 		
 	}
 	
@@ -209,6 +229,7 @@ public class Client {
 							}
 							
 							System.out.println("new room object = " + client.getRoom().showRoom());
+							
 							break;
 						case "login":
 							System.out.println("Client received login object");
@@ -253,14 +274,8 @@ public class Client {
 							break;
 					}
 				}
-				/*
-				try {
-					Thread.sleep(1000);
-				}
-				catch (Exception e) {
-					
-				}
-				*/
+
+				client.checkCanDeal();
 			}
 		}
 	}
@@ -466,22 +481,6 @@ public class Client {
 		this.register = register;
 	}
 
-	public void setRefreshLobbyRoomGUI(Boolean refresh) {
-		this.refreshLobbyRoomGUI = refresh;
-	}
-	
-	public Boolean getRefreshLobbyGUI() {
-		return this.refreshLobbyRoomGUI;
-	}
-	
-	public void setRefreshRoomGUI(Boolean refresh) {
-		this.refreshGameRoomGUI = refresh;
-	}
-	
-	public Boolean getRefreshRoomGUI() {
-		return this.refreshGameRoomGUI;
-	}
-	
 	public void setGameRoomGUI(GameRoomGUI gameRoomGUI) {
 		this.gameRoomGUI = gameRoomGUI;
 	}
