@@ -125,17 +125,17 @@ public class Client {
 		}
 		
 		if (room.getReadyToStart() == 0) {
+			player.clearHand();
 			gameRoomGUI.startRound();
 		}
 	}
 	
 	public void checkCanDeal() {
 		if (player.getSeatIndex() != -1) {
-			if (room.getReadyToStart() >= 1) {
+			if (room.getReadyToStart() > 1) {
 				System.out.println("cannot deal");
 				setCanDeal(false);
-			}
-			else {
+			} else {
 				setCanDeal(true);
 				System.out.println("can deal");
 			}
