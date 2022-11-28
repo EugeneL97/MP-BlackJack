@@ -43,6 +43,12 @@ public class Server {
 		static final int IN_LOBBY = 0;
 	}
 
+	private static final class roomStates {
+		static final int WaitingToSTart = 0;
+		static final int CountDown = 1;
+		static final int MiddleOfRound = 2;
+		static final int EndOfRound = 3;
+	}
 
 	public Server() {
 		this.rooms = new ArrayList<Room>();
