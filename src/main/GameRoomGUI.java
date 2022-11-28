@@ -185,12 +185,43 @@ public class GameRoomGUI extends JFrame {
             lblPlayer1Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer1Wager.setForeground(Color.white);
 
+            //---- btnTakeSeat1 ----
+            btnTakeSeat1.setText("Take Seat");
+            btnTakeSeat1.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat1.addActionListener(evt -> sit(1));
+
+            //---- btnTakeSeat2 ----
+            btnTakeSeat2.setText("Take Seat");
+            btnTakeSeat2.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat2.addActionListener(evt -> sit(2));
+
+            //---- textAreaPlayer2 ----
+            textAreaPlayer2.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer2.setBorder(new TitledBorder(null, "Player 2", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player2Wager ----
+            player2Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
+
             //---- lblPlayer2Wager ----
             lblPlayer2Wager.setText("Wager");
             lblPlayer2Wager.setFont(new Font("Roboto", Font.BOLD, 16));
             lblPlayer2Wager.setPreferredSize(new Dimension(40, 17));
             lblPlayer2Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer2Wager.setForeground(Color.white);
+
+            //---- btnTakeSeat3 ----
+            btnTakeSeat3.setText("Take Seat");
+            btnTakeSeat3.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat3.addActionListener(evt -> sit(3));
+
+            //---- textAreaPlayer3 ----
+            textAreaPlayer3.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer3.setBorder(new TitledBorder(null, "Player 3", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player3Wager ----
+            player3Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
             //---- lblPlayer3Wager ----
             lblPlayer3Wager.setText("Wager");
@@ -199,12 +230,38 @@ public class GameRoomGUI extends JFrame {
             lblPlayer3Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer3Wager.setForeground(Color.white);
 
+            //---- btnTakeSeat4 ----
+            btnTakeSeat4.setText("Take Seat");
+            btnTakeSeat4.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat4.addActionListener(evt -> sit(4));
+
+            //---- textAreaPlayer4 ----
+            textAreaPlayer4.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer4.setBorder(new TitledBorder(null, "Player 4", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player4Wager ----
+            player4Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
+
             //---- lblPlayer4Wager ----
             lblPlayer4Wager.setText("Wager");
             lblPlayer4Wager.setFont(new Font("Roboto", Font.BOLD, 16));
             lblPlayer4Wager.setPreferredSize(new Dimension(40, 17));
             lblPlayer4Wager.setHorizontalAlignment(SwingConstants.CENTER);
             lblPlayer4Wager.setForeground(Color.white);
+
+            //---- btnTakeSeat5 ----
+            btnTakeSeat5.setText("Take Seat");
+            btnTakeSeat5.setFont(new Font("Roboto", Font.PLAIN, 12));
+            btnTakeSeat5.addActionListener(evt -> sit(5));
+
+            //---- textAreaPlayer5 ----
+            textAreaPlayer5.setFont(new Font("Roboto", Font.PLAIN, 14));
+            textAreaPlayer5.setBorder(new TitledBorder(null, "Player 5", TitledBorder.CENTER, TitledBorder.TOP,
+                    new Font("Roboto", Font.BOLD, 14)));
+
+            //---- player5Wager ----
+            player5Wager.setFont(new Font("Roboto", Font.PLAIN, 14));
 
             //---- lblPlayer5Wager ----
             lblPlayer5Wager.setText("Wager");
