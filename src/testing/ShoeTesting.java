@@ -8,5 +8,14 @@ import org.junit.jupiter.api.RepeatedTest;
 
 
 public class ShoeTesting {
-
+	
+	@Test
+	public void GetterAndSetterTest() {
+		
+		Shoe shoe = new Shoe();
+		
+		assertTrue(shoe.getShoeSize() == 312);
+		assertTrue(shoe.getCutPoint() == 70);
+		assertTrue(shoe.getNumOfDecks() == 6);
+	}
 }
