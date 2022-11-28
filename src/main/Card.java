@@ -22,6 +22,14 @@ public class Card {
 		this.suit = suit;
 	}
 	
+	public String showCard() {
+		String output = "";
+		
+		output += Integer.toString(value) + " of " + suit;
+		
+		return output;
+	}
+	
 	public String toString() {
 		return Integer.toString(value) + "#" + suit + "#";
 	}
