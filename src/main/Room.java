@@ -129,6 +129,29 @@ public class Room {
 		return output;
 	}
 	
+	// for testing purposes to show what's in the room
+	public String showRoom() {
+		String output = "";
+		
+		output = Integer.toString(roomNumber) + "%" + Integer.toString(readyToStart) + "%" + Integer.toString(MAX_PLAYERS) + "%";
+		
+		for (int x = 0; x < MAX_PLAYERS; ++x) {
+			if (playersInRoom[x] != null) {
+				output += playersInRoom[x].toString();
+				output += "%";
+			}
+			else {
+				output += null;
+				output += "%";
+			}
+		}
+		
+		
+		output += shoe.toString();
+		
+		return output;
+	}
+	
 	public int getMAXPLAYERS() {
 		return MAX_PLAYERS;
 	}

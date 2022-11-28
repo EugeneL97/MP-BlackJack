@@ -1,4 +1,5 @@
 package main;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 
@@ -9,9 +10,9 @@ public class LobbyGUI extends javax.swing.JFrame {
 
     private Client client;
     private LobbyRoom lobbyRoom;
-    
+
     public LobbyRoom getLobbyRoom() {
-    	return lobbyRoom;
+        return lobbyRoom;
     }
 
     /**
@@ -22,7 +23,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     public LobbyGUI(Client client) {
         this.client = client;
         this.lobbyRoom = new LobbyRoom();
-        
+
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -45,6 +46,7 @@ public class LobbyGUI extends javax.swing.JFrame {
 
         }
         setVisible(true);
+        setLocationRelativeTo(null);
     }
 
     /**
@@ -74,54 +76,54 @@ public class LobbyGUI extends javax.swing.JFrame {
         textField2 = new javax.swing.JTextField();
         textField3 = new javax.swing.JTextField();
         textField4 = new javax.swing.JTextField();
-      
-        btnRefreshRooms = new JButton(); 
+
+        btnRefreshRooms = new JButton();
         btnRefreshRooms.setFont(new Font("Segoe Script", 1, 12)); // NOI18N
         btnRefreshRooms.setText("Refresh Rooms");
-        btnRefreshRooms.addActionListener(e -> refreshRooms(e)); 
-        
-      
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
-        	textField0.setText("");
+        btnRefreshRooms.addActionListener(e -> refreshRooms(e));
+
+
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
+            textField0.setText("");
         }
         else {
-        	textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
-        	
+            textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
+
         }
-        
+
         textField1 = new javax.swing.JTextField();
         if (client.getLobbyRoom().getClientLobbyRoom().size() < 2) {
-        	textField1.setText("");
+            textField1.setText("");
         }
         else {
-        	textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
+            textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
         }
 
         textField2 = new javax.swing.JTextField();
         if (client.getLobbyRoom().getClientLobbyRoom().size() < 3) {
-        	textField2.setText("");
+            textField2.setText("");
         }
         else {
-        	textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
-        }
-        
-        textField3 = new javax.swing.JTextField();
-        if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
-        	textField3.setText("");
-        }
-        else {
-        	textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
-        }
-        
-        textField4 = new javax.swing.JTextField();
-        if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
-        	textField4.setText("");
-        }
-        else {
-        	textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+            textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
         }
 
-        
+        textField3 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
+            textField3.setText("");
+        }
+        else {
+            textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
+        }
+
+        textField4 = new javax.swing.JTextField();
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
+            textField4.setText("");
+        }
+        else {
+            textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+        }
+
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
@@ -138,63 +140,29 @@ public class LobbyGUI extends javax.swing.JFrame {
             }
         });
 
-        btnJoinRoom0.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
-        btnJoinRoom0.setText("Join Room 0");
-        btnJoinRoom0.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom0ActionPerformed(evt);
-                int roomNumber = 0;
-                joinRoomNumber(roomNumber);
-            }
-        });
-
         btnLogOff.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnLogOff.setText("Log Off");
-        btnLogOff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLogOffActionPerformed(evt);
-            }
-        });
+        btnLogOff.addActionListener(evt -> btnLogOffActionPerformed(evt));
+
+        btnJoinRoom0.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
+        btnJoinRoom0.setText("Join Room 0");
+        btnJoinRoom0.addActionListener(evt -> joinRoomNumber(0));
 
         btnJoinRoom1.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom1.setText("Join Room 1");
-        btnJoinRoom1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom1ActionPerformed(evt);
-                int roomNumber = 1;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom1.addActionListener(evt -> joinRoomNumber(1) );
 
         btnJoinRoom2.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom2.setText("Join Room 2");
-        btnJoinRoom2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom2ActionPerformed(evt);
-                int roomNumber = 2;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom2.addActionListener(evt -> joinRoomNumber(2));
 
         btnJoinRoom3.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom3.setText("Join Room 3");
-        btnJoinRoom3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom3ActionPerformed(evt);
-                int roomNumber = 3;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom3.addActionListener(evt -> joinRoomNumber(3));
 
         btnJoinRoom4.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         btnJoinRoom4.setText("Join Room 4");
-        btnJoinRoom4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnJoinRoom4ActionPerformed(evt);
-                int roomNumber = 4;
-                joinRoomNumber(roomNumber);
-            }
-        });
+        btnJoinRoom4.addActionListener(evt -> joinRoomNumber(4));
 
         lblName.setFont(new java.awt.Font("Segoe Script", 1, 12)); // NOI18N
         lblName.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -203,106 +171,106 @@ public class LobbyGUI extends javax.swing.JFrame {
         javax.swing.GroupLayout panelLobbyLayout = new javax.swing.GroupLayout(panelLobby);
         panelLobby.setLayout(panelLobbyLayout);
         panelLobbyLayout.setHorizontalGroup(
-            panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLobbyLayout.createSequentialGroup()
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jSeparator4))
-                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                        .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelLobbyLayout.createSequentialGroup()
-                                .addGap(186, 186, 186)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelLobbyLayout.createSequentialGroup()
-                                .addGap(145, 145, 145)
-                                .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panelLobbyLayout.createSequentialGroup()
-                                .addGap(154, 154, 154)
-                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnAountInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                                    .addComponent(btnRefreshRooms, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE) 
-                                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(142, 142, 142)))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLobbyLayout.createSequentialGroup()
-                .addGap(50, 50, 50)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jSeparator3)
-                    .addComponent(jSeparator1)
-                    .addGroup(panelLobbyLayout.createSequentialGroup()
-                        .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(textField1)
-                            .addComponent(textField0)
-                            .addComponent(textField2)
-                            .addComponent(textField3)
-                            .addComponent(textField4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnJoinRoom0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnJoinRoom3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnJoinRoom1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnJoinRoom2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnJoinRoom4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(45, 45, 45))
+                panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(jSeparator4))
+                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                                .addGap(186, 186, 186)
+                                                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                                .addGap(145, 145, 145)
+                                                                .addComponent(btnLogOff, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                                .addGap(154, 154, 154)
+                                                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(btnAountInfo, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                                        .addComponent(btnRefreshRooms, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                                        .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                                .addGap(142, 142, 142)))
+                                .addContainerGap())
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLobbyLayout.createSequentialGroup()
+                                .addGap(50, 50, 50)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jSeparator3)
+                                        .addComponent(jSeparator1)
+                                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(textField1)
+                                                        .addComponent(textField0)
+                                                        .addComponent(textField2)
+                                                        .addComponent(textField3)
+                                                        .addComponent(textField4))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                        .addComponent(btnJoinRoom0, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnJoinRoom3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnJoinRoom1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnJoinRoom2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                        .addComponent(btnJoinRoom4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(45, 45, 45))
         );
         panelLobbyLayout.setVerticalGroup(
-            panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelLobbyLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(8, 8, 8)
-                .addComponent(lblName)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnAountInfo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRefreshRooms) 
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom0)
-                    .addComponent(textField0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom1)
-                    .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom2)
-                    .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom3)
-                    .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnJoinRoom4)
-                    .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnLogOff)
-                .addContainerGap(69, Short.MAX_VALUE))
+                panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelLobbyLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(8, 8, 8)
+                                .addComponent(lblName)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAountInfo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnRefreshRooms)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 8, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnJoinRoom0)
+                                        .addComponent(textField0, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnJoinRoom1)
+                                        .addComponent(textField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnJoinRoom2)
+                                        .addComponent(textField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnJoinRoom3)
+                                        .addComponent(textField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelLobbyLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(btnJoinRoom4)
+                                        .addComponent(textField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnLogOff)
+                                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelLobby, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(panelLobby, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(panelLobby, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(panelLobby, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
 
         pack();
@@ -336,104 +304,63 @@ public class LobbyGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnLogOffActionPerformed
 
-    private void btnJoinRoom0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom0ActionPerformed
-        // TODO add your handling code here:
-        try {
-            this.lobbyRoom.addPlayer(0, client.getPlayer().getUsername());
-            
-        } catch (Exception ex) {
-        
-
-        }
-    }//GEN-LAST:event_btnJoinRoom0ActionPerformed
-
-    private void btnJoinRoom1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom1ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(1, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom1ActionPerformed
-
-    private void btnJoinRoom2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom2ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(2, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom2ActionPerformed
-
-    private void btnJoinRoom3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom3ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(3, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-    }//GEN-LAST:event_btnJoinRoom3ActionPerformed
-
-    private void btnJoinRoom4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnJoinRoom4ActionPerformed
-        // TODO add your handling code here:
-        try {
-        	this.lobbyRoom.addPlayer(4, client.getPlayer().getUsername());
-        } catch (Exception ex) {
-
-        }
-       
-    }//GEN-LAST:event_btnJoinRoom4ActionPerformed
-
     private void joinRoomNumber(int roomNumber) {
-    	if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
-    		client.joinRoom(roomNumber);
-    	}
+        if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
+            client.joinRoom(roomNumber);
+            
+            GameRoomGUI newRoom = new GameRoomGUI(client);
+            client.setGameRoomGUI(newRoom);
+            newRoom.setupGameRoom();
+            System.out.println("join room button clicked");
+            dispose();
+            setVisible(false);
+        }
     }
-    
+
     public void refreshRooms(ActionEvent evt) {
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
-        	textField0.setText("");
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 1) {
+            textField0.setText("");
         }
         else {
-        	textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
+            textField0.setText(client.getLobbyRoom().getPlayersInRoom(0));
         }
-    	
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 2) {
-        	textField1.setText("");
-        }
-        else {
-        	textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
-        }
-    	
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 3) {
-        	textField2.setText("");
+
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 2) {
+            textField1.setText("");
         }
         else {
-        	textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
+            textField1.setText(client.getLobbyRoom().getPlayersInRoom(1));
         }
-    	
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
-        	textField3.setText("");
-        }
-        else {
-        	textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
-        }
-    	
-    	if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
-        	textField4.setText("");
+
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 3) {
+            textField2.setText("");
         }
         else {
-        	textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+            textField2.setText(client.getLobbyRoom().getPlayersInRoom(2));
         }
-    	
-    	System.out.println(client.getLobbyRoom().getPlayersInRoom(0));
-    	revalidate();
+
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 4) {
+            textField3.setText("");
+        }
+        else {
+            textField3.setText(client.getLobbyRoom().getPlayersInRoom(3));
+        }
+
+        if (client.getLobbyRoom().getClientLobbyRoom().size() < 5) {
+            textField4.setText("");
+        }
+        else {
+            textField4.setText(client.getLobbyRoom().getPlayersInRoom(4));
+        }
+
+        System.out.println(client.getLobbyRoom().getPlayersInRoom(0));
+        revalidate();
         repaint();
         setVisible(true);
     }
-    
-    
-    
+
+
+
     /**
      * @param args the command line arguments
      */
@@ -442,11 +369,11 @@ public class LobbyGUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-            	try {
-                Client client = new Client();
-                client.setPlayer(new Player("Samira", 1000));
-                new LobbyGUI(client).setupLobbyPanel();
-            	} catch(Exception ex) {}
+                try {
+                    Client client = new Client();
+                    client.setPlayer(new Player("Samira", 1000));
+                    new LobbyGUI(client).setupLobbyPanel();
+                } catch(Exception ex) {}
             }
         });
     }
