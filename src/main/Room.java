@@ -86,7 +86,6 @@ public class Room {
 		this.roomNumber = roomNumber;
 		this.readyToStart = readyToStart;
 		this.playersInRoom = playersInRoom;
-		this.playersInRoom = playersInRoom;
 		this.shoe = shoe;
 	}
 	
