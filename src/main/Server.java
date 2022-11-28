@@ -282,7 +282,7 @@ public class Server {
 		
 		
 		public void dealerFunc() {
-			while (tally(roomNumber, 0, 0) >= 17) {
+			while (tally(roomNumber, 0, 0) <= 17) {
 				server.getRooms().get(0).getPlayersInRoom()[0].acceptCard(0, server.getRooms().get(0).getShoe().dealCard());
 				server.getRooms().get(0).getPlayersInRoom()[0].setScore(bust(0, 0, 0));
 			} 
@@ -551,9 +551,7 @@ public class Server {
 														score = "";
 													}
 														
-													// Set newMessage = true so the server will update the client with a new instance
-													// of server attributes rooms and lobbyRooms
-													server.setNewMessage(true);
+													
 													
 													break;
 													
@@ -590,7 +588,8 @@ public class Server {
 								}
 							}
 						}
-							
+						
+						
 
 						// Go through all the players in the room and check if they are still in or not
 						// If there are still players not standing or
@@ -603,9 +602,7 @@ public class Server {
 										// Reset game by setting readyToStart = 0
 										server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
 										
-										// Set newMessage = true so the server will update the client with a new instance
-										// of server attributes rooms and lobbyRooms
-										server.setNewMessage(true);
+										
 									}
 								}
 							}
