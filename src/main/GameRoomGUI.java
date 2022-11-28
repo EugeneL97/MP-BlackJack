@@ -584,11 +584,11 @@ public class GameRoomGUI extends JFrame {
         btnHit.setEnabled(true);
         btnDealStand.setEnabled(true);
         playerWagers[client.getPlayer().getSeatIndex()].setEnabled(true);
+
+        refreshGUI();
     }
 
     public void endRound() {
-        refreshGUI();
-
         btnBet50.setEnabled(false);
         btnBet100.setEnabled(false);
         btnBet500.setEnabled(false);
@@ -596,11 +596,11 @@ public class GameRoomGUI extends JFrame {
         btnHit.setEnabled(false);
         btnDealStand.setEnabled(false);
         playerWagers[client.getPlayer().getSeatIndex()].setEnabled(false);
+
+        refreshGUI();
     }
 
     public void middleOfRound() {
-        refreshGUI();
-
         btnBet50.setEnabled(false);
         btnBet100.setEnabled(false);
         btnBet500.setEnabled(false);
@@ -612,6 +612,8 @@ public class GameRoomGUI extends JFrame {
         btnDealStand.setText("STAND");
         btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
         btnDealStand.addActionListener(e -> stand());
+        refreshGUI();
+
     }
 
     public void setWager(int wager) {
@@ -635,7 +637,7 @@ public class GameRoomGUI extends JFrame {
                     else {  // Check all the other seats
                         if (i == client.getPlayer().getSeatIndex()) {  // If the seat is the current player's seat
                             playerBorders[i].setTitle(client.getPlayer().getUsername());
-                            playerTextAreas[i].setText(String.valueOf(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore()));
+                            playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                             playerWagers[i].setText(String.valueOf(wager));
 
                             // Check if player is bust or blackjack

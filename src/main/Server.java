@@ -1071,13 +1071,14 @@ public class Server {
 			try {
 				while (message == null) {
 					message = (Message) input.readObject();
-					
+					/*
 					try {
 						Thread.sleep(100);
 					}
 					catch (Exception e) {
 						
 					}
+					*/
 				}
 
 				return message;
