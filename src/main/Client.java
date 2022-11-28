@@ -9,12 +9,15 @@ public class Client {
 	private ObjectOutputStream output;
 	private Scanner userInput;
 	private Player player;
+	
+
 	private LobbyRoom lobbyRoom;
 	private Room room;
 	private ArrayList<Message> messageQueue;
 	private int login;
 	private int register;
 	private Boolean canDeal;
+	private Boolean endOfRound;
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
@@ -30,6 +33,7 @@ public class Client {
 		this.login = 0;
 		this.register = 0;
 		this.canDeal = true; 
+		this.endOfRound = false;
 		this.lobbyRoom = new LobbyRoom();
 		
 	}
@@ -44,12 +48,38 @@ public class Client {
 		this.login = 0;
 		this.register = 0;
 		this.canDeal = true;
+		this.endOfRound = false;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
 		
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
+	}
+	
+	public Boolean getEndOfRound() {
+		return endOfRound;
+	}
+
+	public void setEndOfRound(Boolean endOfRound) {
+		this.endOfRound = endOfRound;
+	}
+	
+	public void checkEndOfRound () {
+		if (room.getReadyToStart() == 3) {
+			setEndOfRound(true);
+		}
+		else {
+			setEndOfRound(false);
+		}
+		
+		if (getEndOfRound()) {
+			gameRoomGUI.endRound();
+		}
+		
+		if (room.getReadyToStart() == 0) {
+			gameRoomGUI.startRound();
+		}
 	}
 	
 	public void checkCanDeal() {
