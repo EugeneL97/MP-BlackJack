@@ -598,6 +598,22 @@ public class GameRoomGUI extends JFrame {
         playerWagers[client.getPlayer().getSeatIndex()].setEnabled(false);
     }
 
+    public void middleOfRound() {
+        refreshGUI();
+
+        btnBet50.setEnabled(false);
+        btnBet100.setEnabled(false);
+        btnBet500.setEnabled(false);
+        btnDouble.setEnabled(true);
+        btnHit.setEnabled(true);
+        btnDealStand.setEnabled(true);
+        btnSitOut.setEnabled(true);
+
+        btnDealStand.setText("STAND");
+        btnDealStand.removeActionListener(btnDealStand.getActionListeners()[0]);
+        btnDealStand.addActionListener(e -> stand());
+    }
+
     public void setWager(int wager) {
 
         if (wager == 2) {

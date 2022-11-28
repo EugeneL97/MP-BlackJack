@@ -63,7 +63,7 @@ public class Client {
 		if (getCanDeal() == true)
 			gameRoomGUI.startRound();
 		else
-			gameRoomGUI.endRound();
+			gameRoomGUI.middleOfRound();
 	}
 	
 	public Boolean getCanDeal() {
