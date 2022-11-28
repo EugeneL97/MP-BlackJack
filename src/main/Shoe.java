@@ -51,10 +51,17 @@ public class Shoe {
 	    }
 		
 		// shuffling
+		int index = -1;
+		int value = -1;
+		String suit = "";
+		Card tmp = null;
+		
 		for (int x = 0; x < SHOE_SIZE; x++) {
-			int index = random.nextInt(SHOE_SIZE);
+			index = random.nextInt(SHOE_SIZE);
+			value = deck.get(x).getValue();
+			suit = deck.get(x).getSuit();
 			
-			Card tmp = new Card(deck.get(x).getValue(), deck.get(x).getSuit());
+			tmp = new Card(value, suit);
 			
 			deck.set(x, deck.get(index));
 			deck.set(index, tmp);
@@ -68,14 +75,17 @@ public class Shoe {
 	
 	public Card dealCard() {
 		Card tmp = null;
+		int value = deck.get(0).getValue();
+		String suit = deck.get(0).getSuit();
 		
 		if (deck.size() > 0) {
-			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
+			tmp = new Card(value, suit);
 			deck.remove(0);
 		}
 		else {
 			generateCards();
-			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
+
+			tmp = new Card(value, suit);
 			deck.remove(0);
 		}
 		
