@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
 
-
 public class MessageTesting {
 	@Test
 	public void ConstructorTest() {
