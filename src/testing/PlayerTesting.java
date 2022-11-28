@@ -1,6 +1,6 @@
 package testing;
 
-import main.Player;
+import main.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.Test;
@@ -11,10 +11,11 @@ public class PlayerTesting {
 		String username = "Jimmy";
 		int accountBalance = 5000;
 		Player player1 = new Player(username, accountBalance);
+		Player player2 = new Player(player1);
+		
 		assertTrue(player1.getUsername().equals(username));
-		assertTrue(player1.getAccountBalance() == accountBalance);
+		assertEquals(player1.getAccountBalance(), accountBalance);
 	}
-	
 	@Test
 	public void GetterAndSetterTest() {
 		String username = "Bobby";
@@ -37,12 +38,29 @@ public class PlayerTesting {
 		player1.setScore(score);
 		
 		assertTrue(player1.getUsername().equals(username));
-		assertTrue(player1.getRoomNumber() == roomNumber);
-		assertTrue(player1.getPlayerState() == playerState);
-		assertTrue(player1.getWager() == wager);
-		assertTrue(player1.getSeatIndex() == seatIndex);
-		assertTrue(player1.getAccountBalance() == accountBalance);
-		assertTrue(player1.getCurrentAction() == currentAction);
+		assertEquals(player1.getRoomNumber(), roomNumber);
+		assertEquals(player1.getPlayerState(), playerState);
+		assertEquals(player1.getWager(), wager);
+		assertEquals(player1.getSeatIndex(), seatIndex);
+		assertEquals(player1.getAccountBalance(), accountBalance);
+		assertEquals(player1.getCurrentAction(), currentAction);
 		assertTrue(player1.getScore().equals(score));
+	}
+	@Test
+	public void acceptAndRemoveCardTest() {
+		Player player1 = new Player("Jimmy Johns", 42000);
+		Card card = new Card(2, "Heart");
+		
+		player1.acceptCard(0, card);
+		assertFalse(player1.getCurrentHand().isEmpty());
+
+		player1.removeCard(0, 0);
+		assertTrue(player1.getCurrentHand().isEmpty());
+	}
+	@Test
+	public void clearHandTest() {
+		Player player1 = new Player("Jimmy Jangles", 50000);
+		player1.clearHand();
+		assertTrue(player1.getCurrentHand().isEmpty());
 	}
 }
