@@ -596,13 +596,16 @@ public class Server {
 						for (int x = 0; x < server.getRooms().get(roomNumber).getPlayersInRoom().length; ++x) {
 							if (x != 0) {
 								if (server.getRooms().get(roomNumber).getPlayersInRoom()[x] != null) {
-									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() == currentActions.STAND
-											|| server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() == currentActions.SIT_OUT) {
+									if (server.getRooms().get(roomNumber).getPlayersInRoom()[x].getCurrentAction() != currentActions.STAND) {
+										
 										
 										// Reset game by setting readyToStart = 0
+										server.getRooms().get(roomNumber).setReadyToStart(roomStates.MiddleOfRound);
+										break;
+									}
+									else {
+										// Reset game by setting readyToStart = 0
 										server.getRooms().get(roomNumber).setReadyToStart(roomStates.EndOfRound);
-										
-										
 									}
 								}
 							}
