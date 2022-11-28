@@ -14,8 +14,7 @@ public class Client {
 	private ArrayList<Message> messageQueue;
 	private int login;
 	private int register;
-	private Boolean refreshLobbyRoomGUI;
-	private Boolean refreshGameRoomGUI;
+	private Boolean canDeal;
 	private ConnectGUI connectGUI;
 	private LoginGUI loginGUI;
 	private LobbyGUI lobbyGUI;
@@ -30,8 +29,7 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
-		this.refreshLobbyRoomGUI = false;
-		this.refreshGameRoomGUI = false;
+		this.canDeal = true; 
 		this.lobbyRoom = new LobbyRoom();
 		
 	}
@@ -45,12 +43,34 @@ public class Client {
 		this.room = new Room(-1);
 		this.login = 0;
 		this.register = 0;
+		this.canDeal = true;
 		this.lobbyRoom = new LobbyRoom();
 		// Create a message handler for the client
 		MessageHandler messageHandler = new MessageHandler(this);
 		
 		// Spawn a new thread for the client
 		new Thread(messageHandler).start();
+	}
+	
+	public void checkCanDeal() {
+		if (room.getReadyToStart() >= 1) {
+			setCanDeal(false);
+		}
+		else {
+			setCanDeal(true);
+		}
+		
+		if (getCanDeal() == true) {
+			
+		}
+	}
+	
+	public Boolean getCanDeal() {
+		return canDeal;
+	}
+
+	public void setCanDeal(Boolean canDeal) {
+		this.canDeal = canDeal;
 	}
 	
 	public LobbyGUI getLobbyGUI() {
@@ -169,6 +189,10 @@ public class Client {
 		
 	}
 	
+	public void checkDeal() {
+		
+	}
+	
 	// MessageHandler will listen to messages and put them in a queue for processing
 	private static class MessageHandler implements Runnable {
 		private Client client;
@@ -186,6 +210,7 @@ public class Client {
 				Message message = null;
 				message = client.getMessage(message);
 				client.messageQueue.add(message);
+				client.checkCanDeal();
 				
 				if (client.messageQueue.size() > 0 ) {
 					switch (client.messageQueue.get(0).getType()) {
@@ -466,22 +491,6 @@ public class Client {
 		this.register = register;
 	}
 
-	public void setRefreshLobbyRoomGUI(Boolean refresh) {
-		this.refreshLobbyRoomGUI = refresh;
-	}
-	
-	public Boolean getRefreshLobbyGUI() {
-		return this.refreshLobbyRoomGUI;
-	}
-	
-	public void setRefreshRoomGUI(Boolean refresh) {
-		this.refreshGameRoomGUI = refresh;
-	}
-	
-	public Boolean getRefreshRoomGUI() {
-		return this.refreshGameRoomGUI;
-	}
-	
 	public void setGameRoomGUI(GameRoomGUI gameRoomGUI) {
 		this.gameRoomGUI = gameRoomGUI;
 	}
