@@ -1,19 +1,18 @@
 package main;
 public class Card {
-	private int value;
+	private int rank;
 	private String suit;
 	
 	public Card(int value, String suit) {
-		super();
-		this.value = value;
+		this.rank = value;
 		this.suit = suit;
 	}
 	
-	public int getValue() {
-		return value;
+	public int getRank() {
+		return rank;
 	}
-	public void setValue(int value) {
-		this.value = value;
+	public void setRank(int rank) {
+		this.rank = rank;
 	}
 	public String getSuit() {
 		return suit;
@@ -23,14 +22,14 @@ public class Card {
 	}
 	
 	public String showCard() {
-		String output = "";
+		StringBuilder output = new StringBuilder();
 		
-		output += Integer.toString(value) + " of " + suit;
+		output.append(rank).append(" of ").append(suit);
 		
-		return output;
+		return output.toString();
 	}
-	
+	@Override
 	public String toString() {
-		return Integer.toString(value) + "#" + suit + "#";
+		return showCard();
 	}
 }
