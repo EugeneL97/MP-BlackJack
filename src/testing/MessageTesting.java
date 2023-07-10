@@ -16,9 +16,9 @@ public class MessageTesting {
 		Message msg2 = new Message(msg1);
 		Message msg3 = new Message(type, status, text);
 		
-		Boolean typeCheck = msg1.getType().equals(msg2.getType());
-		Boolean statusCheck = msg1.getStatus().equals(msg2.getStatus());
-		Boolean textCheck = msg1.getText().equals(msg2.getText());
+		boolean typeCheck = msg1.getType().equals(msg2.getType());
+		boolean statusCheck = msg1.getStatus().equals(msg2.getStatus());
+		boolean textCheck = msg1.getText().equals(msg2.getText());
 		
 		assertTrue(typeCheck && statusCheck && textCheck);
 		

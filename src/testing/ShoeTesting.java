@@ -12,9 +12,9 @@ public class ShoeTesting {
 	public void GetterAndSetterTest() {
 		
 		Shoe shoe = new Shoe();
-		
-		assertTrue(shoe.getShoeSize() == 312);
-		assertTrue(shoe.getCutPoint() == 70);
-		assertTrue(shoe.getNumOfDecks() == 6);
+
+		assertEquals(312, shoe.getShoeSize());
+		assertEquals(70, shoe.getCutPoint());
+		assertEquals(6, shoe.getNumOfDecks());
 	}
 }

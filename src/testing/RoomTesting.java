@@ -16,14 +16,14 @@ public class RoomTesting {
 		}
 		
 		// Max should be 7, dealer + 6 players
-		assertTrue(room.getNumOfPlayers() == 7);
+		assertEquals(7, room.getNumOfPlayers());
 		
 		for (int i = room.getNumOfPlayers() - 2; i >= 0; i--) {
 			room.removePlayer(i);
 		}
 		//System.out.println(room.getNumOfPlayers());
 		//Dealer should be last one left
-		assertTrue(room.getNumOfPlayers() == 1);
+		assertEquals(1, room.getNumOfPlayers());
 		
 		
 	}

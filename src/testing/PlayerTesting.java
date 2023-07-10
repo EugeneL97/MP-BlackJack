@@ -11,8 +11,8 @@ public class PlayerTesting {
 		String username = "Jimmy";
 		int accountBalance = 5000;
 		Player player1 = new Player(username, accountBalance);
-		assertTrue(player1.getUsername().equals(username));
-		assertTrue(player1.getAccountBalance() == accountBalance);
+		assertEquals(player1.getUsername(), username);
+		assertEquals(player1.getAccountBalance(), accountBalance);
 	}
 	
 	@Test
