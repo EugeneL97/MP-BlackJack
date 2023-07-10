@@ -9,23 +9,23 @@ public class CardTesting {
 
 	@Test
 	public void ConstructorTest() {
-		int value = 5;
+		int rank = 5;
 		String suit = "diamond";
-		Card card = new Card(value, suit);
+		Card card = new Card(rank, suit);
 		
-		assertTrue(card.getValue() == value && card.getSuit().equals(suit));
+		assertTrue(card.getRank() == rank && card.getSuit().equals(suit));
 	}
 	
 	@Test
 	public void GetterAndSetterTest() {
-		int value = 10;
+		int rank = 10;
 		String suit = "spade";
 		Card card = new Card(5, "heart");
 		
 		card.setSuit(suit);
-		card.setValue(value);
+		card.setRank(rank);
 		
-		assertTrue(card.getSuit().equals(suit) && card.getValue() == value);
+		assertTrue(card.getSuit().equals(suit) && card.getRank() == rank);
 	}
 	
 	@Test

@@ -271,13 +271,13 @@ public class Driver {
 		
 		// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
 		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).size(); ++y) {
-			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 11
-					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 12
-					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 11
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 12
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 13) {
 				tmpArray1.add(10);
 			}
 			else {
-				tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue());
+				tmpArray1.add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank());
 			}
 		}	
 		
@@ -352,13 +352,13 @@ public class Driver {
 		
 		// Copy all values of cards currentHand at index x into tmpArray1 and convert values of 11, 12, 13 to 10
 		for (int y = 0; y < server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).size(); ++y) {
-			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 11
-					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 12
-					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue() == 13) {
+			if (server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 11
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 12
+					|| server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank() == 13) {
 				tmpArray1.get(0).add(10);
 			}
 			else {
-				tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getValue());
+				tmpArray1.get(0).add(server.getRooms().get(roomNumber).getPlayersInRoom()[playerIndex].getCurrentHand().get(handIndex).get(y).getRank());
 			}
 		}	
 		

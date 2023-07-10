@@ -54,7 +54,7 @@ public class Shoe {
 		for (int x = 0; x < SHOE_SIZE; x++) {
 			int index = random.nextInt(SHOE_SIZE);
 			
-			Card tmp = new Card(deck.get(x).getValue(), deck.get(x).getSuit());
+			Card tmp = new Card(deck.get(x).getRank(), deck.get(x).getSuit());
 			
 			deck.set(x, deck.get(index));
 			deck.set(index, tmp);
@@ -70,12 +70,12 @@ public class Shoe {
 		Card tmp = null;
 		
 		if (deck.size() > 0) {
-			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
+			tmp = new Card(deck.get(0).getRank(), deck.get(0).getSuit());
 			deck.remove(0);
 		}
 		else {
 			generateCards();
-			tmp = new Card(deck.get(0).getValue(), deck.get(0).getSuit());
+			tmp = new Card(deck.get(0).getRank(), deck.get(0).getSuit());
 			deck.remove(0);
 		}
 		
