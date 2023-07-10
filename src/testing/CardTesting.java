@@ -35,9 +35,9 @@ public class CardTesting {
 		Card card = new Card(value, suit);
 		
 		String string1 = card.toString();
-		String string2 = Integer.toString(value) + "#" + suit + "#";
-		
-		assertTrue(string1.equals(string2));
+		String string2 = value + "#" + suit + "#";
+
+		assertEquals(string1, string2);
 	}
 	
 	@Test
@@ -47,6 +47,6 @@ public class CardTesting {
 		Card card = new Card(value, suit);
 		
 		String toString = value + " of " + suit;
-		assertTrue(card.showCard().equals(toString));
+		assertEquals(card.showCard(), toString);
 	}
 }

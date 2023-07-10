@@ -35,14 +35,14 @@ public class PlayerTesting {
 		player1.setAccountBalance(accountBalance);
 		player1.setCurrentAction(currentAction);
 		player1.setScore(score);
-		
-		assertTrue(player1.getUsername().equals(username));
-		assertTrue(player1.getRoomNumber() == roomNumber);
-		assertTrue(player1.getPlayerState() == playerState);
-		assertTrue(player1.getWager() == wager);
-		assertTrue(player1.getSeatIndex() == seatIndex);
-		assertTrue(player1.getAccountBalance() == accountBalance);
-		assertTrue(player1.getCurrentAction() == currentAction);
-		assertTrue(player1.getScore().equals(score));
+
+		assertEquals(player1.getUsername(), username);
+		assertEquals(player1.getRoomNumber(), roomNumber);
+		assertEquals(player1.getPlayerState(), playerState);
+		assertEquals(player1.getWager(), wager);
+		assertEquals(player1.getSeatIndex(), seatIndex);
+		assertEquals(player1.getAccountBalance(), accountBalance);
+		assertEquals(player1.getCurrentAction(), currentAction);
+		assertEquals(player1.getScore(), score);
 	}
 }
