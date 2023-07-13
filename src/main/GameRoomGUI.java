@@ -474,7 +474,7 @@ public class GameRoomGUI extends JFrame {
         btnLeaveRoom.setEnabled(false);
         btnSitOut.setEnabled(true);
 
-        for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
+        for (int i = 1; client.getRoom().getMaxPlayers() > i; i++) {
             if (seatIndex == i) {
                 takeSeatButtons[i - 1].setText("Leave Seat");
                 takeSeatButtons[i - 1].removeActionListener(takeSeatButtons[seatIndex - 1].getActionListeners()[0]);
@@ -498,7 +498,7 @@ public class GameRoomGUI extends JFrame {
         btnLeaveRoom.setEnabled(true);
         btnSitOut.setEnabled(false);
 
-        for (int i = 1; client.getRoom().getMAXPLAYERS() > i; i++) {
+        for (int i = 1; client.getRoom().getMaxPlayers() > i; i++) {
             if ((client.getPlayer().getSeatIndex() - 1) != i)
                 takeSeatButtons[i].setEnabled(true);
             else {
@@ -583,7 +583,7 @@ public class GameRoomGUI extends JFrame {
     public void refreshGUI() {
     	try {
             java.awt.EventQueue.invokeLater(() -> {
-                for (int i = 0; client.getRoom().getMAXPLAYERS() > i; i++) {
+                for (int i = 0; client.getRoom().getMaxPlayers() > i; i++) {
                     if (i == 0)  // Update the dealers hand
                         playerTextAreas[i].setText(client.getRoom().getPlayersInRoom()[i].showHand() + "\n\n" + client.getRoom().getPlayersInRoom()[i].getScore());
                     else {  // Check all the other seats

@@ -307,7 +307,7 @@ public class LobbyGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLogOffActionPerformed
 
     private void joinRoomNumber(int roomNumber) {
-        if (client.getRoom().getNumOfPlayers() < client.getRoom().getMAXPLAYERS()) {
+        if (client.getRoom().getNumOfPlayers() < client.getRoom().getMaxPlayers()) {
             client.joinRoom(roomNumber);
             
             GameRoomGUI newRoom = new GameRoomGUI(client);
