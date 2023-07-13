@@ -50,7 +50,7 @@ public class Parser {
 			playersInRoom[x] = null;
 		}
 		
-		Shoe shoe;
+		CardShoe cardShoe;
 		
 		String [] room;
 		
@@ -72,8 +72,8 @@ public class Parser {
 			}
 		}
 		
-		shoe = parseShoe(room[room.length - 1]);
-		tmp = new Room(roomNumber, readyToStart, playersInRoom, shoe);
+		cardShoe = parseShoe(room[room.length - 1]);
+		tmp = new Room(roomNumber, readyToStart, playersInRoom, cardShoe);
 		
 		return tmp;
 	}
@@ -132,10 +132,10 @@ public class Parser {
 	}
 	
 	// Helper function for parseRoom function
-	public Shoe parseShoe(String message) {
-		Shoe tmp = null;
+	public CardShoe parseShoe(String message) {
+		CardShoe tmp = null;
 		ArrayList<Card> tmpDeck = parseDeck(message);
-		tmp = new Shoe(tmpDeck);
+		tmp = new CardShoe(tmpDeck);
 		
 		return tmp;
 	}
