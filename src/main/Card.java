@@ -3,8 +3,8 @@ public class Card {
 	private int rank;
 	private String suit;
 	
-	public Card(int value, String suit) {
-		this.rank = value;
+	public Card(int rank, String suit) {
+		this.rank = rank;
 		this.suit = suit;
 	}
 	
@@ -22,11 +22,7 @@ public class Card {
 	}
 	
 	public String showCard() {
-		StringBuilder output = new StringBuilder();
-		
-		output.append(rank).append(" of ").append(suit);
-		
-		return output.toString();
+		return rank + " of " + suit;
 	}
 	@Override
 	public String toString() {
