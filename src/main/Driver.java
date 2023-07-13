@@ -200,7 +200,7 @@ public class Driver {
 		
 		*/
 		
-		Shoe shoe = new Shoe();
+		CardShoe cardShoe = new CardShoe();
 		Player [] playersInRoom = new Player [6];
 		int roomNumber = 23;
 		int readyToStart = 1;
@@ -216,7 +216,7 @@ public class Driver {
 		int isSitting = 1;
 		String score = "not bust";
 		ArrayList<ArrayList<Card>> currentHand = new ArrayList<ArrayList<Card>>();
-		shoe = new Shoe();
+		cardShoe = new CardShoe();
 		currentHand.add(new ArrayList<Card>());
 		
 		Card card1 = new Card(5, "Heart");
@@ -234,7 +234,7 @@ public class Driver {
 	
 		
 		Room room;
-		room = new Room(roomNumber, readyToStart, playersInRoom, shoe);
+		room = new Room(roomNumber, readyToStart, playersInRoom, cardShoe);
 		Driver driver = new Driver();
 		Server server = new Server();
 		server.getRooms().add(room);
