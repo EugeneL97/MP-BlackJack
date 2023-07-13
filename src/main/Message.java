@@ -1,22 +1,20 @@
 package main;
+import java.io.Serial;
 import java.io.Serializable;
 
 public class Message implements Serializable {
 	private String type;
     private String status;
     private String text;
-    private static final long serialVersionUID = 363945L;
+    @Serial
+	private static final long serialVersionUID = 363945L;
 	
 	public Message() {
-		this.type = "undefined";
-		this.status = "undefined";
-		this.text = "undefined";
+		this("undefined", "undefined", "undefined");
 	}
 	
 	public Message(Message message) {
-		this.type = message.getType();
-		this.status = message.getStatus();
-		this.text = message.getText();
+		this(message.getType(), message.getStatus(), message.getText());
 	}
 	
 	public Message(String type, String status, String text) {
