@@ -477,7 +477,7 @@ public class Client {
 				System.out.println("can deal");
 			}
 			
-			if (getCanDeal() == true) {
+			if (getCanDeal()) {
 				gameRoomGUI.startRound();
 				System.out.println("startRound executed");
 			}
